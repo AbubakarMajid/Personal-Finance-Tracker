@@ -104,9 +104,11 @@ class Others : public AbstractTransaction
 class FinanceTracker
 {
 private:
+
     AbstractTransaction** transactions;
     int capacity;
     int count;
+
 
 public:
     FinanceTracker(int capacity)
@@ -114,6 +116,41 @@ public:
         this->capacity = capacity;
         this->count = 0;
         this->transactions = new AbstractTransaction * [capacity];
+    }
+
+    void resize(int newCapacity){
+        AbstractTransaction** newTransaction = new AbstractTransaction * [newCapacity];
+
+        for (int i = 0; i < capacity; i++){
+            newTransaction[i] = transactions[i];
+        }
+        transactions = nullptr;
+        transactions = newTransaction;
+        capacity = newCapacity;
+    }
+
+    void inputTransaction(AbstractTransaction& transaction)
+    {
+        char date[11];
+        char type[11];
+        char category[21];
+        float amount;
+
+        cout << "Enter date (yyyy-mm-dd): ";
+        cin >> date;
+        transaction.setDate(date);
+
+        cout << "Enter type: ";
+        cin >> type;
+        transaction.setType(type);
+
+        cout << "Enter category: ";
+        cin >> category;
+        transaction.setCategory(category);
+
+        cout << "Enter amount: ";
+        cin >> amount;
+        transaction.setAmount(amount);
     }
 
     void addTransaction(AbstractTransaction& transaction)
@@ -133,6 +170,10 @@ public:
         }
     }
 
+    int getCap(){
+        return capacity;
+    }
+
     ~FinanceTracker()
     {
         for (int i = 0; i < count; i++)
@@ -143,30 +184,6 @@ public:
     }
 };
 
-void inputTransaction(AbstractTransaction& transaction)
-{
-    char date[11];
-    char type[11];
-    char category[21];
-    float amount;
-
-    cout << "Enter date (yyyy-mm-dd): ";
-    cin >> date;
-    transaction.setDate(date);
-
-    cout << "Enter type: ";
-    cin >> type;
-    transaction.setType(type);
-
-    cout << "Enter category: ";
-    cin >> category;
-    transaction.setCategory(category);
-
-    cout << "Enter amount: ";
-    cin >> amount;
-    transaction.setAmount(amount);
-}
-
 int main()
 {
     int capacity;
@@ -176,6 +193,7 @@ int main()
     FinanceTracker tracker(capacity);
 
     char choice;
+    int increment;
     do
     {
         cout << "Enter type of transaction (E for expense, I for income, O for others): ";
@@ -199,9 +217,13 @@ int main()
             cout << "Invalid choice. Please try again." << endl;
             continue;
         }
-
-        inputTransaction(*transaction);
+        if (increment > tracker.getCap()){
+            tracker.resize(capacity * 2);
+        }
+        tracker.inputTransaction(*transaction);
         tracker.addTransaction(*transaction);
+        increment++;
+        
 
         cout << "Do you want to add another transaction? (Y/N): ";
         cin >> choice;
