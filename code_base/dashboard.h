@@ -1,6 +1,6 @@
 #pragma once
 
-namespace dashboard {
+namespace codebase {
 
 	using namespace System;
 	using namespace System::ComponentModel;
@@ -71,27 +71,7 @@ namespace dashboard {
 	private: System::Windows::Forms::Panel^ panel14;
 	private: System::Windows::Forms::Panel^ panel15;
 	private: System::Windows::Forms::Label^ label11;
-
-
-
-
 	private: System::ComponentModel::IContainer^ components;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	protected:
 
 	private:
