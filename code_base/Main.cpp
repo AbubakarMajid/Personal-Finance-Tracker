@@ -36,9 +36,10 @@ int main(array<String^>^ args)
 
 	}
 
-	if (user != nullptr) {
-		dashboard::Dashboard dash;
-		Application::Run(% dash);
+	if (user != nullptr) 
+	{
+		codebase::Dashboard home;
+		Application::Run(% home);
 	}
 	else {
 		MessageBox::Show("Authentication Cancelled!");
