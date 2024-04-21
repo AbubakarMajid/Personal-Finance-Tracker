@@ -1,5 +1,5 @@
 #include "login_form.h"
-#include "home_form.h"
+#include "dashboard.h"
 #include "Account.h"
 
 using namespace System;
@@ -37,8 +37,8 @@ int main(array<String^>^ args)
 	}
 
 	if (user != nullptr) {
-		codebase::home_form home(user);
-		Application::Run(% home);
+		dashboard::Dashboard dash;
+		Application::Run(% dash);
 	}
 	else {
 		MessageBox::Show("Authentication Cancelled!");
