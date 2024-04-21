@@ -37,7 +37,7 @@ int main(array<String^>^ args)
 	}
 
 	if (user != nullptr) {
-		codebase::home_form home(user);
+		codebase::home_form home;
 		Application::Run(% home);
 	}
 	else {
