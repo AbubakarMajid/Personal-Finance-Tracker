@@ -71,29 +71,8 @@ namespace dashboard {
 	private: System::Windows::Forms::Panel^ panel14;
 	private: System::Windows::Forms::Panel^ panel15;
 	private: System::Windows::Forms::Label^ label11;
-
-
-
-
 	private: System::ComponentModel::IContainer^ components;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	protected:
-
 	private:
 		/// <summary>
 		/// Required designer variable.
