@@ -51,7 +51,7 @@ namespace codebase {
 	private: System::Windows::Forms::Label^ password_label;
 
 
-	private: System::Windows::Forms::TextBox^ textBox1;
+
 	private: System::Windows::Forms::TextBox^ username_box;
 	private: System::Windows::Forms::TextBox^ pass_box;
 	private: System::Windows::Forms::TextBox^ Income_box;
@@ -79,7 +79,6 @@ namespace codebase {
 			this->income_label = (gcnew System::Windows::Forms::Label());
 			this->username_label = (gcnew System::Windows::Forms::Label());
 			this->password_label = (gcnew System::Windows::Forms::Label());
-			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
 			this->username_box = (gcnew System::Windows::Forms::TextBox());
 			this->pass_box = (gcnew System::Windows::Forms::TextBox());
 			this->Income_box = (gcnew System::Windows::Forms::TextBox());
@@ -139,13 +138,6 @@ namespace codebase {
 			this->password_label->TabIndex = 3;
 			this->password_label->Text = L"PASSWORD";
 			this->password_label->TextAlign = System::Drawing::ContentAlignment::TopCenter;
-			// 
-			// textBox1
-			// 
-			this->textBox1->Location = System::Drawing::Point(0, 0);
-			this->textBox1->Name = L"textBox1";
-			this->textBox1->Size = System::Drawing::Size(100, 20);
-			this->textBox1->TabIndex = 4;
 			// 
 			// username_box
 			// 
@@ -220,7 +212,6 @@ namespace codebase {
 			this->Controls->Add(this->Income_box);
 			this->Controls->Add(this->pass_box);
 			this->Controls->Add(this->username_box);
-			this->Controls->Add(this->textBox1);
 			this->Controls->Add(this->password_label);
 			this->Controls->Add(this->username_label);
 			this->Controls->Add(this->income_label);
