@@ -1,6 +1,8 @@
 #include "login_form.h"
 #include "dashboard.h"
 #include "Account.h"
+#include "Transaction.h"
+#include "Budget_Setter.h"
 
 using namespace System;
 using namespace System::Windows::Forms;
