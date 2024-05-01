@@ -18,7 +18,7 @@ int main(array<String^>^ args)
 	while (true) {
 		codebase::login_form log;
 		log.ShowDialog();
-
+		user = log.user;
 		if (log.switch_to_account) {
 			codebase::Account account;
 			account.ShowDialog();
@@ -31,19 +31,35 @@ int main(array<String^>^ args)
 			}
 		}
 
-		else {
-			user = log.user;
+		if (user != nullptr) {
 			break;
 		}
-
 	}
 
-	if (user != nullptr) 
-	{
-		codebase::Dashboard home;
-		Application::Run(% home);
-	}
-	else {
-		MessageBox::Show("Authentication Cancelled!");
-	}
+	while (true) {
+				codebase::Dashboard dash;
+				Application::Run(% dash);
+				//dash.ShowDialog();
+				if (dash.switch_to_transaction) {
+					codebase::Transaction transaction;
+					transaction.ShowDialog();
+					if (transaction.switch_to_dashboard) {
+						continue;
+					}
+
+				}
+				else if (dash.switch_to_budget) {
+					codebase::Budget_Setter setter;
+					setter.ShowDialog();
+					if (setter.switch_to_dashboard) {
+						continue;
+					}
+
+				}
+				else {
+					break;
+				}
+			}
+
 }
+	

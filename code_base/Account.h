@@ -249,7 +249,7 @@ private: System::Void account_button_Click(System::Object^ sender, System::Event
 
 	try {
 
-		String^ conn_str = "Data Source=(localdb)\\tracker-app;Initial Catalog=tracker-app-db;Integrated Security=True";
+		String^ conn_str = "Data Source=(localdb)\\tracker-app;Initial Catalog=tracker_db;Integrated Security=True";
 		SqlConnection sqlConn(conn_str);
 
 		sqlConn.Open();
