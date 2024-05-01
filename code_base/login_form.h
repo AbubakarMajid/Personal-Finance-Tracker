@@ -86,7 +86,7 @@ namespace codebase {
 			this->label1->ForeColor = System::Drawing::SystemColors::ButtonFace;
 			this->label1->Location = System::Drawing::Point(241, 43);
 			this->label1->Name = L"label1";
-			this->label1->Size = System::Drawing::Size(80, 26);
+			this->label1->Size = System::Drawing::Size(99, 31);
 			this->label1->TabIndex = 0;
 			this->label1->Text = L"LOGIN";
 			this->label1->TextAlign = System::Drawing::ContentAlignment::TopCenter;
@@ -98,7 +98,7 @@ namespace codebase {
 			this->password_label->ForeColor = System::Drawing::SystemColors::ButtonFace;
 			this->password_label->Location = System::Drawing::Point(55, 220);
 			this->password_label->Name = L"password_label";
-			this->password_label->Size = System::Drawing::Size(142, 26);
+			this->password_label->Size = System::Drawing::Size(172, 31);
 			this->password_label->TabIndex = 1;
 			this->password_label->Text = L"PASSWORD";
 			// 
@@ -108,7 +108,7 @@ namespace codebase {
 			this->username_label->ForeColor = System::Drawing::SystemColors::ButtonFace;
 			this->username_label->Location = System::Drawing::Point(55, 120);
 			this->username_label->Name = L"username_label";
-			this->username_label->Size = System::Drawing::Size(138, 26);
+			this->username_label->Size = System::Drawing::Size(168, 31);
 			this->username_label->TabIndex = 2;
 			this->username_label->Text = L"USERNAME";
 			// 
@@ -118,7 +118,7 @@ namespace codebase {
 			this->username_box->ForeColor = System::Drawing::SystemColors::InactiveCaptionText;
 			this->username_box->Location = System::Drawing::Point(60, 164);
 			this->username_box->Name = L"username_box";
-			this->username_box->Size = System::Drawing::Size(440, 32);
+			this->username_box->Size = System::Drawing::Size(440, 38);
 			this->username_box->TabIndex = 3;
 			// 
 			// password_box
@@ -127,7 +127,7 @@ namespace codebase {
 			this->password_box->Location = System::Drawing::Point(60, 271);
 			this->password_box->Name = L"password_box";
 			this->password_box->PasswordChar = '*';
-			this->password_box->Size = System::Drawing::Size(440, 32);
+			this->password_box->Size = System::Drawing::Size(440, 38);
 			this->password_box->TabIndex = 4;
 			// 
 			// login_button
@@ -149,7 +149,7 @@ namespace codebase {
 				static_cast<System::Int32>(static_cast<System::Byte>(255)));
 			this->account_link->Location = System::Drawing::Point(464, 460);
 			this->account_link->Name = L"account_link";
-			this->account_link->Size = System::Drawing::Size(179, 22);
+			this->account_link->Size = System::Drawing::Size(215, 26);
 			this->account_link->TabIndex = 7;
 			this->account_link->TabStop = true;
 			this->account_link->Text = L"CREATE ACCOUNT";
@@ -163,13 +163,13 @@ namespace codebase {
 			this->info_label->ForeColor = System::Drawing::SystemColors::ButtonHighlight;
 			this->info_label->Location = System::Drawing::Point(300, 465);
 			this->info_label->Name = L"info_label";
-			this->info_label->Size = System::Drawing::Size(158, 17);
+			this->info_label->Size = System::Drawing::Size(185, 20);
 			this->info_label->TabIndex = 8;
 			this->info_label->Text = L"Don\'t have an account\?";
 			// 
 			// login_form
 			// 
-			this->AutoScaleDimensions = System::Drawing::SizeF(12, 25);
+			this->AutoScaleDimensions = System::Drawing::SizeF(16, 31);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(0)),
 				static_cast<System::Int32>(static_cast<System::Byte>(64)));
@@ -187,6 +187,7 @@ namespace codebase {
 			this->Margin = System::Windows::Forms::Padding(6);
 			this->Name = L"login_form";
 			this->Text = L"login_form";
+			this->Load += gcnew System::EventHandler(this, &login_form::login_form_Load);
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -218,7 +219,7 @@ namespace codebase {
 
 			SqlDataReader^ reader = command->ExecuteReader();*/
 
-			String^ conn_str = "Data Source=(localdb)\\tracker-app;Initial Catalog=tracker-app-db;Integrated Security=True";
+			String^ conn_str = "Data Source=(localdb)\\tracker-app;Initial Catalog=tracker_db;Integrated Security=True";
 			SqlConnection sqlConn(conn_str);
 
 			sqlConn.Open();
@@ -240,6 +241,7 @@ namespace codebase {
 			else {
 				MessageBox::Show("Username or password is incorrect",
 					"Email or Password Error", MessageBoxButtons::OK);
+
 			}
 		}
 		catch (Exception^ e) {
@@ -255,6 +257,8 @@ private: System::Void account_link_LinkClicked(System::Object^ sender, System::W
 	this->switch_to_account = true;
 	this->Close();
 
+}
+private: System::Void login_form_Load(System::Object^ sender, System::EventArgs^ e) {
 }
 };
 }
