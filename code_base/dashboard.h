@@ -75,7 +75,6 @@ namespace codebase {
 	private: System::Windows::Forms::Panel^ panel9;
 	private: System::Windows::Forms::Label^ label14;
 	private: System::Windows::Forms::ComboBox^ comboBox1;
-	private: System::Windows::Forms::DataVisualization::Charting::Chart^ chart1;
 
 
 
@@ -120,9 +119,6 @@ namespace codebase {
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			System::Windows::Forms::DataVisualization::Charting::ChartArea^ chartArea1 = (gcnew System::Windows::Forms::DataVisualization::Charting::ChartArea());
-			System::Windows::Forms::DataVisualization::Charting::Legend^ legend1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Legend());
-			System::Windows::Forms::DataVisualization::Charting::Series^ series1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
 			this->panel2 = (gcnew System::Windows::Forms::Panel());
 			this->label7 = (gcnew System::Windows::Forms::Label());
@@ -148,15 +144,14 @@ namespace codebase {
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->panel11 = (gcnew System::Windows::Forms::Panel());
 			this->panel10 = (gcnew System::Windows::Forms::Panel());
-			this->comboBox1 = (gcnew System::Windows::Forms::ComboBox());
 			this->dataGridView1 = (gcnew System::Windows::Forms::DataGridView());
 			this->label12 = (gcnew System::Windows::Forms::Label());
 			this->panel8 = (gcnew System::Windows::Forms::Panel());
-			this->chart1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Chart());
-			this->label14 = (gcnew System::Windows::Forms::Label());
 			this->label13 = (gcnew System::Windows::Forms::Label());
 			this->progressBar1 = (gcnew System::Windows::Forms::ProgressBar());
 			this->panel9 = (gcnew System::Windows::Forms::Panel());
+			this->label14 = (gcnew System::Windows::Forms::Label());
+			this->comboBox1 = (gcnew System::Windows::Forms::ComboBox());
 			this->panel1->SuspendLayout();
 			this->panel2->SuspendLayout();
 			this->panel3->SuspendLayout();
@@ -170,7 +165,6 @@ namespace codebase {
 			this->panel10->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView1))->BeginInit();
 			this->panel8->SuspendLayout();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->chart1))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// panel1
@@ -500,18 +494,6 @@ namespace codebase {
 			this->panel10->Size = System::Drawing::Size(637, 480);
 			this->panel10->TabIndex = 3;
 			// 
-			// comboBox1
-			// 
-			this->comboBox1->FormattingEnabled = true;
-			this->comboBox1->Items->AddRange(gcnew cli::array< System::Object^  >(12) {
-				L"January", L"February", L"March", L"April", L"May",
-					L"June", L"July", L"August", L"September", L"October", L"November", L"December"
-			});
-			this->comboBox1->Location = System::Drawing::Point(472, 20);
-			this->comboBox1->Name = L"comboBox1";
-			this->comboBox1->Size = System::Drawing::Size(141, 21);
-			this->comboBox1->TabIndex = 6;
-			// 
 			// dataGridView1
 			// 
 			this->dataGridView1->BackgroundColor = System::Drawing::SystemColors::ButtonHighlight;
@@ -545,7 +527,6 @@ namespace codebase {
 				| System::Windows::Forms::AnchorStyles::Right));
 			this->panel8->BackColor = System::Drawing::Color::Azure;
 			this->panel8->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
-			this->panel8->Controls->Add(this->chart1);
 			this->panel8->Controls->Add(this->label14);
 			this->panel8->Controls->Add(this->label13);
 			this->panel8->Controls->Add(this->progressBar1);
@@ -555,39 +536,6 @@ namespace codebase {
 			this->panel8->Name = L"panel8";
 			this->panel8->Size = System::Drawing::Size(215, 552);
 			this->panel8->TabIndex = 9;
-			// 
-			// chart1
-			// 
-			this->chart1->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Left)
-				| System::Windows::Forms::AnchorStyles::Right));
-			this->chart1->BackColor = System::Drawing::Color::LightSteelBlue;
-			chartArea1->Name = L"ChartArea1";
-			this->chart1->ChartAreas->Add(chartArea1);
-			legend1->Name = L"Legend1";
-			this->chart1->Legends->Add(legend1);
-			this->chart1->Location = System::Drawing::Point(28, 312);
-			this->chart1->Name = L"chart1";
-			series1->ChartArea = L"ChartArea1";
-			series1->Legend = L"Legend1";
-			series1->Name = L"Series1";
-			this->chart1->Series->Add(series1);
-			this->chart1->Size = System::Drawing::Size(160, 193);
-			this->chart1->TabIndex = 4;
-			this->chart1->Text = L"chart1";
-			// 
-			// label14
-			// 
-			this->label14->AutoSize = true;
-			this->label14->BackColor = System::Drawing::Color::LightSteelBlue;
-			this->label14->Font = (gcnew System::Drawing::Font(L"Cambria", 11.25F, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
-				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			this->label14->ForeColor = System::Drawing::SystemColors::Window;
-			this->label14->Location = System::Drawing::Point(157, 77);
-			this->label14->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
-			this->label14->Name = L"label14";
-			this->label14->Size = System::Drawing::Size(110, 17);
-			this->label14->TabIndex = 1;
-			this->label14->Text = L"Your Net Worth";
 			// 
 			// label13
 			// 
@@ -627,7 +575,33 @@ namespace codebase {
 			this->panel9->Size = System::Drawing::Size(51, 140);
 			this->panel9->TabIndex = 2;
 			// 
-			// Dashboard
+			// label14
+			// 
+			this->label14->AutoSize = true;
+			this->label14->BackColor = System::Drawing::Color::LightSteelBlue;
+			this->label14->Font = (gcnew System::Drawing::Font(L"Cambria", 11.25F, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
+				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+			this->label14->ForeColor = System::Drawing::SystemColors::Window;
+			this->label14->Location = System::Drawing::Point(157, 77);
+			this->label14->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
+			this->label14->Name = L"label14";
+			this->label14->Size = System::Drawing::Size(110, 17);
+			this->label14->TabIndex = 1;
+			this->label14->Text = L"Your Net Worth";
+			// 
+			// comboBox1
+			// 
+			this->comboBox1->FormattingEnabled = true;
+			this->comboBox1->Items->AddRange(gcnew cli::array< System::Object^  >(12) {
+				L"January", L"February", L"March", L"April", L"May",
+					L"June", L"July", L"August", L"September", L"October", L"November", L"December"
+			});
+			this->comboBox1->Location = System::Drawing::Point(472, 20);
+			this->comboBox1->Name = L"comboBox1";
+			this->comboBox1->Size = System::Drawing::Size(141, 21);
+			this->comboBox1->TabIndex = 6;
+			// 
+			// Budget_Setter
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
@@ -638,7 +612,7 @@ namespace codebase {
 			this->Controls->Add(this->tableLayoutPanel1);
 			this->Controls->Add(this->panel3);
 			this->Controls->Add(this->panel1);
-			this->Name = L"Dashboard";
+			this->Name = L"Budget_Setter";
 			this->Text = L"Budget_Setter";
 			this->WindowState = System::Windows::Forms::FormWindowState::Maximized;
 			this->Load += gcnew System::EventHandler(this, &Dashboard::Budget_Setter_Load);
@@ -663,7 +637,6 @@ namespace codebase {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView1))->EndInit();
 			this->panel8->ResumeLayout(false);
 			this->panel8->PerformLayout();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->chart1))->EndInit();
 			this->ResumeLayout(false);
 
 		}
@@ -678,7 +651,7 @@ namespace codebase {
 	}
 	private: System::Void label12_Click(System::Object^ sender, System::EventArgs^ e) {
 	}
-	};
+};
 }
 #pragma once
 
