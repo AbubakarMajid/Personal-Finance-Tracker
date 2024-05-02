@@ -49,7 +49,7 @@ int main(array<String^>^ args)
 
 				}
 				else if (dash.switch_to_budget) {
-					codebase::Budget_Setter setter;
+					codebase::Budget_Setter setter(user);
 					setter.ShowDialog();
 					if (setter.switch_to_dashboard) {
 						continue;

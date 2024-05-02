@@ -1,4 +1,5 @@
 #pragma once
+#include "User.h"
 
 namespace codebase {
 
@@ -8,6 +9,7 @@ namespace codebase {
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
+	using namespace System::Data::SqlClient;
 
 	/// <summary>
 	/// Summary for Budget_Setter
@@ -15,12 +17,15 @@ namespace codebase {
 	public ref class Budget_Setter : public System::Windows::Forms::Form
 	{
 	public:
-		Budget_Setter(void)
+		int income;
+		Budget_Setter(USER ^ user)
 		{
 			InitializeComponent();
 			//
 			//TODO: Add the constructor code here
 			//
+			this->name_label->Text = user->username;
+			this->income = user->income;
 		}
 
 	protected:
@@ -69,6 +74,8 @@ namespace codebase {
 	private: System::Windows::Forms::TextBox^ textBox4;
 	private: System::Windows::Forms::TabPage^ tabPage4;
 	private: System::Windows::Forms::TextBox^ textBox7;
+	private: System::Windows::Forms::Label^ name_label;
+
 
 
 
@@ -129,6 +136,7 @@ namespace codebase {
 			this->label4 = (gcnew System::Windows::Forms::Label());
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->panel3 = (gcnew System::Windows::Forms::Panel());
+			this->name_label = (gcnew System::Windows::Forms::Label());
 			this->button3 = (gcnew System::Windows::Forms::Button());
 			this->button2 = (gcnew System::Windows::Forms::Button());
 			this->button1 = (gcnew System::Windows::Forms::Button());
@@ -153,8 +161,9 @@ namespace codebase {
 			this->panel1->Location = System::Drawing::Point(0, 0);
 			this->panel1->Margin = System::Windows::Forms::Padding(3, 2, 3, 2);
 			this->panel1->Name = L"panel1";
-			this->panel1->Size = System::Drawing::Size(1157, 110);
+			this->panel1->Size = System::Drawing::Size(1438, 110);
 			this->panel1->TabIndex = 6;
+			this->panel1->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &Budget_Setter::panel1_Paint);
 			// 
 			// panel2
 			// 
@@ -186,9 +195,9 @@ namespace codebase {
 			this->panel5->Controls->Add(this->label6);
 			this->panel5->Dock = System::Windows::Forms::DockStyle::Top;
 			this->panel5->Location = System::Drawing::Point(0, 0);
-			this->panel5->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->panel5->Margin = System::Windows::Forms::Padding(4);
 			this->panel5->Name = L"panel5";
-			this->panel5->Size = System::Drawing::Size(583, 74);
+			this->panel5->Size = System::Drawing::Size(864, 74);
 			this->panel5->TabIndex = 16;
 			// 
 			// label6
@@ -210,13 +219,14 @@ namespace codebase {
 			this->button4->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 			this->button4->ForeColor = System::Drawing::SystemColors::ControlText;
-			this->button4->Location = System::Drawing::Point(442, 367);
-			this->button4->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->button4->Location = System::Drawing::Point(723, 367);
+			this->button4->Margin = System::Windows::Forms::Padding(4);
 			this->button4->Name = L"button4";
 			this->button4->Size = System::Drawing::Size(125, 38);
 			this->button4->TabIndex = 6;
 			this->button4->Text = L"Submit";
 			this->button4->UseVisualStyleBackColor = false;
+			this->button4->Click += gcnew System::EventHandler(this, &Budget_Setter::button4_Click);
 			// 
 			// panel4
 			// 
@@ -228,10 +238,10 @@ namespace codebase {
 			this->panel4->Controls->Add(this->textBox2);
 			this->panel4->Controls->Add(this->label4);
 			this->panel4->Controls->Add(this->label1);
-			this->panel4->Location = System::Drawing::Point(472, 139);
-			this->panel4->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->panel4->Location = System::Drawing::Point(472, 253);
+			this->panel4->Margin = System::Windows::Forms::Padding(4);
 			this->panel4->Name = L"panel4";
-			this->panel4->Size = System::Drawing::Size(583, 416);
+			this->panel4->Size = System::Drawing::Size(864, 416);
 			this->panel4->TabIndex = 8;
 			// 
 			// abc
@@ -247,7 +257,7 @@ namespace codebase {
 			this->abc->Margin = System::Windows::Forms::Padding(3, 2, 3, 2);
 			this->abc->Name = L"abc";
 			this->abc->SelectedIndex = 0;
-			this->abc->Size = System::Drawing::Size(251, 97);
+			this->abc->Size = System::Drawing::Size(532, 97);
 			this->abc->TabIndex = 7;
 			// 
 			// tabPage1
@@ -259,10 +269,11 @@ namespace codebase {
 			this->tabPage1->Margin = System::Windows::Forms::Padding(3, 2, 3, 2);
 			this->tabPage1->Name = L"tabPage1";
 			this->tabPage1->Padding = System::Windows::Forms::Padding(3, 2, 3, 2);
-			this->tabPage1->Size = System::Drawing::Size(243, 68);
+			this->tabPage1->Size = System::Drawing::Size(524, 68);
 			this->tabPage1->TabIndex = 0;
 			this->tabPage1->Text = L"Utilities";
 			this->tabPage1->UseVisualStyleBackColor = true;
+			this->tabPage1->Click += gcnew System::EventHandler(this, &Budget_Setter::tabPage1_Click);
 			// 
 			// textBox6
 			// 
@@ -272,7 +283,7 @@ namespace codebase {
 			this->textBox6->Location = System::Drawing::Point(49, 18);
 			this->textBox6->Margin = System::Windows::Forms::Padding(3, 2, 3, 2);
 			this->textBox6->Name = L"textBox6";
-			this->textBox6->Size = System::Drawing::Size(138, 22);
+			this->textBox6->Size = System::Drawing::Size(419, 22);
 			this->textBox6->TabIndex = 13;
 			// 
 			// tabPage2
@@ -284,7 +295,7 @@ namespace codebase {
 			this->tabPage2->Margin = System::Windows::Forms::Padding(3, 2, 3, 2);
 			this->tabPage2->Name = L"tabPage2";
 			this->tabPage2->Padding = System::Windows::Forms::Padding(3, 2, 3, 2);
-			this->tabPage2->Size = System::Drawing::Size(105, 68);
+			this->tabPage2->Size = System::Drawing::Size(243, 68);
 			this->tabPage2->TabIndex = 4;
 			this->tabPage2->Text = L"Entertainment";
 			this->tabPage2->UseVisualStyleBackColor = true;
@@ -309,7 +320,7 @@ namespace codebase {
 			this->tabPage3->Margin = System::Windows::Forms::Padding(3, 2, 3, 2);
 			this->tabPage3->Name = L"tabPage3";
 			this->tabPage3->Padding = System::Windows::Forms::Padding(3, 2, 3, 2);
-			this->tabPage3->Size = System::Drawing::Size(105, 68);
+			this->tabPage3->Size = System::Drawing::Size(243, 68);
 			this->tabPage3->TabIndex = 5;
 			this->tabPage3->Text = L"Healthcare";
 			this->tabPage3->UseVisualStyleBackColor = true;
@@ -334,7 +345,7 @@ namespace codebase {
 			this->tabPage4->Margin = System::Windows::Forms::Padding(3, 2, 3, 2);
 			this->tabPage4->Name = L"tabPage4";
 			this->tabPage4->Padding = System::Windows::Forms::Padding(3, 2, 3, 2);
-			this->tabPage4->Size = System::Drawing::Size(105, 68);
+			this->tabPage4->Size = System::Drawing::Size(243, 68);
 			this->tabPage4->TabIndex = 6;
 			this->tabPage4->Text = L"Food";
 			this->tabPage4->UseVisualStyleBackColor = true;
@@ -356,9 +367,9 @@ namespace codebase {
 				| System::Windows::Forms::AnchorStyles::Left)
 				| System::Windows::Forms::AnchorStyles::Right));
 			this->textBox2->Location = System::Drawing::Point(243, 245);
-			this->textBox2->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->textBox2->Margin = System::Windows::Forms::Padding(4);
 			this->textBox2->Name = L"textBox2";
-			this->textBox2->Size = System::Drawing::Size(250, 22);
+			this->textBox2->Size = System::Drawing::Size(531, 22);
 			this->textBox2->TabIndex = 11;
 			// 
 			// label4
@@ -394,24 +405,38 @@ namespace codebase {
 			// panel3
 			// 
 			this->panel3->BackColor = System::Drawing::Color::SteelBlue;
+			this->panel3->Controls->Add(this->name_label);
 			this->panel3->Controls->Add(this->button3);
 			this->panel3->Controls->Add(this->button2);
 			this->panel3->Controls->Add(this->button1);
 			this->panel3->Dock = System::Windows::Forms::DockStyle::Left;
 			this->panel3->Location = System::Drawing::Point(0, 110);
-			this->panel3->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->panel3->Margin = System::Windows::Forms::Padding(4);
 			this->panel3->Name = L"panel3";
-			this->panel3->Size = System::Drawing::Size(333, 440);
+			this->panel3->Size = System::Drawing::Size(333, 669);
 			this->panel3->TabIndex = 4;
+			// 
+			// name_label
+			// 
+			this->name_label->AutoSize = true;
+			this->name_label->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium", 24, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->name_label->ForeColor = System::Drawing::Color::SteelBlue;
+			this->name_label->Location = System::Drawing::Point(60, 412);
+			this->name_label->Name = L"name_label";
+			this->name_label->Size = System::Drawing::Size(134, 47);
+			this->name_label->TabIndex = 9;
+			this->name_label->Text = L"label2";
+			this->name_label->Click += gcnew System::EventHandler(this, &Budget_Setter::label2_Click);
 			// 
 			// button3
 			// 
 			this->button3->BackColor = System::Drawing::Color::SteelBlue;
 			this->button3->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 15.75F, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			this->button3->ForeColor = System::Drawing::SystemColors::ControlLightLight;
+			this->button3->ForeColor = System::Drawing::SystemColors::ButtonHighlight;
 			this->button3->Location = System::Drawing::Point(0, 252);
-			this->button3->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->button3->Margin = System::Windows::Forms::Padding(4);
 			this->button3->Name = L"button3";
 			this->button3->Size = System::Drawing::Size(333, 58);
 			this->button3->TabIndex = 8;
@@ -421,12 +446,11 @@ namespace codebase {
 			// 
 			// button2
 			// 
-			this->button2->BackColor = System::Drawing::Color::SteelBlue;
 			this->button2->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 15.75F, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			this->button2->ForeColor = System::Drawing::SystemColors::ControlLightLight;
+			this->button2->ForeColor = System::Drawing::SystemColors::ButtonHighlight;
 			this->button2->Location = System::Drawing::Point(0, 187);
-			this->button2->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->button2->Margin = System::Windows::Forms::Padding(4);
 			this->button2->Name = L"button2";
 			this->button2->Size = System::Drawing::Size(333, 58);
 			this->button2->TabIndex = 7;
@@ -439,9 +463,9 @@ namespace codebase {
 			this->button1->BackColor = System::Drawing::Color::SteelBlue;
 			this->button1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 15.75F, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			this->button1->ForeColor = System::Drawing::SystemColors::ControlLightLight;
+			this->button1->ForeColor = System::Drawing::SystemColors::ButtonHighlight;
 			this->button1->Location = System::Drawing::Point(0, 122);
-			this->button1->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->button1->Margin = System::Windows::Forms::Padding(4);
 			this->button1->Name = L"button1";
 			this->button1->Size = System::Drawing::Size(333, 58);
 			this->button1->TabIndex = 6;
@@ -455,11 +479,11 @@ namespace codebase {
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::Color::AliceBlue;
-			this->ClientSize = System::Drawing::Size(1157, 550);
+			this->ClientSize = System::Drawing::Size(1438, 779);
 			this->Controls->Add(this->panel3);
 			this->Controls->Add(this->panel1);
 			this->Controls->Add(this->panel4);
-			this->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->Margin = System::Windows::Forms::Padding(4);
 			this->Name = L"Budget_Setter";
 			this->Text = L"Budget_Setter";
 			this->WindowState = System::Windows::Forms::FormWindowState::Maximized;
@@ -480,6 +504,7 @@ namespace codebase {
 			this->tabPage4->ResumeLayout(false);
 			this->tabPage4->PerformLayout();
 			this->panel3->ResumeLayout(false);
+			this->panel3->PerformLayout();
 			this->ResumeLayout(false);
 
 		}
@@ -495,5 +520,177 @@ namespace codebase {
 		this->switch_to_dashboard = true;
 		this->Close();
 	}
+private: System::Void tabPage1_Click(System::Object^ sender, System::EventArgs^ e) {
+}
+
+private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e) {
+
+	String^ utility_budget = this->textBox6->Text;
+	String^ ent_budget = this->textBox5->Text;
+	String^ health_budget = this->textBox4->Text;
+	String^ food_budget = this->textBox7->Text;
+	String^ income_goal = this->textBox2->Text;
+
+	int utility = Convert::ToInt32(utility_budget);
+	int ent = Convert::ToInt32(ent_budget);
+	int health = Convert::ToInt32(health_budget);
+	int food = Convert::ToInt32(food_budget);
+	int income = Convert::ToInt32(income_goal);
+
+	int total_budget = utility + ent + health + food;
+
+	try {
+
+		String^ conn_str = "Data Source=(localdb)\\tracker-app;Initial Catalog=tracker_db;Integrated Security=True";
+		SqlConnection sqlConn(conn_str);
+
+		sqlConn.Open();
+
+		String^ tmpQuery = "SELECT * FROM Budget WHERE Username = @user";
+
+		SqlCommand^ command = gcnew SqlCommand(tmpQuery, % sqlConn);
+		command->Parameters->AddWithValue("@user", this->name_label->Text);
+		SqlDataReader^ reader = command->ExecuteReader();
+
+		if (reader->Read()) {
+
+			reader->Close();
+			if (total_budget <= this->income)
+			{
+				if (utility_budget != "") {
+					String^ sqlQuery = "UPDATE Budget SET Budget = @budget WHERE Username = @user AND Category = @cat";
+
+					SqlCommand^ command = gcnew SqlCommand(sqlQuery, % sqlConn);
+					command->Parameters->AddWithValue("@user", this->name_label->Text);
+					command->Parameters->AddWithValue("@cat", "Utility");
+					command->Parameters->AddWithValue("@budget", utility);
+
+					command->ExecuteNonQuery();
+				}
+
+				if (ent_budget != "") {
+					String^ sqlQuery = "UPDATE Budget SET Budget = @budget WHERE Username = @user AND Category = @cat";
+
+					SqlCommand^ command = gcnew SqlCommand(sqlQuery, % sqlConn);
+					command->Parameters->AddWithValue("@user", this->name_label->Text);
+					command->Parameters->AddWithValue("@cat", "Entertainment");
+					command->Parameters->AddWithValue("@budget", ent);
+
+					command->ExecuteNonQuery();
+				}
+
+				if (health_budget != "") {
+					String^ sqlQuery = "UPDATE Budget SET Budget = @budget WHERE Username = @user AND Category = @cat";
+
+					SqlCommand^ command = gcnew SqlCommand(sqlQuery, % sqlConn);
+					command->Parameters->AddWithValue("@user", this->name_label->Text);
+					command->Parameters->AddWithValue("@cat", "Health");
+					command->Parameters->AddWithValue("@budget", health);
+
+					command->ExecuteNonQuery();
+				}
+
+				if (food_budget != "") {
+					String^ sqlQuery = "UPDATE Budget SET Budget = @budget WHERE Username = @user AND Category = @cat";
+
+					SqlCommand^ command = gcnew SqlCommand(sqlQuery, % sqlConn);
+					command->Parameters->AddWithValue("@user", this->name_label->Text);
+					command->Parameters->AddWithValue("@cat", "Food");
+					command->Parameters->AddWithValue("@budget", food);
+
+					command->ExecuteNonQuery();
+				}
+
+				if (income_goal != "") {
+					String^ sqlQuery = "UPDATE Income_goal SET income_goal = @goal WHERE Username = @user";
+
+					SqlCommand^ command = gcnew SqlCommand(sqlQuery, % sqlConn);
+					command->Parameters->AddWithValue("@user", this->name_label->Text);
+					command->Parameters->AddWithValue("@goal", income);
+
+					command->ExecuteNonQuery();
+				}
+
+				MessageBox::Show("Your Budget is Updated Successfully", "Success", MessageBoxButtons::OK);
+			}
+			else {
+				MessageBox::Show("Budget Exceeded Income for Updation", "Budget Setting Failed", MessageBoxButtons::OK);
+			}
+		}
+
+		else {
+
+			if (total_budget <= this->income)
+			{
+				if (utility_budget != "") {
+					String^ sqlQuery = "INSERT INTO Budget (Username , Category , Budget) VALUES (@user  , @cat , @budget)";
+
+					SqlCommand^ command = gcnew SqlCommand(sqlQuery, % sqlConn);
+					command->Parameters->AddWithValue("@user", this->name_label->Text);
+					command->Parameters->AddWithValue("@cat", "Utility");
+					command->Parameters->AddWithValue("@budget", utility);
+
+					command->ExecuteNonQuery();
+				}
+
+				if (ent_budget != "") {
+					String^ sqlQuery = "INSERT INTO Budget (Username , Category , Budget) VALUES (@user  , @cat , @budget)";
+
+					SqlCommand^ command = gcnew SqlCommand(sqlQuery, % sqlConn);
+					command->Parameters->AddWithValue("@user", this->name_label->Text);
+					command->Parameters->AddWithValue("@cat", "Entertainment");
+					command->Parameters->AddWithValue("@budget", ent);
+
+					command->ExecuteNonQuery();
+				}
+
+				if (health_budget != "") {
+					String^ sqlQuery = "INSERT INTO Budget (Username , Category , Budget) VALUES (@user  , @cat , @budget)";
+
+					SqlCommand^ command = gcnew SqlCommand(sqlQuery, % sqlConn);
+					command->Parameters->AddWithValue("@user", this->name_label->Text);
+					command->Parameters->AddWithValue("@cat", "Health");
+					command->Parameters->AddWithValue("@budget", health);
+
+					command->ExecuteNonQuery();
+				}
+
+				if (food_budget != "") {
+					String^ sqlQuery = "INSERT INTO Budget (Username , Category , Budget) VALUES (@user  , @cat , @budget)";
+
+					SqlCommand^ command = gcnew SqlCommand(sqlQuery, % sqlConn);
+					command->Parameters->AddWithValue("@user", this->name_label->Text);
+					command->Parameters->AddWithValue("@cat", "Food");
+					command->Parameters->AddWithValue("@budget", food);
+
+					command->ExecuteNonQuery();
+				}
+
+				if (income_goal != "") {
+					String^ sqlQuery = "INSERT INTO Income_goal (Username , income_goal) VALUES (@user  , @goal)";
+
+					SqlCommand^ command = gcnew SqlCommand(sqlQuery, % sqlConn);
+					command->Parameters->AddWithValue("@user", this->name_label->Text);
+					command->Parameters->AddWithValue("@goal", income);
+
+					command->ExecuteNonQuery();
+				}
+
+				MessageBox::Show("Your Budget is set Successfully", "Success", MessageBoxButtons::OK);
+			}
+			else {
+				MessageBox::Show("Budget Exceeded Income", "Budget Setting Failed", MessageBoxButtons::OK);
+			}
+		}
+	}
+
+	catch (Exception^ e){
+		MessageBox::Show("Failed to Add Budget" + e->Message, "Budget Setting Failed", MessageBoxButtons::OK);
+	}
+}
+private: System::Void panel1_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
+}
+private: System::Void label2_Click(System::Object^ sender, System::EventArgs^ e) {
+}
 };
 }

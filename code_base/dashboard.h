@@ -1,4 +1,3 @@
-
 #pragma once
 
 namespace codebase {
@@ -76,6 +75,7 @@ namespace codebase {
 	private: System::Windows::Forms::Panel^ panel9;
 	private: System::Windows::Forms::Label^ label14;
 	private: System::Windows::Forms::ComboBox^ comboBox1;
+	private: System::Windows::Forms::DataVisualization::Charting::Chart^ chart1;
 
 
 
@@ -120,6 +120,9 @@ namespace codebase {
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			System::Windows::Forms::DataVisualization::Charting::ChartArea^ chartArea1 = (gcnew System::Windows::Forms::DataVisualization::Charting::ChartArea());
+			System::Windows::Forms::DataVisualization::Charting::Legend^ legend1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Legend());
+			System::Windows::Forms::DataVisualization::Charting::Series^ series1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
 			this->panel2 = (gcnew System::Windows::Forms::Panel());
 			this->label7 = (gcnew System::Windows::Forms::Label());
@@ -149,6 +152,7 @@ namespace codebase {
 			this->dataGridView1 = (gcnew System::Windows::Forms::DataGridView());
 			this->label12 = (gcnew System::Windows::Forms::Label());
 			this->panel8 = (gcnew System::Windows::Forms::Panel());
+			this->chart1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Chart());
 			this->label14 = (gcnew System::Windows::Forms::Label());
 			this->label13 = (gcnew System::Windows::Forms::Label());
 			this->progressBar1 = (gcnew System::Windows::Forms::ProgressBar());
@@ -166,6 +170,7 @@ namespace codebase {
 			this->panel10->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView1))->BeginInit();
 			this->panel8->SuspendLayout();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->chart1))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// panel1
@@ -535,6 +540,7 @@ namespace codebase {
 				| System::Windows::Forms::AnchorStyles::Right));
 			this->panel8->BackColor = System::Drawing::Color::Azure;
 			this->panel8->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
+			this->panel8->Controls->Add(this->chart1);
 			this->panel8->Controls->Add(this->label14);
 			this->panel8->Controls->Add(this->label13);
 			this->panel8->Controls->Add(this->progressBar1);
@@ -544,6 +550,26 @@ namespace codebase {
 			this->panel8->Name = L"panel8";
 			this->panel8->Size = System::Drawing::Size(286, 679);
 			this->panel8->TabIndex = 9;
+			// 
+			// chart1
+			// 
+			this->chart1->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Left)
+				| System::Windows::Forms::AnchorStyles::Right));
+			this->chart1->BackColor = System::Drawing::Color::LightSteelBlue;
+			chartArea1->Name = L"ChartArea1";
+			this->chart1->ChartAreas->Add(chartArea1);
+			legend1->Name = L"Legend1";
+			this->chart1->Legends->Add(legend1);
+			this->chart1->Location = System::Drawing::Point(37, 384);
+			this->chart1->Margin = System::Windows::Forms::Padding(4);
+			this->chart1->Name = L"chart1";
+			series1->ChartArea = L"ChartArea1";
+			series1->Legend = L"Legend1";
+			series1->Name = L"Series1";
+			this->chart1->Series->Add(series1);
+			this->chart1->Size = System::Drawing::Size(213, 238);
+			this->chart1->TabIndex = 4;
+			this->chart1->Text = L"chart1";
 			// 
 			// label14
 			// 
@@ -632,10 +658,15 @@ namespace codebase {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView1))->EndInit();
 			this->panel8->ResumeLayout(false);
 			this->panel8->PerformLayout();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->chart1))->EndInit();
 			this->ResumeLayout(false);
 
 		}
 #pragma endregion
+
+	public: bool switch_to_transaction = false;
+	public: bool switch_to_budget = false;
+
 	private: System::Void panel2_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
 	}
 	private: System::Void textBox4_TextChanged(System::Object^ sender, System::EventArgs^ e) {
@@ -646,18 +677,13 @@ namespace codebase {
 	}
 	private: System::Void label12_Click(System::Object^ sender, System::EventArgs^ e) {
 	}
-
-	public: bool switch_to_transaction = false;
 	private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {
 		this->switch_to_transaction = true;
 		this->Close();
 	}
-
-	public: bool switch_to_budget = false;
-	private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e) {
+private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e) {
 	this->switch_to_budget = true;
 	this->Close();
-
 }
 };
 }
