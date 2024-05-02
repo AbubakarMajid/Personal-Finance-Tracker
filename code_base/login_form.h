@@ -116,7 +116,7 @@ namespace codebase {
 			// 
 			this->username_box->AllowDrop = true;
 			this->username_box->ForeColor = System::Drawing::SystemColors::InactiveCaptionText;
-			this->username_box->Location = System::Drawing::Point(60, 164);
+			this->username_box->Location = System::Drawing::Point(64, 164);
 			this->username_box->Name = L"username_box";
 			this->username_box->Size = System::Drawing::Size(440, 38);
 			this->username_box->TabIndex = 3;
