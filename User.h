@@ -3,7 +3,8 @@
 
 using namespace System;
 
-public ref class USER {
+public ref class USER
+{
 public:
 	int id;
 	String^ username;

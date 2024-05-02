@@ -1,5 +1,5 @@
 #include "login_form.h"
-#include "home_form.h"
+#include "dashboard.h"
 #include "Account.h"
 #include "Transaction.h"
 #include "Budget_Setter.h"
@@ -18,7 +18,7 @@ int main(array<String^>^ args)
 	while (true) {
 		codebase::login_form log;
 		log.ShowDialog();
-
+		user = log.user;
 		if (log.switch_to_account) {
 			codebase::Account account;
 			account.ShowDialog();
@@ -31,18 +31,35 @@ int main(array<String^>^ args)
 			}
 		}
 
-		else {
-			user = log.user;
+		if (user != nullptr) {
 			break;
 		}
-
 	}
 
-	if (user != nullptr) {
-		codebase::home_form home;
-		Application::Run(% home);
+	while (true) {
+		codebase::Dashboard dash;
+		Application::Run(% dash);
+		if (dash.switch_to_transaction) 
+		{
+			codebase::Transaction transaction;
+			transaction.ShowDialog();
+			if (transaction.switch_to_dashboard)
+			{
+				continue;
+			}
+
+		}
+		else if (dash.switch_to_budget) {
+			codebase::Budget_Setter setter;
+			setter.ShowDialog();
+			if (setter.switch_to_dashboard) {
+				continue;
+			}
+
+		}
+		else {
+			break;
+		}
 	}
-	else {
-		MessageBox::Show("Authentication Cancelled!");
-	}
+
 }

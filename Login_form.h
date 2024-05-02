@@ -1,5 +1,5 @@
 #pragma once
-#include"User.h"
+#include "User.h"
 
 namespace codebase {
 
@@ -147,7 +147,7 @@ namespace codebase {
 				static_cast<System::Byte>(0)));
 			this->account_link->LinkColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(192)), static_cast<System::Int32>(static_cast<System::Byte>(192)),
 				static_cast<System::Int32>(static_cast<System::Byte>(255)));
-			this->account_link->Location = System::Drawing::Point(464, 460);
+			this->account_link->Location = System::Drawing::Point(491, 460);
 			this->account_link->Name = L"account_link";
 			this->account_link->Size = System::Drawing::Size(215, 26);
 			this->account_link->TabIndex = 7;
@@ -173,7 +173,7 @@ namespace codebase {
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(0)),
 				static_cast<System::Int32>(static_cast<System::Byte>(64)));
-			this->ClientSize = System::Drawing::Size(1291, 500);
+			this->ClientSize = System::Drawing::Size(734, 500);
 			this->Controls->Add(this->info_label);
 			this->Controls->Add(this->account_link);
 			this->Controls->Add(this->login_button);
@@ -187,6 +187,7 @@ namespace codebase {
 			this->Margin = System::Windows::Forms::Padding(6);
 			this->Name = L"login_form";
 			this->Text = L"login_form";
+			this->Load += gcnew System::EventHandler(this, &login_form::login_form_Load);
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -206,8 +207,7 @@ namespace codebase {
 		}
 
 		try {
-			
-			String^ conn_str = "Data Source=MIANZAINALLAUDI\\SQLEXPRESS;Initial Catalog=APP;Integrated Security=True";
+			String^ conn_str = "Data Source=MIANZAIN\\SQLEXPRESS;Initial Catalog=APP;Integrated Security=True";
 			SqlConnection sqlConn(conn_str);
 
 			sqlConn.Open();
@@ -229,6 +229,7 @@ namespace codebase {
 			else {
 				MessageBox::Show("Username or password is incorrect",
 					"Email or Password Error", MessageBoxButtons::OK);
+
 			}
 		}
 		catch (Exception^ e) {
@@ -244,6 +245,8 @@ namespace codebase {
 		this->switch_to_account = true;
 		this->Close();
 
+	}
+	private: System::Void login_form_Load(System::Object^ sender, System::EventArgs^ e) {
 	}
 	};
 }
