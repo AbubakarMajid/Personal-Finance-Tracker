@@ -39,12 +39,10 @@ int main(array<String^>^ args)
 	while (true) {
 		codebase::Dashboard dash;
 		Application::Run(% dash);
-		if (dash.switch_to_transaction) 
-		{
+		if (dash.switch_to_transaction) {
 			codebase::Transaction transaction;
 			transaction.ShowDialog();
-			if (transaction.switch_to_dashboard)
-			{
+			if (transaction.switch_to_dashboard) {
 				continue;
 			}
 
@@ -63,3 +61,4 @@ int main(array<String^>^ args)
 	}
 
 }
+

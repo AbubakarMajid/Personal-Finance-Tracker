@@ -116,7 +116,7 @@ namespace codebase {
 			// 
 			this->username_box->AllowDrop = true;
 			this->username_box->ForeColor = System::Drawing::SystemColors::InactiveCaptionText;
-			this->username_box->Location = System::Drawing::Point(60, 164);
+			this->username_box->Location = System::Drawing::Point(64, 164);
 			this->username_box->Name = L"username_box";
 			this->username_box->Size = System::Drawing::Size(440, 38);
 			this->username_box->TabIndex = 3;
@@ -147,7 +147,7 @@ namespace codebase {
 				static_cast<System::Byte>(0)));
 			this->account_link->LinkColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(192)), static_cast<System::Int32>(static_cast<System::Byte>(192)),
 				static_cast<System::Int32>(static_cast<System::Byte>(255)));
-			this->account_link->Location = System::Drawing::Point(491, 460);
+			this->account_link->Location = System::Drawing::Point(464, 460);
 			this->account_link->Name = L"account_link";
 			this->account_link->Size = System::Drawing::Size(215, 26);
 			this->account_link->TabIndex = 7;
@@ -173,7 +173,7 @@ namespace codebase {
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(0)),
 				static_cast<System::Int32>(static_cast<System::Byte>(64)));
-			this->ClientSize = System::Drawing::Size(734, 500);
+			this->ClientSize = System::Drawing::Size(653, 500);
 			this->Controls->Add(this->info_label);
 			this->Controls->Add(this->account_link);
 			this->Controls->Add(this->login_button);

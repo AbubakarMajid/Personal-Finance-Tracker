@@ -70,32 +70,6 @@ namespace codebase {
 	private: System::Windows::Forms::TabPage^ tabPage4;
 	private: System::Windows::Forms::TextBox^ textBox7;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	private:
 		/// <summary>
 		/// Required designer variable.
