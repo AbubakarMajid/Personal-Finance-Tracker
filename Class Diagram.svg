@@ -23,6 +23,7 @@ link Transaction to Currency--><g id="link_Transaction_Currency"><path codeLine=
 link Transaction to Category--><g id="link_Transaction_Category"><path codeLine="130" d="M1330.94,694.08 C1357.04,717.07 1384.68,741.41 1407.81,761.77 " fill="none" id="Transaction-Category" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[6bd399dd209ecb8775ea4fbe013b111a]
 link Account to Transaction--><g id="link_Account_Transaction"><path codeLine="131" d="M1310.41,456.14 C1299.57,480.15 1287.42,507.03 1276.31,531.62 " fill="none" id="Account-Transaction" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[44222df06490a3c0f74a48d44edf4b13]
 link Budget to BudgetGoal--><g id="link_Budget_BudgetGoal"><path codeLine="132" d="M1754,177.06 C1754,218.46 1754,275.04 1754,318.27 " fill="none" id="Budget-BudgetGoal" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[9e61103ca3efe126455e8c2d025d7b18]
+<<<<<<< HEAD
 @startuml
 interface ITransaction
 {
@@ -157,6 +158,142 @@ Transaction - - Category
 Account - - Transaction
 Budget - - BudgetGoal
 @enduml
+=======
+@startuml
+interface ITransaction
+{
+    + setDate(const char*) : void
+    + setType(const char*) : void
+    + setCategory(const char*) : void
+    + setAmount(float) : void
+}
+
+class AbstractTransaction 
+{
+    # date: char[11]
+    # type: char[11]
+    # category: char[21]
+    # amount: float
+    + <<abstract>> setDate()
+    + <<abstract>> setType()
+    + <<abstract>> setCategory()
+    + <<abstract>> setAmount()
+}
+
+class Expense 
+{
+    - expenseSpecificAttr: char[21]
+    + setExpenseDetails()
+}
+
+class Income
+{
+    // income specific attributes and methods
+}
+
+class Others 
+{
+    // other types of transactions
+}
+
+AbstractTransaction <|- - Expense
+AbstractTransaction <|- - Income
+AbstractTransaction <|- - Others
+
+class FinanceTracker
+{
+    - transactions: AbstractTransaction*
+    - capacity: int
+    - count: int
+    + FinanceTracker(int)
+    + addTransaction(AbstractTransaction&)
+    + displayTransactions()
+    + ...
+}
+
+class User
+{
+    - username: char[21]
+    - password: char[21]
+    + login() : bool
+    + logout() : void
+    + register() : bool
+}
+
+ITransaction <|.. AbstractTransaction
+FinanceTracker o- - AbstractTransaction
+
+class User 
+{
+    - username: char[21]
+    - password: char[21]
+    + createUser(username: char[21], password: char[21]): bool
+    + login(username: char[21], password: char[21]): bool
+    + logout(): void
+    + setPassword(username: char[21], newPassword: char[21]): bool
+}
+
+class Currency
+{
+    - name: char[21]
+    - exchangeRate: float
+    + getExchangeRate(currencyName: char[21]): float
+    + convert(amount: float, fromCurrency: char[21], toCurrency: char[21]): float
+}
+
+class Transaction 
+{
+    - amount: float
+    - category: char[21]
+    - date: char[11]
+    - currency: char[21]
+    + addTransaction(amount: float, category: char[21], date: char[11], currency: char[21]): bool
+    + editTransaction(transactionID: int, amount: float, category: char[21], date: char[11], currency: char[21]): bool
+    + deleteTransaction(transactionID: int): bool
+}
+
+class Account 
+{
+    - name: char[21]
+    - balance: float
+    - transactions: AbstractTransaction*
+    + addAccount(name: char[21]): bool
+    + deleteAccount(accountID: int): bool
+    + getAccountBalance(accountID: int): float
+}
+
+class Category 
+{
+    - name: char[21]
+    + addCategory(name: char[21]): bool
+    + deleteCategory(categoryID: int): bool
+}
+
+class Budget
+{
+    - totalIncome: float
+    - totalExpenses: float
+    - goals: BudgetGoal*
+    + calculateBudget(): float
+}
+
+class BudgetGoal
+{
+    - name: char[21]
+    - targetAmount: float
+    - currentAmount: float
+    + setTargetAmount(targetAmount: float): bool
+    + trackProgress(transactionAmount: float): bool
+}
+
+User - - Transaction
+User - - Account
+Transaction - - Currency
+Transaction - - Category
+Account - - Transaction
+Budget - - BudgetGoal
+@enduml
+>>>>>>> a59a70446a71b45c256d44437d336c5e3785a32f
 
 PlantUML version 1.2022.7(Mon Aug 22 17:01:30 UTC 2022)
 (GPL source distribution)
