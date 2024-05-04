@@ -235,10 +235,6 @@ namespace codebase {
 		String^ username = username_box->Text;
 		String^ password = pass_box->Text;
 		String^ income = Income_box->Text;
-
-		/*msclr::interop::marshal_context context;
-		std::wstring incomeStr = context.marshal_as<std::wstring>(income);
-		int incomeInt = std::stoi(incomeStr);*/
 		int incomeInt = Convert::ToInt32(income);
 
 		if (username->Length == 0 || password->Length == 0 || income->Length == 0) {
