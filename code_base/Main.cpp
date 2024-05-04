@@ -37,7 +37,7 @@ int main(array<String^>^ args)
 	}
 
 	while (true) {
-				codebase::Dashboard dash;
+				codebase::Dashboard dash(user);
 				Application::Run(% dash);
 				//dash.ShowDialog();
 				if (dash.switch_to_transaction) {
@@ -53,6 +53,10 @@ int main(array<String^>^ args)
 					setter.ShowDialog();
 					if (setter.switch_to_dashboard) {
 						continue;
+					}
+					else if (setter.switch_to_transaction) {
+						codebase::Transaction transaction;
+						transaction.ShowDialog();
 					}
 
 				}
