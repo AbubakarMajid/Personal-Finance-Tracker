@@ -579,6 +579,7 @@ private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e
 
 		if (reader->Read()) {
 
+			reader->Close();
 			if (total_budget <= this->income)
 			{
 				if (utility_budget != "") {
