@@ -61,7 +61,7 @@ namespace codebase {
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
-		System::ComponentModel::Container ^components;
+		System::ComponentModel::Container^ components;
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -116,7 +116,7 @@ namespace codebase {
 			// 
 			this->username_box->AllowDrop = true;
 			this->username_box->ForeColor = System::Drawing::SystemColors::InactiveCaptionText;
-			this->username_box->Location = System::Drawing::Point(60, 164);
+			this->username_box->Location = System::Drawing::Point(64, 164);
 			this->username_box->Name = L"username_box";
 			this->username_box->Size = System::Drawing::Size(440, 38);
 			this->username_box->TabIndex = 3;
@@ -196,8 +196,8 @@ namespace codebase {
 	private: System::Void label1_Click(System::Object^ sender, System::EventArgs^ e) {
 	}
 
-	public : 
-		USER^ user = nullptr; 
+	public:
+		USER^ user = nullptr;
 	private: System::Void login_button_Click(System::Object^ sender, System::EventArgs^ e) {
 		String^ username = this->username_box->Text;
 		String^ password = this->password_box->Text;
@@ -207,19 +207,7 @@ namespace codebase {
 		}
 
 		try {
-			/*String^ conn_str = "Data Source=(localdb)\\tracker-app;Initial Catalog=tracker-app-db;Integrated Security=True";
-			SqlConnection sqlConn(conn_str);
-
-			sqlConn.Open();
-
-			String^ query = "SELECT * FROM Credentials WHERE Username=@username AND Passkey=@pwd;";
-			SqlCommand^ command = gcnew SqlCommand(query, %sqlConn);
-			command->Parameters->AddWithValue("@username", username);
-			command->Parameters->AddWithValue("@pwd", password);
-
-			SqlDataReader^ reader = command->ExecuteReader();*/
-
-			String^ conn_str = "Data Source=(localdb)\\tracker-app;Initial Catalog=tracker_db;Integrated Security=True";
+			String^ conn_str = "Data Source=MIANZAIN\\SQLEXPRESS;Initial Catalog=APP;Integrated Security=True";
 			SqlConnection sqlConn(conn_str);
 
 			sqlConn.Open();
@@ -231,7 +219,7 @@ namespace codebase {
 
 			SqlDataReader^ reader = command->ExecuteReader();
 			if (reader->Read()) {
-				user = gcnew USER; 
+				user = gcnew USER;
 				user->username = reader->GetString(0);
 				user->password = reader->GetString(1);
 				user->income = reader->GetInt64(2);
@@ -249,16 +237,16 @@ namespace codebase {
 		}
 
 	}
-private: System::Void account_button_Click(System::Object^ sender, System::EventArgs^ e) {
-}
-	   public: bool switch_to_account = false;
-private: System::Void account_link_LinkClicked(System::Object^ sender, System::Windows::Forms::LinkLabelLinkClickedEventArgs^ e) {
+	private: System::Void account_button_Click(System::Object^ sender, System::EventArgs^ e) {
+	}
+	public: bool switch_to_account = false;
+	private: System::Void account_link_LinkClicked(System::Object^ sender, System::Windows::Forms::LinkLabelLinkClickedEventArgs^ e) {
 
-	this->switch_to_account = true;
-	this->Close();
+		this->switch_to_account = true;
+		this->Close();
 
-}
-private: System::Void login_form_Load(System::Object^ sender, System::EventArgs^ e) {
-}
-};
+	}
+	private: System::Void login_form_Load(System::Object^ sender, System::EventArgs^ e) {
+	}
+	};
 }

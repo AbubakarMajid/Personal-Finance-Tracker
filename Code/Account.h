@@ -1,5 +1,4 @@
 #pragma once
-//#include <msclr/marshal_cppstd.h> 
 #include "User.h"
 
 namespace codebase {
@@ -66,7 +65,7 @@ namespace codebase {
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
-		System::ComponentModel::Container ^components;
+		System::ComponentModel::Container^ components;
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -227,55 +226,55 @@ namespace codebase {
 	private: System::Void Account_Load(System::Object^ sender, System::EventArgs^ e) {
 	}
 	public: bool switch_to_login = false;
-private: System::Void login_link_LinkClicked(System::Object^ sender, System::Windows::Forms::LinkLabelLinkClickedEventArgs^ e) {
-	this->switch_to_login = true;
-	this->Close();
-}
-	   public: USER^ user = nullptr;
-private: System::Void account_button_Click(System::Object^ sender, System::EventArgs^ e) {
-	String^ username = username_box->Text;
-	String^ password = pass_box->Text;
-	String^ income = Income_box->Text;
-
-	/*msclr::interop::marshal_context context;
-	std::wstring incomeStr = context.marshal_as<std::wstring>(income);
-	int incomeInt = std::stoi(incomeStr);*/
-	int incomeInt = Convert::ToInt32(income);
-
-	if (username->Length == 0 || password->Length == 0 || income->Length == 0) {
-		MessageBox::Show("PlEASE ENTER ALL THE FIELDS!!","One or More Empty Fields", MessageBoxButtons::OK);
-		return;
-	}
-
-	try {
-
-		String^ conn_str = "Data Source=(localdb)\\tracker-app;Initial Catalog=tracker_db;Integrated Security=True";
-		SqlConnection sqlConn(conn_str);
-
-		sqlConn.Open();
-
-		String^ sqlQuery = "INSERT INTO Credentials (Username , Passkey , Income , Balance) VALUES (@user  , @pwd , @income , @balance)";
-
-		SqlCommand^ command = gcnew SqlCommand(sqlQuery, % sqlConn);
-		command->Parameters->AddWithValue("@user", username);
-		command->Parameters->AddWithValue("@pwd", password);
-		command->Parameters->AddWithValue("@income", incomeInt);
-		command->Parameters->AddWithValue("@balance", incomeInt);
-
-		command->ExecuteNonQuery();
-
-		user = gcnew USER;
-		user->username = username;
-		user->income = incomeInt;
-		user->balance = incomeInt;
-
+	private: System::Void login_link_LinkClicked(System::Object^ sender, System::Windows::Forms::LinkLabelLinkClickedEventArgs^ e) {
+		this->switch_to_login = true;
 		this->Close();
+	}
+	public: USER^ user = nullptr;
+	private: System::Void account_button_Click(System::Object^ sender, System::EventArgs^ e) {
+		String^ username = username_box->Text;
+		String^ password = pass_box->Text;
+		String^ income = Income_box->Text;
+
+		/*msclr::interop::marshal_context context;
+		std::wstring incomeStr = context.marshal_as<std::wstring>(income);
+		int incomeInt = std::stoi(incomeStr);*/
+		int incomeInt = Convert::ToInt32(income);
+
+		if (username->Length == 0 || password->Length == 0 || income->Length == 0) {
+			MessageBox::Show("PlEASE ENTER ALL THE FIELDS!!", "One or More Empty Fields", MessageBoxButtons::OK);
+			return;
+		}
+
+		try {
+
+			String^ conn_str = "Data Source=MIANZAIN\\SQLEXPRESS;Initial Catalog=APP;Integrated Security=True";
+			SqlConnection sqlConn(conn_str);
+
+			sqlConn.Open();
+
+			String^ sqlQuery = "INSERT INTO Credentials (Username , Passkey , Income , Balance) VALUES (@user  , @pwd , @income , @balance)";
+
+			SqlCommand^ command = gcnew SqlCommand(sqlQuery, % sqlConn);
+			command->Parameters->AddWithValue("@user", username);
+			command->Parameters->AddWithValue("@pwd", password);
+			command->Parameters->AddWithValue("@income", incomeInt);
+			command->Parameters->AddWithValue("@balance", incomeInt);
+
+			command->ExecuteNonQuery();
+
+			user = gcnew USER;
+			user->username = username;
+			user->income = incomeInt;
+			user->balance = incomeInt;
+
+			this->Close();
+
+		}
+		catch (Exception^ e) {
+			MessageBox::Show("Failed to Create Account", "Account Creation Failed", MessageBoxButtons::OK);
+		}
 
 	}
-	catch(Exception^ e){
-		MessageBox::Show("Failed to Create Account", "Account Creation Failed", MessageBoxButtons::OK);
-	}
-
-}
-};
+	};
 }

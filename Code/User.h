@@ -3,8 +3,9 @@
 
 using namespace System;
 
-public ref class USER {
-public : 
+public ref class USER
+{
+public:
 	int id;
 	String^ username;
 	String^ password;
