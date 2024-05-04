@@ -456,6 +456,7 @@ namespace codebase {
 			this->label6->Size = System::Drawing::Size(44, 16);
 			this->label6->TabIndex = 1;
 			this->label6->Text = L"label6";
+			this->label6->Click += gcnew System::EventHandler(this, &Dashboard::label6_Click);
 			// 
 			// label1
 			// 
@@ -685,7 +686,9 @@ namespace codebase {
 		this->switch_to_budget = true;
 		this->Close();
 	}
-	};
+	private: System::Void label6_Click(System::Object^ sender, System::EventArgs^ e) {
+	}
+};
 }
 #pragma once
 

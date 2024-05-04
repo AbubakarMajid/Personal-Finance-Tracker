@@ -143,7 +143,7 @@ namespace codebase {
 			this->panel3->Controls->Add(this->button1);
 			this->panel3->Dock = System::Windows::Forms::DockStyle::Left;
 			this->panel3->Location = System::Drawing::Point(0, 110);
-			this->panel3->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->panel3->Margin = System::Windows::Forms::Padding(4);
 			this->panel3->Name = L"panel3";
 			this->panel3->Size = System::Drawing::Size(333, 451);
 			this->panel3->TabIndex = 4;
@@ -155,7 +155,7 @@ namespace codebase {
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 			this->button3->ForeColor = System::Drawing::SystemColors::ControlLightLight;
 			this->button3->Location = System::Drawing::Point(0, 277);
-			this->button3->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->button3->Margin = System::Windows::Forms::Padding(4);
 			this->button3->Name = L"button3";
 			this->button3->Size = System::Drawing::Size(333, 58);
 			this->button3->TabIndex = 5;
@@ -170,7 +170,7 @@ namespace codebase {
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 			this->button2->ForeColor = System::Drawing::SystemColors::ControlLightLight;
 			this->button2->Location = System::Drawing::Point(0, 212);
-			this->button2->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->button2->Margin = System::Windows::Forms::Padding(4);
 			this->button2->Name = L"button2";
 			this->button2->Size = System::Drawing::Size(333, 58);
 			this->button2->TabIndex = 1;
@@ -185,7 +185,7 @@ namespace codebase {
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 			this->button1->ForeColor = System::Drawing::SystemColors::ControlLightLight;
 			this->button1->Location = System::Drawing::Point(0, 146);
-			this->button1->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->button1->Margin = System::Windows::Forms::Padding(4);
 			this->button1->Name = L"button1";
 			this->button1->Size = System::Drawing::Size(333, 58);
 			this->button1->TabIndex = 0;
@@ -211,7 +211,7 @@ namespace codebase {
 			this->panel4->Controls->Add(this->label2);
 			this->panel4->Controls->Add(this->label1);
 			this->panel4->Location = System::Drawing::Point(472, 145);
-			this->panel4->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->panel4->Margin = System::Windows::Forms::Padding(4);
 			this->panel4->Name = L"panel4";
 			this->panel4->Size = System::Drawing::Size(520, 416);
 			this->panel4->TabIndex = 5;
@@ -222,7 +222,7 @@ namespace codebase {
 			this->panel5->Controls->Add(this->label6);
 			this->panel5->Dock = System::Windows::Forms::DockStyle::Top;
 			this->panel5->Location = System::Drawing::Point(0, 0);
-			this->panel5->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->panel5->Margin = System::Windows::Forms::Padding(4);
 			this->panel5->Name = L"panel5";
 			this->panel5->Size = System::Drawing::Size(520, 74);
 			this->panel5->TabIndex = 16;
@@ -247,7 +247,7 @@ namespace codebase {
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 			this->button4->ForeColor = System::Drawing::SystemColors::ControlText;
 			this->button4->Location = System::Drawing::Point(379, 367);
-			this->button4->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->button4->Margin = System::Windows::Forms::Padding(4);
 			this->button4->Name = L"button4";
 			this->button4->Size = System::Drawing::Size(125, 38);
 			this->button4->TabIndex = 6;
@@ -264,10 +264,11 @@ namespace codebase {
 			this->comboBox3->IntegralHeight = false;
 			this->comboBox3->Items->AddRange(gcnew cli::array< System::Object^  >(4) { L"Utilities", L"Food", L"Healthcare", L"Entertainment" });
 			this->comboBox3->Location = System::Drawing::Point(243, 112);
-			this->comboBox3->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->comboBox3->Margin = System::Windows::Forms::Padding(4);
 			this->comboBox3->Name = L"comboBox3";
 			this->comboBox3->Size = System::Drawing::Size(187, 24);
 			this->comboBox3->TabIndex = 15;
+			this->comboBox3->SelectedIndexChanged += gcnew System::EventHandler(this, &Transaction::comboBox3_SelectedIndexChanged);
 			// 
 			// comboBox2
 			// 
@@ -277,7 +278,7 @@ namespace codebase {
 			this->comboBox2->FormattingEnabled = true;
 			this->comboBox2->Items->AddRange(gcnew cli::array< System::Object^  >(3) { L"US Dollar", L"Pound", L"Euro" });
 			this->comboBox2->Location = System::Drawing::Point(243, 260);
-			this->comboBox2->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->comboBox2->Margin = System::Windows::Forms::Padding(4);
 			this->comboBox2->Name = L"comboBox2";
 			this->comboBox2->Size = System::Drawing::Size(187, 24);
 			this->comboBox2->TabIndex = 14;
@@ -290,7 +291,7 @@ namespace codebase {
 			this->comboBox1->FormattingEnabled = true;
 			this->comboBox1->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Income", L"Expense" });
 			this->comboBox1->Location = System::Drawing::Point(243, 209);
-			this->comboBox1->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->comboBox1->Margin = System::Windows::Forms::Padding(4);
 			this->comboBox1->Name = L"comboBox1";
 			this->comboBox1->Size = System::Drawing::Size(187, 24);
 			this->comboBox1->TabIndex = 13;
@@ -301,7 +302,7 @@ namespace codebase {
 				| System::Windows::Forms::AnchorStyles::Left)
 				| System::Windows::Forms::AnchorStyles::Right));
 			this->textBox3->Location = System::Drawing::Point(243, 160);
-			this->textBox3->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->textBox3->Margin = System::Windows::Forms::Padding(4);
 			this->textBox3->Name = L"textBox3";
 			this->textBox3->Size = System::Drawing::Size(187, 22);
 			this->textBox3->TabIndex = 12;
@@ -312,7 +313,7 @@ namespace codebase {
 				| System::Windows::Forms::AnchorStyles::Left)
 				| System::Windows::Forms::AnchorStyles::Right));
 			this->textBox2->Location = System::Drawing::Point(243, 314);
-			this->textBox2->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->textBox2->Margin = System::Windows::Forms::Padding(4);
 			this->textBox2->Name = L"textBox2";
 			this->textBox2->Size = System::Drawing::Size(187, 22);
 			this->textBox2->TabIndex = 11;
@@ -466,5 +467,7 @@ namespace codebase {
 		this->switch_to_dashboard = true;
 		this->Close();
 	}
-	};
+	private: System::Void comboBox3_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
+	}
+};
 }
