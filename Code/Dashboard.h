@@ -682,12 +682,19 @@ namespace codebase {
 		this->switch_to_transaction = true;
 		this->Close();
 	}
+<<<<<<< HEAD:Code/Dashboard.h
 	private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e) {
 		this->switch_to_budget = true;
 		this->Close();
 	}
 	private: System::Void label6_Click(System::Object^ sender, System::EventArgs^ e) {
 	}
+=======
+private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e) {
+	this->switch_to_budget = true;
+	this->Close();
+}
+>>>>>>> 25f5874a080e48230f4709b0d3bd58aaa86f0ad9:code_base/dashboard.h
 };
 }
 #pragma once
