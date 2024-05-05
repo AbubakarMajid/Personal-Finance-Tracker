@@ -37,33 +37,32 @@ int main(array<String^>^ args)
 	}
 
 	while (true) {
-				codebase::Dashboard dash(user);
-				Application::Run(% dash);
-				//dash.ShowDialog();
-				if (dash.switch_to_transaction) {
-					codebase::Transaction transaction;
-					transaction.ShowDialog();
-					if (transaction.switch_to_dashboard) {
-						continue;
-					}
-
-				}
-				else if (dash.switch_to_budget) {
-					codebase::Budget_Setter setter(user);
-					setter.ShowDialog();
-					if (setter.switch_to_dashboard) {
-						continue;
-					}
-					else if (setter.switch_to_transaction) {
-						codebase::Transaction transaction;
-						transaction.ShowDialog();
-					}
-
-				}
-				else {
-					break;
-				}
+		codebase::Dashboard dash(user);
+		Application::Run(% dash);
+		//dash.ShowDialog();
+		if (dash.switch_to_transaction) {
+			codebase::Transaction transaction;
+			transaction.ShowDialog();
+			if (transaction.switch_to_dashboard) {
+				continue;
 			}
 
+		}
+		else if (dash.switch_to_budget) {
+			codebase::Budget_Setter setter(user);
+			setter.ShowDialog();
+			if (setter.switch_to_dashboard) {
+				continue;
+			}
+			else if (setter.switch_to_transaction) {
+				codebase::Transaction transaction;
+				transaction.ShowDialog();
+			}
+
+		}
+		else {
+			break;
+		}
+	}
+
 }
-	

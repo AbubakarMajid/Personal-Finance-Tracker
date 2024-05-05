@@ -186,9 +186,9 @@ private: System::Windows::Forms::Panel^ panel7;
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			System::Windows::Forms::DataVisualization::Charting::ChartArea^ chartArea4 = (gcnew System::Windows::Forms::DataVisualization::Charting::ChartArea());
-			System::Windows::Forms::DataVisualization::Charting::Legend^ legend4 = (gcnew System::Windows::Forms::DataVisualization::Charting::Legend());
-			System::Windows::Forms::DataVisualization::Charting::Series^ series4 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
+			System::Windows::Forms::DataVisualization::Charting::ChartArea^ chartArea1 = (gcnew System::Windows::Forms::DataVisualization::Charting::ChartArea());
+			System::Windows::Forms::DataVisualization::Charting::Legend^ legend1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Legend());
+			System::Windows::Forms::DataVisualization::Charting::Series^ series1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
 			this->panel2 = (gcnew System::Windows::Forms::Panel());
 			this->label7 = (gcnew System::Windows::Forms::Label());
@@ -218,11 +218,11 @@ private: System::Windows::Forms::Panel^ panel7;
 			this->dataGridView1 = (gcnew System::Windows::Forms::DataGridView());
 			this->label12 = (gcnew System::Windows::Forms::Label());
 			this->panel8 = (gcnew System::Windows::Forms::Panel());
-			this->chart1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Chart());
+			this->panel7 = (gcnew System::Windows::Forms::Panel());
 			this->label14 = (gcnew System::Windows::Forms::Label());
+			this->chart1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Chart());
 			this->label13 = (gcnew System::Windows::Forms::Label());
 			this->progressBar1 = (gcnew System::Windows::Forms::ProgressBar());
-			this->panel7 = (gcnew System::Windows::Forms::Panel());
 			this->panel1->SuspendLayout();
 			this->panel2->SuspendLayout();
 			this->panel3->SuspendLayout();
@@ -236,8 +236,8 @@ private: System::Windows::Forms::Panel^ panel7;
 			this->panel10->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView1))->BeginInit();
 			this->panel8->SuspendLayout();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->chart1))->BeginInit();
 			this->panel7->SuspendLayout();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->chart1))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// panel1
@@ -251,6 +251,7 @@ private: System::Windows::Forms::Panel^ panel7;
 			this->panel1->Name = L"panel1";
 			this->panel1->Size = System::Drawing::Size(1675, 110);
 			this->panel1->TabIndex = 6;
+			this->panel1->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &Dashboard::panel1_Paint);
 			// 
 			// panel2
 			// 
@@ -284,7 +285,7 @@ private: System::Windows::Forms::Panel^ panel7;
 			this->panel3->Controls->Add(this->button1);
 			this->panel3->Dock = System::Windows::Forms::DockStyle::Left;
 			this->panel3->Location = System::Drawing::Point(0, 110);
-			this->panel3->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->panel3->Margin = System::Windows::Forms::Padding(4);
 			this->panel3->Name = L"panel3";
 			this->panel3->Size = System::Drawing::Size(333, 719);
 			this->panel3->TabIndex = 4;
@@ -296,7 +297,7 @@ private: System::Windows::Forms::Panel^ panel7;
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 			this->button3->ForeColor = System::Drawing::SystemColors::ControlLightLight;
 			this->button3->Location = System::Drawing::Point(0, 252);
-			this->button3->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->button3->Margin = System::Windows::Forms::Padding(4);
 			this->button3->Name = L"button3";
 			this->button3->Size = System::Drawing::Size(333, 58);
 			this->button3->TabIndex = 8;
@@ -312,7 +313,7 @@ private: System::Windows::Forms::Panel^ panel7;
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 			this->button2->ForeColor = System::Drawing::SystemColors::ControlLightLight;
 			this->button2->Location = System::Drawing::Point(0, 187);
-			this->button2->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->button2->Margin = System::Windows::Forms::Padding(4);
 			this->button2->Name = L"button2";
 			this->button2->Size = System::Drawing::Size(333, 58);
 			this->button2->TabIndex = 7;
@@ -328,7 +329,7 @@ private: System::Windows::Forms::Panel^ panel7;
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 			this->button1->ForeColor = System::Drawing::SystemColors::ControlLightLight;
 			this->button1->Location = System::Drawing::Point(0, 122);
-			this->button1->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->button1->Margin = System::Windows::Forms::Padding(4);
 			this->button1->Name = L"button1";
 			this->button1->Size = System::Drawing::Size(333, 58);
 			this->button1->TabIndex = 6;
@@ -581,7 +582,7 @@ private: System::Windows::Forms::Panel^ panel7;
 					L"June", L"July", L"August", L"September", L"October", L"November", L"December"
 			});
 			this->comboBox1->Location = System::Drawing::Point(629, 25);
-			this->comboBox1->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->comboBox1->Margin = System::Windows::Forms::Padding(4);
 			this->comboBox1->Name = L"comboBox1";
 			this->comboBox1->Size = System::Drawing::Size(187, 24);
 			this->comboBox1->TabIndex = 6;
@@ -628,26 +629,15 @@ private: System::Windows::Forms::Panel^ panel7;
 			this->panel8->Size = System::Drawing::Size(451, 662);
 			this->panel8->TabIndex = 9;
 			// 
-			// chart1
+			// panel7
 			// 
-			this->chart1->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Left)
-				| System::Windows::Forms::AnchorStyles::Right));
-			this->chart1->BackColor = System::Drawing::Color::LightSteelBlue;
-			chartArea4->Name = L"ChartArea1";
-			this->chart1->ChartAreas->Add(chartArea4);
-			legend4->Name = L"Legend1";
-			this->chart1->Legends->Add(legend4);
-			this->chart1->Location = System::Drawing::Point(7, 369);
-			this->chart1->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
-			this->chart1->Name = L"chart1";
-			series4->ChartArea = L"ChartArea1";
-			series4->Legend = L"Legend1";
-			series4->Name = L"Series1";
-			this->chart1->Series->Add(series4);
-			this->chart1->Size = System::Drawing::Size(431, 223);
-			this->chart1->TabIndex = 4;
-			this->chart1->Text = L"chart1";
-			this->chart1->Click += gcnew System::EventHandler(this, &Dashboard::chart1_Click);
+			this->panel7->BackColor = System::Drawing::Color::LightSteelBlue;
+			this->panel7->Controls->Add(this->label14);
+			this->panel7->Location = System::Drawing::Point(7, 164);
+			this->panel7->Name = L"panel7";
+			this->panel7->Size = System::Drawing::Size(422, 169);
+			this->panel7->TabIndex = 5;
+			this->panel7->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &Dashboard::panel7_Paint);
 			// 
 			// label14
 			// 
@@ -661,6 +651,27 @@ private: System::Windows::Forms::Panel^ panel7;
 			this->label14->Size = System::Drawing::Size(140, 22);
 			this->label14->TabIndex = 1;
 			this->label14->Text = L"Your Net Worth";
+			// 
+			// chart1
+			// 
+			this->chart1->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Left)
+				| System::Windows::Forms::AnchorStyles::Right));
+			this->chart1->BackColor = System::Drawing::Color::LightSteelBlue;
+			chartArea1->Name = L"ChartArea1";
+			this->chart1->ChartAreas->Add(chartArea1);
+			legend1->Name = L"Legend1";
+			this->chart1->Legends->Add(legend1);
+			this->chart1->Location = System::Drawing::Point(7, 369);
+			this->chart1->Margin = System::Windows::Forms::Padding(4);
+			this->chart1->Name = L"chart1";
+			series1->ChartArea = L"ChartArea1";
+			series1->Legend = L"Legend1";
+			series1->Name = L"Series1";
+			this->chart1->Series->Add(series1);
+			this->chart1->Size = System::Drawing::Size(431, 223);
+			this->chart1->TabIndex = 4;
+			this->chart1->Text = L"chart1";
+			this->chart1->Click += gcnew System::EventHandler(this, &Dashboard::chart1_Click);
 			// 
 			// label13
 			// 
@@ -689,16 +700,6 @@ private: System::Windows::Forms::Panel^ panel7;
 			this->progressBar1->Value = 20;
 			this->progressBar1->Click += gcnew System::EventHandler(this, &Dashboard::progressBar1_Click);
 			// 
-			// panel7
-			// 
-			this->panel7->BackColor = System::Drawing::Color::LightSteelBlue;
-			this->panel7->Controls->Add(this->label14);
-			this->panel7->Location = System::Drawing::Point(7, 164);
-			this->panel7->Name = L"panel7";
-			this->panel7->Size = System::Drawing::Size(422, 169);
-			this->panel7->TabIndex = 5;
-			this->panel7->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &Dashboard::panel7_Paint);
-			// 
 			// Dashboard
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
@@ -713,7 +714,7 @@ private: System::Windows::Forms::Panel^ panel7;
 			this->Controls->Add(this->tableLayoutPanel1);
 			this->Controls->Add(this->panel3);
 			this->Controls->Add(this->panel1);
-			this->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->Margin = System::Windows::Forms::Padding(4);
 			this->Name = L"Dashboard";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"Budget_Setter";
@@ -740,9 +741,9 @@ private: System::Windows::Forms::Panel^ panel7;
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView1))->EndInit();
 			this->panel8->ResumeLayout(false);
 			this->panel8->PerformLayout();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->chart1))->EndInit();
 			this->panel7->ResumeLayout(false);
 			this->panel7->PerformLayout();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->chart1))->EndInit();
 			this->ResumeLayout(false);
 
 		}
@@ -784,6 +785,8 @@ private: System::Void panel9_Paint(System::Object^ sender, System::Windows::Form
 private: System::Void chart1_Click(System::Object^ sender, System::EventArgs^ e) {
 }
 private: System::Void panel7_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
+}
+private: System::Void panel1_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
 }
 };
 }

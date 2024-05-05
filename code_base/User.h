@@ -1,10 +1,11 @@
+
 #pragma once
 
 
 using namespace System;
 
 public ref class USER {
-public : 
+public:
 	int id;
 	String^ username;
 	String^ password;

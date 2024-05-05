@@ -521,5 +521,5 @@ namespace codebase {
 		this->switch_to_dashboard = true;
 		this->Close();
 	}
-};
+	};
 }
