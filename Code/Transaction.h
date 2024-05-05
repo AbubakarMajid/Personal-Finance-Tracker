@@ -1,5 +1,5 @@
 #pragma once
-
+#include"User.h"
 namespace codebase {
 
 	using namespace System;
@@ -8,6 +8,7 @@ namespace codebase {
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
+	using namespace System::Data::SqlClient;
 
 	/// <summary>
 	/// Summary for frontEndii
@@ -15,12 +16,28 @@ namespace codebase {
 	public ref class Transaction : public System::Windows::Forms::Form
 	{
 	public:
-		Transaction(void)
+		Transaction(USER^ user)
 		{
-			InitializeComponent();
-			//
-			//TODO: Add the constructor code here
-			//
+			InitializeComponent(); // Move this line to the top
+
+			if (user == nullptr)
+			{
+				MessageBox::Show("User not found", "Error", MessageBoxButtons::OK);
+				this->Close();
+			}
+			else
+			{
+				// Ensure that name_label is not null before trying to access its Text property
+				if (this->name_label != nullptr)
+				{
+					this->name_label->Text = user->username;
+				}
+				else
+				{
+					// Handle the case when name_label is null
+					// ...
+				}
+			}
 		}
 
 	protected:
@@ -56,6 +73,7 @@ namespace codebase {
 	private: System::Windows::Forms::Button^ button4;
 	private: System::Windows::Forms::Panel^ panel5;
 	private: System::Windows::Forms::Label^ label6;
+	private: System::Windows::Forms::Label^ name_label;
 	protected:
 	protected:
 	private:
@@ -71,6 +89,14 @@ namespace codebase {
 		/// </summary>
 		void InitializeComponent(void)
 		{
+
+			this->name_label = (gcnew System::Windows::Forms::Label());
+			this->name_label->Location = System::Drawing::Point(100, 100); // Change these values as needed
+			this->name_label->Name = L"name_label";
+			this->name_label->Size = System::Drawing::Size(100, 23); // Change these values as needed
+			this->name_label->TabIndex = 0;
+			this->name_label->Text = L"";
+			this->Controls->Add(this->name_label);
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
 			this->panel2 = (gcnew System::Windows::Forms::Panel());
 			this->label7 = (gcnew System::Windows::Forms::Label());
@@ -462,6 +488,33 @@ namespace codebase {
 	private: System::Void label1_Click(System::Object^ sender, System::EventArgs^ e) {
 	}
 	private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e) {
+		String^ category = this->comboBox3->Text;
+		String^ type = this->comboBox1->Text;
+		String^ amount = this->textBox3->Text;
+		String^ currency = this->comboBox2->Text;
+		String^ date = this->textBox2->Text;
+
+		try {
+			String^ conn_str = "Data Source=MIANZAIN\\SQLEXPRESS;Initial Catalog=APP;Integrated Security=True";
+			SqlConnection sqlConn(conn_str);
+			sqlConn.Open();
+			String^ sqlQuery = "INSERT INTO Transactions (Username, Category, Type, Date, Amount, Currency) VALUES (@user, @cat, @type, @date, @amount, @currency)";
+			SqlCommand^ command = gcnew SqlCommand(sqlQuery, % sqlConn);
+			command->Parameters->AddWithValue("@user", this->name_label->Text);
+			command->Parameters->AddWithValue("@cat", category);
+			command->Parameters->AddWithValue("@type", type);
+			command->Parameters->AddWithValue("@date", date);
+			command->Parameters->AddWithValue("@amount", amount);
+            command->Parameters->AddWithValue("@currency", currency);
+			command->ExecuteNonQuery();
+			MessageBox::Show("Transaction Added Successfully", "Success", MessageBoxButtons::OK);
+		}
+		catch (SqlException^ ex) {
+			MessageBox::Show("SQL Error: " + ex->Message, "Transaction Failed", MessageBoxButtons::OK);
+		}
+		catch (Exception^ ex) {
+			MessageBox::Show("Error: " + ex->Message, "Transaction Failed", MessageBoxButtons::OK);
+		}
 	}
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
 		this->switch_to_dashboard = true;

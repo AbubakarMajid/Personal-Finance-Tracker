@@ -39,29 +39,38 @@ int main(array<String^>^ args)
 	while (true) {
 		codebase::Dashboard dash(user);
 		Application::Run(% dash);
-		if (dash.switch_to_transaction) {
-			codebase::Transaction transaction;
-			transaction.ShowDialog();
-			if (transaction.switch_to_dashboard) {
-				continue;
+		if (dash.switch_to_transaction)
+		{
+			if (user != nullptr) {
+				codebase::Transaction transaction(user);
+				if (transaction.ShowDialog() == System::Windows::Forms::DialogResult::OK) 
+				{
+					transaction.ShowDialog();
+				}
+				else {
+					break;
+				}
+				if (transaction.switch_to_dashboard)
+				{
+					continue;
+				}
 			}
+			else if (dash.switch_to_budget) {
+				codebase::Budget_Setter setter(user);
+				setter.ShowDialog();
+				if (setter.switch_to_dashboard) {
+					continue;
+				}
+				else if (setter.switch_to_transaction) {
+					codebase::Transaction transaction(user);
+					transaction.ShowDialog();
+				}
 
+			}
+			else {
+				break;
+			}
 		}
-		else if (dash.switch_to_budget) {
-			codebase::Budget_Setter setter(user);
-			setter.ShowDialog();
-			if (setter.switch_to_dashboard) {
-				continue;
-			}
-			else if (setter.switch_to_transaction) {
-				codebase::Transaction transaction;
-				transaction.ShowDialog();
-			}
 
-		}
-		else {
-			break;
-		}
 	}
-
 }
