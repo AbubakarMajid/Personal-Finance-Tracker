@@ -16,11 +16,11 @@ int main(array<String^>^ args)
 
 	USER^ user = nullptr;
 	while (true) {
-		codebase::login_form log;
+		Project::login_form log;
 		log.ShowDialog();
 		user = log.user;
 		if (log.switch_to_account) {
-			codebase::Account account;
+			Project::Account account;
 			account.ShowDialog();
 			if (account.switch_to_login) {
 				continue;
@@ -37,12 +37,12 @@ int main(array<String^>^ args)
 	}
 
 	while (true) {
-		codebase::Dashboard dash(user);
+		Project::Dashboard dash(user);
 		Application::Run(% dash);
 		if (dash.switch_to_transaction)
 		{
 			if (user != nullptr) {
-				codebase::Transaction transaction(user);
+				Project::Transaction transaction(user);
 				if (transaction.ShowDialog() == System::Windows::Forms::DialogResult::OK) 
 				{
 					transaction.ShowDialog();
@@ -56,13 +56,13 @@ int main(array<String^>^ args)
 				}
 			}
 			else if (dash.switch_to_budget) {
-				codebase::Budget_Setter setter(user);
+				Project::Budget_Setter setter(user);
 				setter.ShowDialog();
 				if (setter.switch_to_dashboard) {
 					continue;
 				}
 				else if (setter.switch_to_transaction) {
-					codebase::Transaction transaction(user);
+					Project::Transaction transaction(user);
 					transaction.ShowDialog();
 				}
 

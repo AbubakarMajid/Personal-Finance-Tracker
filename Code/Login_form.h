@@ -1,7 +1,7 @@
 #pragma once
 #include "User.h"
 
-namespace codebase {
+namespace Project {
 
 	using namespace System;
 	using namespace System::ComponentModel;
@@ -36,10 +36,10 @@ namespace codebase {
 				delete components;
 			}
 		}
-	private: System::Windows::Forms::Label^ label1;
-	private: System::Windows::Forms::Label^ password_label;
 
-	private: System::Windows::Forms::Label^ username_label;
+
+
+
 
 	private: System::Windows::Forms::TextBox^ username_box;
 	private: System::Windows::Forms::TextBox^ password_box;
@@ -47,7 +47,7 @@ namespace codebase {
 
 	private: System::Windows::Forms::Button^ login_button;
 	private: System::Windows::Forms::LinkLabel^ account_link;
-	private: System::Windows::Forms::Label^ info_label;
+
 
 
 
@@ -70,123 +70,79 @@ namespace codebase {
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			this->label1 = (gcnew System::Windows::Forms::Label());
-			this->password_label = (gcnew System::Windows::Forms::Label());
-			this->username_label = (gcnew System::Windows::Forms::Label());
+			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(login_form::typeid));
 			this->username_box = (gcnew System::Windows::Forms::TextBox());
 			this->password_box = (gcnew System::Windows::Forms::TextBox());
 			this->login_button = (gcnew System::Windows::Forms::Button());
 			this->account_link = (gcnew System::Windows::Forms::LinkLabel());
-			this->info_label = (gcnew System::Windows::Forms::Label());
 			this->SuspendLayout();
-			// 
-			// label1
-			// 
-			this->label1->AutoSize = true;
-			this->label1->ForeColor = System::Drawing::SystemColors::ButtonFace;
-			this->label1->Location = System::Drawing::Point(241, 43);
-			this->label1->Name = L"label1";
-			this->label1->Size = System::Drawing::Size(99, 31);
-			this->label1->TabIndex = 0;
-			this->label1->Text = L"LOGIN";
-			this->label1->TextAlign = System::Drawing::ContentAlignment::TopCenter;
-			this->label1->Click += gcnew System::EventHandler(this, &login_form::label1_Click);
-			// 
-			// password_label
-			// 
-			this->password_label->AutoSize = true;
-			this->password_label->ForeColor = System::Drawing::SystemColors::ButtonFace;
-			this->password_label->Location = System::Drawing::Point(55, 220);
-			this->password_label->Name = L"password_label";
-			this->password_label->Size = System::Drawing::Size(172, 31);
-			this->password_label->TabIndex = 1;
-			this->password_label->Text = L"PASSWORD";
-			// 
-			// username_label
-			// 
-			this->username_label->AutoSize = true;
-			this->username_label->ForeColor = System::Drawing::SystemColors::ButtonFace;
-			this->username_label->Location = System::Drawing::Point(55, 120);
-			this->username_label->Name = L"username_label";
-			this->username_label->Size = System::Drawing::Size(168, 31);
-			this->username_label->TabIndex = 2;
-			this->username_label->Text = L"USERNAME";
 			// 
 			// username_box
 			// 
 			this->username_box->AllowDrop = true;
 			this->username_box->ForeColor = System::Drawing::SystemColors::InactiveCaptionText;
-			this->username_box->Location = System::Drawing::Point(64, 164);
+			this->username_box->Location = System::Drawing::Point(79, 209);
+			this->username_box->Multiline = true;
 			this->username_box->Name = L"username_box";
-			this->username_box->Size = System::Drawing::Size(440, 38);
+			this->username_box->Size = System::Drawing::Size(198, 29);
 			this->username_box->TabIndex = 3;
 			// 
 			// password_box
 			// 
 			this->password_box->ForeColor = System::Drawing::SystemColors::InactiveCaptionText;
-			this->password_box->Location = System::Drawing::Point(60, 271);
+			this->password_box->Location = System::Drawing::Point(79, 278);
+			this->password_box->Multiline = true;
 			this->password_box->Name = L"password_box";
 			this->password_box->PasswordChar = '*';
-			this->password_box->Size = System::Drawing::Size(440, 38);
+			this->password_box->Size = System::Drawing::Size(198, 31);
 			this->password_box->TabIndex = 4;
 			// 
 			// login_button
 			// 
-			this->login_button->Location = System::Drawing::Point(230, 334);
+			this->login_button->BackColor = System::Drawing::Color::AliceBlue;
+			this->login_button->ForeColor = System::Drawing::Color::MidnightBlue;
+			this->login_button->Location = System::Drawing::Point(117, 330);
 			this->login_button->Name = L"login_button";
 			this->login_button->Size = System::Drawing::Size(123, 38);
 			this->login_button->TabIndex = 5;
-			this->login_button->Text = L"LOGIN";
-			this->login_button->UseVisualStyleBackColor = true;
+			this->login_button->Text = L"Login";
+			this->login_button->UseVisualStyleBackColor = false;
 			this->login_button->Click += gcnew System::EventHandler(this, &login_form::login_button_Click);
 			// 
 			// account_link
 			// 
 			this->account_link->AutoSize = true;
-			this->account_link->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 13, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			this->account_link->BackColor = System::Drawing::Color::LightSteelBlue;
+			this->account_link->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->account_link->LinkColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(192)), static_cast<System::Int32>(static_cast<System::Byte>(192)),
-				static_cast<System::Int32>(static_cast<System::Byte>(255)));
-			this->account_link->Location = System::Drawing::Point(464, 460);
+			this->account_link->LinkColor = System::Drawing::Color::DarkBlue;
+			this->account_link->Location = System::Drawing::Point(137, 397);
 			this->account_link->Name = L"account_link";
-			this->account_link->Size = System::Drawing::Size(215, 26);
+			this->account_link->Size = System::Drawing::Size(140, 24);
 			this->account_link->TabIndex = 7;
 			this->account_link->TabStop = true;
-			this->account_link->Text = L"CREATE ACCOUNT";
+			this->account_link->Text = L"Create Account";
 			this->account_link->LinkClicked += gcnew System::Windows::Forms::LinkLabelLinkClickedEventHandler(this, &login_form::account_link_LinkClicked);
-			// 
-			// info_label
-			// 
-			this->info_label->AutoSize = true;
-			this->info_label->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 10, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->info_label->ForeColor = System::Drawing::SystemColors::ButtonHighlight;
-			this->info_label->Location = System::Drawing::Point(300, 465);
-			this->info_label->Name = L"info_label";
-			this->info_label->Size = System::Drawing::Size(185, 20);
-			this->info_label->TabIndex = 8;
-			this->info_label->Text = L"Don\'t have an account\?";
 			// 
 			// login_form
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(16, 31);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(0)),
-				static_cast<System::Int32>(static_cast<System::Byte>(64)));
-			this->ClientSize = System::Drawing::Size(653, 500);
-			this->Controls->Add(this->info_label);
+			this->BackColor = System::Drawing::Color::White;
+			this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
+			this->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
+			this->ClientSize = System::Drawing::Size(914, 558);
 			this->Controls->Add(this->account_link);
 			this->Controls->Add(this->login_button);
 			this->Controls->Add(this->password_box);
 			this->Controls->Add(this->username_box);
-			this->Controls->Add(this->username_label);
-			this->Controls->Add(this->password_label);
-			this->Controls->Add(this->label1);
+			this->DoubleBuffered = true;
 			this->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 16, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->Margin = System::Windows::Forms::Padding(6);
 			this->Name = L"login_form";
 			this->Text = L"login_form";
+			this->WindowState = System::Windows::Forms::FormWindowState::Maximized;
 			this->Load += gcnew System::EventHandler(this, &login_form::login_form_Load);
 			this->ResumeLayout(false);
 			this->PerformLayout();
@@ -247,6 +203,8 @@ namespace codebase {
 
 	}
 	private: System::Void login_form_Load(System::Object^ sender, System::EventArgs^ e) {
+	}
+	private: System::Void info_label_Click(System::Object^ sender, System::EventArgs^ e) {
 	}
 	};
 }

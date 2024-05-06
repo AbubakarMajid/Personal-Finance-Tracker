@@ -1,7 +1,7 @@
 #pragma once
 #include "User.h"
 
-namespace codebase {
+namespace Project {
 
 	using namespace System;
 	using namespace System::ComponentModel;
