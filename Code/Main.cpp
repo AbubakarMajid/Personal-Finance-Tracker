@@ -16,11 +16,11 @@ int main(array<String^>^ args)
 
 	USER^ user = nullptr;
 	while (true) {
-		codebase::login_form log;
+		Project::login_form log;
 		log.ShowDialog();
 		user = log.user;
 		if (log.switch_to_account) {
-			codebase::Account account;
+			Project::Account account;
 			account.ShowDialog();
 			if (account.switch_to_login) {
 				continue;
@@ -37,53 +37,40 @@ int main(array<String^>^ args)
 	}
 
 	while (true) {
-<<<<<<< HEAD:Code/Main.cpp
-		codebase::Dashboard dash;
+		Project::Dashboard dash(user);
 		Application::Run(% dash);
-		//dash.ShowDialog();
-		if (dash.switch_to_transaction) {
-			codebase::Transaction transaction;
-			transaction.ShowDialog();
-			if (transaction.switch_to_dashboard) {
-				continue;
-=======
-				codebase::Dashboard dash;
-				Application::Run(% dash);
-				//dash.ShowDialog();
-				if (dash.switch_to_transaction) {
-					codebase::Transaction transaction;
+		if (dash.switch_to_transaction)
+		{
+			if (user != nullptr) {
+				Project::Transaction transaction(user);
+				if (transaction.ShowDialog() == System::Windows::Forms::DialogResult::OK) 
+				{
 					transaction.ShowDialog();
-					if (transaction.switch_to_dashboard) {
-						continue;
-					}
-
-				}
-				else if (dash.switch_to_budget) {
-					codebase::Budget_Setter setter(user);
-					setter.ShowDialog();
-					if (setter.switch_to_dashboard) {
-						continue;
-					}
-
 				}
 				else {
 					break;
 				}
->>>>>>> 25f5874a080e48230f4709b0d3bd58aaa86f0ad9:code_base/Main.cpp
+				if (transaction.switch_to_dashboard)
+				{
+					continue;
+				}
 			}
+			else if (dash.switch_to_budget) {
+				Project::Budget_Setter setter(user);
+				setter.ShowDialog();
+				if (setter.switch_to_dashboard) {
+					continue;
+				}
+				else if (setter.switch_to_transaction) {
+					Project::Transaction transaction(user);
+					transaction.ShowDialog();
+				}
 
-		}
-		else if (dash.switch_to_budget) {
-			codebase::Budget_Setter setter(user);
-			setter.ShowDialog();
-			if (setter.switch_to_dashboard) {
-				continue;
 			}
+			else {
+				break;
+			}
+		}
 
-		}
-		else {
-			break;
-		}
 	}
-
 }

@@ -1,7 +1,7 @@
 #pragma once
 #include "User.h"
 
-namespace codebase {
+namespace Project {
 
 	using namespace System;
 	using namespace System::ComponentModel;
@@ -38,16 +38,16 @@ namespace codebase {
 				delete components;
 			}
 		}
-	private: System::Windows::Forms::Label^ header_label;
-	private: System::Windows::Forms::Label^ income_label;
-	protected:
+
 
 	protected:
 
 	protected:
 
-	private: System::Windows::Forms::Label^ username_label;
-	private: System::Windows::Forms::Label^ password_label;
+	protected:
+
+
+
 
 
 
@@ -56,7 +56,7 @@ namespace codebase {
 	private: System::Windows::Forms::TextBox^ Income_box;
 	private: System::Windows::Forms::Button^ account_button;
 	private: System::Windows::Forms::LinkLabel^ login_link;
-	private: System::Windows::Forms::Label^ label1;
+
 
 
 
@@ -74,149 +74,88 @@ namespace codebase {
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			this->header_label = (gcnew System::Windows::Forms::Label());
-			this->income_label = (gcnew System::Windows::Forms::Label());
-			this->username_label = (gcnew System::Windows::Forms::Label());
-			this->password_label = (gcnew System::Windows::Forms::Label());
+			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(Account::typeid));
 			this->username_box = (gcnew System::Windows::Forms::TextBox());
 			this->pass_box = (gcnew System::Windows::Forms::TextBox());
 			this->Income_box = (gcnew System::Windows::Forms::TextBox());
 			this->account_button = (gcnew System::Windows::Forms::Button());
 			this->login_link = (gcnew System::Windows::Forms::LinkLabel());
-			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->SuspendLayout();
-			// 
-			// header_label
-			// 
-			this->header_label->AutoSize = true;
-			this->header_label->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 16, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->header_label->ForeColor = System::Drawing::SystemColors::ButtonFace;
-			this->header_label->Location = System::Drawing::Point(272, 32);
-			this->header_label->Name = L"header_label";
-			this->header_label->Size = System::Drawing::Size(178, 26);
-			this->header_label->TabIndex = 0;
-			this->header_label->Text = L"NEW ACCOUNT";
-			this->header_label->TextAlign = System::Drawing::ContentAlignment::TopCenter;
-			// 
-			// income_label
-			// 
-			this->income_label->AutoSize = true;
-			this->income_label->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 16, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->income_label->ForeColor = System::Drawing::SystemColors::ButtonFace;
-			this->income_label->Location = System::Drawing::Point(31, 318);
-			this->income_label->Name = L"income_label";
-			this->income_label->Size = System::Drawing::Size(100, 26);
-			this->income_label->TabIndex = 1;
-			this->income_label->Text = L"INCOME";
-			this->income_label->TextAlign = System::Drawing::ContentAlignment::TopCenter;
-			// 
-			// username_label
-			// 
-			this->username_label->AutoSize = true;
-			this->username_label->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 16, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->username_label->ForeColor = System::Drawing::SystemColors::ButtonFace;
-			this->username_label->Location = System::Drawing::Point(31, 118);
-			this->username_label->Name = L"username_label";
-			this->username_label->Size = System::Drawing::Size(138, 26);
-			this->username_label->TabIndex = 2;
-			this->username_label->Text = L"USERNAME";
-			this->username_label->TextAlign = System::Drawing::ContentAlignment::TopCenter;
-			// 
-			// password_label
-			// 
-			this->password_label->AutoSize = true;
-			this->password_label->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 16, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->password_label->ForeColor = System::Drawing::SystemColors::ButtonFace;
-			this->password_label->Location = System::Drawing::Point(31, 223);
-			this->password_label->Name = L"password_label";
-			this->password_label->Size = System::Drawing::Size(142, 26);
-			this->password_label->TabIndex = 3;
-			this->password_label->Text = L"PASSWORD";
-			this->password_label->TextAlign = System::Drawing::ContentAlignment::TopCenter;
 			// 
 			// username_box
 			// 
-			this->username_box->Location = System::Drawing::Point(172, 173);
+			this->username_box->Location = System::Drawing::Point(1066, 289);
+			this->username_box->Margin = System::Windows::Forms::Padding(4);
 			this->username_box->Name = L"username_box";
-			this->username_box->Size = System::Drawing::Size(367, 20);
+			this->username_box->Size = System::Drawing::Size(417, 22);
 			this->username_box->TabIndex = 5;
 			// 
 			// pass_box
 			// 
-			this->pass_box->Location = System::Drawing::Point(172, 282);
+			this->pass_box->Location = System::Drawing::Point(1066, 401);
+			this->pass_box->Margin = System::Windows::Forms::Padding(4);
 			this->pass_box->Name = L"pass_box";
-			this->pass_box->Size = System::Drawing::Size(367, 20);
+			this->pass_box->Size = System::Drawing::Size(417, 22);
 			this->pass_box->TabIndex = 6;
 			// 
 			// Income_box
 			// 
-			this->Income_box->Location = System::Drawing::Point(172, 378);
+			this->Income_box->Location = System::Drawing::Point(1066, 528);
+			this->Income_box->Margin = System::Windows::Forms::Padding(4);
 			this->Income_box->Name = L"Income_box";
-			this->Income_box->Size = System::Drawing::Size(367, 20);
+			this->Income_box->Size = System::Drawing::Size(417, 22);
 			this->Income_box->TabIndex = 7;
 			// 
 			// account_button
 			// 
-			this->account_button->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 10, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			this->account_button->BackColor = System::Drawing::Color::AliceBlue;
+			this->account_button->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 15.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->account_button->Location = System::Drawing::Point(277, 453);
+			this->account_button->ForeColor = System::Drawing::Color::MidnightBlue;
+			this->account_button->Location = System::Drawing::Point(1186, 596);
+			this->account_button->Margin = System::Windows::Forms::Padding(4);
 			this->account_button->Name = L"account_button";
-			this->account_button->Size = System::Drawing::Size(150, 34);
+			this->account_button->Size = System::Drawing::Size(200, 42);
 			this->account_button->TabIndex = 8;
-			this->account_button->Text = L"CREATE ACCOUNT";
-			this->account_button->UseVisualStyleBackColor = true;
+			this->account_button->Text = L"Create";
+			this->account_button->UseVisualStyleBackColor = false;
 			this->account_button->Click += gcnew System::EventHandler(this, &Account::account_button_Click);
 			// 
 			// login_link
 			// 
 			this->login_link->AutoSize = true;
-			this->login_link->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 13, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			this->login_link->BackColor = System::Drawing::Color::LightSteelBlue;
+			this->login_link->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->login_link->LinkColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(192)), static_cast<System::Int32>(static_cast<System::Byte>(192)),
-				static_cast<System::Int32>(static_cast<System::Byte>(255)));
-			this->login_link->Location = System::Drawing::Point(638, 510);
+			this->login_link->LinkColor = System::Drawing::Color::DarkBlue;
+			this->login_link->Location = System::Drawing::Point(1502, 657);
+			this->login_link->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
 			this->login_link->Name = L"login_link";
-			this->login_link->Size = System::Drawing::Size(65, 22);
+			this->login_link->Size = System::Drawing::Size(87, 29);
 			this->login_link->TabIndex = 10;
 			this->login_link->TabStop = true;
 			this->login_link->Text = L"LOGIN";
 			this->login_link->LinkClicked += gcnew System::Windows::Forms::LinkLabelLinkClickedEventHandler(this, &Account::login_link_LinkClicked);
 			// 
-			// label1
-			// 
-			this->label1->AutoSize = true;
-			this->label1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 10, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->label1->ForeColor = System::Drawing::SystemColors::ButtonFace;
-			this->label1->Location = System::Drawing::Point(459, 515);
-			this->label1->Name = L"label1";
-			this->label1->Size = System::Drawing::Size(173, 17);
-			this->label1->TabIndex = 11;
-			this->label1->Text = L"Already have an account\?";
-			// 
 			// Account
 			// 
-			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
+			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(0)),
 				static_cast<System::Int32>(static_cast<System::Byte>(64)));
-			this->ClientSize = System::Drawing::Size(725, 541);
-			this->Controls->Add(this->label1);
+			this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
+			this->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
+			this->ClientSize = System::Drawing::Size(1763, 817);
 			this->Controls->Add(this->login_link);
 			this->Controls->Add(this->account_button);
 			this->Controls->Add(this->Income_box);
 			this->Controls->Add(this->pass_box);
 			this->Controls->Add(this->username_box);
-			this->Controls->Add(this->password_label);
-			this->Controls->Add(this->username_label);
-			this->Controls->Add(this->income_label);
-			this->Controls->Add(this->header_label);
+			this->DoubleBuffered = true;
+			this->Margin = System::Windows::Forms::Padding(4);
 			this->Name = L"Account";
 			this->Text = L"Account";
+			this->WindowState = System::Windows::Forms::FormWindowState::Maximized;
 			this->Load += gcnew System::EventHandler(this, &Account::Account_Load);
 			this->ResumeLayout(false);
 			this->PerformLayout();
