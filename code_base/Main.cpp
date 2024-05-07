@@ -41,10 +41,14 @@ int main(array<String^>^ args)
 		Application::Run(% dash);
 		//dash.ShowDialog();
 		if (dash.switch_to_transaction) {
-			codebase::Transaction transaction;
+			codebase::Transaction transaction(user);
 			transaction.ShowDialog();
 			if (transaction.switch_to_dashboard) {
 				continue;
+			}
+			else if (transaction.switch_to_budget) {
+				codebase::Budget_Setter setter(user);
+				setter.ShowDialog();
 			}
 
 		}
@@ -55,7 +59,7 @@ int main(array<String^>^ args)
 				continue;
 			}
 			else if (setter.switch_to_transaction) {
-				codebase::Transaction transaction;
+				codebase::Transaction transaction(user);
 				transaction.ShowDialog();
 			}
 

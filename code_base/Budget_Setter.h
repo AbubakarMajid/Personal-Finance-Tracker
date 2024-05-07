@@ -609,7 +609,7 @@ private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e
 
 					SqlCommand^ command = gcnew SqlCommand(sqlQuery, % sqlConn);
 					command->Parameters->AddWithValue("@user", this->name_label->Text);
-					command->Parameters->AddWithValue("@cat", "Health");
+					command->Parameters->AddWithValue("@cat", "Healthcare");
 					command->Parameters->AddWithValue("@budget", health);
 
 					command->ExecuteNonQuery();
@@ -674,7 +674,7 @@ private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e
 
 					SqlCommand^ command = gcnew SqlCommand(sqlQuery, % sqlConn);
 					command->Parameters->AddWithValue("@user", this->name_label->Text);
-					command->Parameters->AddWithValue("@cat", "Health");
+					command->Parameters->AddWithValue("@cat", "Healthcare");
 					command->Parameters->AddWithValue("@budget", health);
 
 					command->ExecuteNonQuery();

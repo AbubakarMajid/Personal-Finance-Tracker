@@ -1,6 +1,7 @@
 #pragma once
 #include "User.h"
-namespace codebase {
+namespace codebase
+{
 
 	using namespace System;
 	using namespace System::ComponentModel;
@@ -21,14 +22,17 @@ namespace codebase {
 			InitializeComponent();
 			//
 			//TODO: Add the constructor code here
-			//
+			//	
+				
+				this->label6->Text = Convert::ToString(user->balance);
+				cat_label_data(this->label10, this->label15, "Utility", user->username);
+				cat_label_data(this->label9, this->label17, "Entertainment", user->username);
+				cat_label_data(this->label8, this->label19, "Healthcare", user->username);
+				cat_label_data(this->label11, this->label21, "Food", user->username);
 
-			this->label6->Text = Convert::ToString(user->balance);
+				spent_vs_earned(this->label26, this->label28, user->username);
 
-			cat_label_data(this->label10, "Utility", user->username);
-			cat_label_data(this->label9, "Entertainment", user->username);
-			cat_label_data(this->label8, "health", user->username);
-			cat_label_data(this->label11, "Food", user->username);
+			
 
 			try {
 				String^ conn_str = "Data Source=(localdb)\\tracker-app;Initial Catalog=tracker_db;Integrated Security=True";
@@ -45,6 +49,8 @@ namespace codebase {
 
 				if (reader->Read()) {
 					this->progressBar1->Maximum = reader->GetInt64(0);
+					this->label24->Text = Convert::ToString(reader->GetInt64(0));
+					this->label23->Text = Convert::ToString(reader->GetInt64(1));
 					this->progressBar1->Value = reader->GetInt64(1);
 					//this->label10->Text = Convert::ToString(reader->GetInt64(0));
 					//this->label11->Text = Convert::ToString(reader->GetInt64(1));
@@ -115,23 +121,106 @@ namespace codebase {
 
 	private: System::Windows::Forms::Label^ label14;
 	private: System::Windows::Forms::ComboBox^ comboBox1;
-private: System::Windows::Forms::Panel^ panel7;
-	private: System::Windows::Forms::DataVisualization::Charting::Chart^ chart1;
+	private: System::Windows::Forms::PictureBox^ pictureBox1;
+	private: System::Windows::Forms::Label^ user_name;
+	private: System::Windows::Forms::Label^ label17;
+	private: System::Windows::Forms::Label^ label18;
+	private: System::Windows::Forms::Label^ label15;
+	private: System::Windows::Forms::Label^ label16;
+	private: System::Windows::Forms::Label^ label21;
+	private: System::Windows::Forms::Label^ label22;
+	private: System::Windows::Forms::Label^ label19;
+	private: System::Windows::Forms::Label^ label20;
+
+	private: System::Windows::Forms::Label^ label24;
+
+
+
+	private: System::Windows::Forms::Label^ label25;
+	private: System::Windows::Forms::Label^ label23;
+	private: System::Windows::Forms::PictureBox^ pictureBox2;
+	private: System::Windows::Forms::Label^ label27;
+
+
+
+	private: System::Windows::Forms::RadioButton^ radioButton1;
+
+	private: System::Windows::Forms::RadioButton^ radioButton3;
+	private: System::Windows::Forms::RadioButton^ radioButton2;
+	private: System::Windows::Forms::Button^ button4;
+	private: System::Windows::Forms::RadioButton^ radioButton4;
+	private: System::Windows::Forms::Panel^ panel9;
+	private: System::Windows::Forms::Label^ label26;
+	private: System::Windows::Forms::Label^ label29;
+	private: System::Windows::Forms::Label^ label28;
+private: System::Windows::Forms::Label^ label30;
 
 
 
 
+	private: System::Windows::Forms::Panel^ panel7;
+		   //private: System::Windows::Forms::DataVisualization::Charting::Chart^ chart1;
 
 
 
-		   void cat_label_data(Label^ label, String^ cat, String^ username) {
+		   void spent_vs_earned(Label^ label1, Label^ label2, String^ username) {
 			   try {
 				   String^ conn_str = "Data Source=(localdb)\\tracker-app;Initial Catalog=tracker_db;Integrated Security=True";
 				   SqlConnection sqlConn(conn_str);
 
 				   sqlConn.Open();
 
-				   String^ tmpQuery = "SELECT SUM(Amount) FROM Transactions WHERE Username = @user AND Category = @cat GROUP BY Username , Category";
+				   String^ tmpQuery = "Select Sum(Amount) from Transactions where Username = @user AND Type = 'Expense'";
+
+				   SqlCommand^ command = gcnew SqlCommand(tmpQuery, % sqlConn);
+				   command->Parameters->AddWithValue("@user", username);
+				   SqlDataReader^ reader = command->ExecuteReader();
+
+				   if (reader->Read()) {
+					   if (reader->GetInt64(0)) {
+						   label1->Text = Convert::ToString(reader->GetInt64(0));
+					   }
+				   }
+				   else {
+					   label1->Text = "0";
+				   }
+
+				   reader->Close();
+
+				   String^ tmpQuery2 = "Select Sum(Amount) from Transactions where Username = @user AND Type = 'Income'";
+
+				   SqlCommand^ command2 = gcnew SqlCommand(tmpQuery2, % sqlConn);
+				   command2->Parameters->AddWithValue("@user", username);
+				   SqlDataReader^ reader2 = command2->ExecuteReader();
+
+				   if (reader2->Read()) {
+					   if (reader2->GetInt64(0)) {
+						   label2->Text = Convert::ToString(reader2->GetInt64(0));
+					   }
+				   }
+				   else {
+					   label2->Text = "0";
+				   }
+
+			   }
+
+			   catch (Exception^ e) {
+				   MessageBox::Show(e->Message);
+				   //label2->Text = e->Message;
+			   }
+
+		   }
+
+
+
+		   void cat_label_data(Label^ label1 , Label^ label2, String^ cat, String^ username) {
+			   try {
+				   String^ conn_str = "Data Source=(localdb)\\tracker-app;Initial Catalog=tracker_db;Integrated Security=True";
+				   SqlConnection sqlConn(conn_str);
+
+				   sqlConn.Open();
+
+				   String^ tmpQuery = "select COALESCE(SUM(Amount), 0), COALESCE(MAX(Budget), 0) from Budget as b JOIN Transactions as t on  b.Category = t.Category AND b.Username = t.Username WHERE  b.Username = @user AND b.Category = @cat";
 
 				   SqlCommand^ command = gcnew SqlCommand(tmpQuery, % sqlConn);
 				   command->Parameters->AddWithValue("@user", username);
@@ -139,15 +228,18 @@ private: System::Windows::Forms::Panel^ panel7;
 				   SqlDataReader^ reader = command->ExecuteReader();
 
 				   if (reader->Read()) {
-					   label->Text = Convert::ToString(reader->GetInt64(0));
+						   label1->Text = Convert::ToString(reader->GetInt64(0));
+						   label2->Text = Convert::ToString(reader->GetInt64(1));
 				   }
 				   else {
-					   label->Text = "0";
+					   label1->Text = "0";
+					   label2->Text = "0";
 				   }
 			   }
 
 			   catch (Exception^ e) {
-				   label->Text = e->Message;
+				   MessageBox::Show(e->Message);
+				   //label2->Text = e->Message;
 			   }
 		   }
 
@@ -186,27 +278,35 @@ private: System::Windows::Forms::Panel^ panel7;
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			System::Windows::Forms::DataVisualization::Charting::ChartArea^ chartArea1 = (gcnew System::Windows::Forms::DataVisualization::Charting::ChartArea());
-			System::Windows::Forms::DataVisualization::Charting::Legend^ legend1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Legend());
-			System::Windows::Forms::DataVisualization::Charting::Series^ series1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
 			this->panel2 = (gcnew System::Windows::Forms::Panel());
 			this->label7 = (gcnew System::Windows::Forms::Label());
 			this->panel3 = (gcnew System::Windows::Forms::Panel());
+			this->button4 = (gcnew System::Windows::Forms::Button());
+			this->user_name = (gcnew System::Windows::Forms::Label());
+			this->pictureBox1 = (gcnew System::Windows::Forms::PictureBox());
 			this->button3 = (gcnew System::Windows::Forms::Button());
 			this->button2 = (gcnew System::Windows::Forms::Button());
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->tableLayoutPanel1 = (gcnew System::Windows::Forms::TableLayoutPanel());
 			this->panel13 = (gcnew System::Windows::Forms::Panel());
+			this->label21 = (gcnew System::Windows::Forms::Label());
+			this->label22 = (gcnew System::Windows::Forms::Label());
 			this->label11 = (gcnew System::Windows::Forms::Label());
 			this->label5 = (gcnew System::Windows::Forms::Label());
 			this->panel12 = (gcnew System::Windows::Forms::Panel());
+			this->label19 = (gcnew System::Windows::Forms::Label());
+			this->label20 = (gcnew System::Windows::Forms::Label());
 			this->label8 = (gcnew System::Windows::Forms::Label());
 			this->label3 = (gcnew System::Windows::Forms::Label());
 			this->panel6 = (gcnew System::Windows::Forms::Panel());
+			this->label17 = (gcnew System::Windows::Forms::Label());
+			this->label18 = (gcnew System::Windows::Forms::Label());
 			this->label9 = (gcnew System::Windows::Forms::Label());
 			this->label4 = (gcnew System::Windows::Forms::Label());
 			this->panel5 = (gcnew System::Windows::Forms::Panel());
+			this->label15 = (gcnew System::Windows::Forms::Label());
+			this->label16 = (gcnew System::Windows::Forms::Label());
 			this->label10 = (gcnew System::Windows::Forms::Label());
 			this->label2 = (gcnew System::Windows::Forms::Label());
 			this->panel4 = (gcnew System::Windows::Forms::Panel());
@@ -218,14 +318,28 @@ private: System::Windows::Forms::Panel^ panel7;
 			this->dataGridView1 = (gcnew System::Windows::Forms::DataGridView());
 			this->label12 = (gcnew System::Windows::Forms::Label());
 			this->panel8 = (gcnew System::Windows::Forms::Panel());
+			this->panel9 = (gcnew System::Windows::Forms::Panel());
+			this->label26 = (gcnew System::Windows::Forms::Label());
+			this->label29 = (gcnew System::Windows::Forms::Label());
+			this->radioButton4 = (gcnew System::Windows::Forms::RadioButton());
+			this->radioButton3 = (gcnew System::Windows::Forms::RadioButton());
+			this->radioButton2 = (gcnew System::Windows::Forms::RadioButton());
+			this->label27 = (gcnew System::Windows::Forms::Label());
+			this->radioButton1 = (gcnew System::Windows::Forms::RadioButton());
+			this->pictureBox2 = (gcnew System::Windows::Forms::PictureBox());
+			this->label25 = (gcnew System::Windows::Forms::Label());
+			this->label23 = (gcnew System::Windows::Forms::Label());
+			this->label24 = (gcnew System::Windows::Forms::Label());
 			this->panel7 = (gcnew System::Windows::Forms::Panel());
+			this->label28 = (gcnew System::Windows::Forms::Label());
 			this->label14 = (gcnew System::Windows::Forms::Label());
-			this->chart1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Chart());
 			this->label13 = (gcnew System::Windows::Forms::Label());
 			this->progressBar1 = (gcnew System::Windows::Forms::ProgressBar());
+			this->label30 = (gcnew System::Windows::Forms::Label());
 			this->panel1->SuspendLayout();
 			this->panel2->SuspendLayout();
 			this->panel3->SuspendLayout();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
 			this->tableLayoutPanel1->SuspendLayout();
 			this->panel13->SuspendLayout();
 			this->panel12->SuspendLayout();
@@ -236,8 +350,9 @@ private: System::Windows::Forms::Panel^ panel7;
 			this->panel10->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView1))->BeginInit();
 			this->panel8->SuspendLayout();
+			this->panel9->SuspendLayout();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox2))->BeginInit();
 			this->panel7->SuspendLayout();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->chart1))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// panel1
@@ -249,15 +364,15 @@ private: System::Windows::Forms::Panel^ panel7;
 			this->panel1->Location = System::Drawing::Point(0, 0);
 			this->panel1->Margin = System::Windows::Forms::Padding(3, 2, 3, 2);
 			this->panel1->Name = L"panel1";
-			this->panel1->Size = System::Drawing::Size(1675, 110);
+			this->panel1->Size = System::Drawing::Size(1827, 110);
 			this->panel1->TabIndex = 6;
-			this->panel1->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &Dashboard::panel1_Paint);
 			// 
 			// panel2
 			// 
 			this->panel2->BackColor = System::Drawing::Color::LightSteelBlue;
 			this->panel2->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 			this->panel2->Controls->Add(this->label7);
+			this->panel2->ForeColor = System::Drawing::SystemColors::ActiveCaption;
 			this->panel2->Location = System::Drawing::Point(-1, -1);
 			this->panel2->Margin = System::Windows::Forms::Padding(3, 2, 3, 2);
 			this->panel2->Name = L"panel2";
@@ -280,6 +395,9 @@ private: System::Windows::Forms::Panel^ panel7;
 			// panel3
 			// 
 			this->panel3->BackColor = System::Drawing::Color::SteelBlue;
+			this->panel3->Controls->Add(this->button4);
+			this->panel3->Controls->Add(this->user_name);
+			this->panel3->Controls->Add(this->pictureBox1);
 			this->panel3->Controls->Add(this->button3);
 			this->panel3->Controls->Add(this->button2);
 			this->panel3->Controls->Add(this->button1);
@@ -287,16 +405,54 @@ private: System::Windows::Forms::Panel^ panel7;
 			this->panel3->Location = System::Drawing::Point(0, 110);
 			this->panel3->Margin = System::Windows::Forms::Padding(4);
 			this->panel3->Name = L"panel3";
-			this->panel3->Size = System::Drawing::Size(333, 719);
+			this->panel3->Size = System::Drawing::Size(333, 812);
 			this->panel3->TabIndex = 4;
+			// 
+			// button4
+			// 
+			this->button4->BackColor = System::Drawing::Color::AliceBlue;
+			this->button4->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 9.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->button4->ForeColor = System::Drawing::Color::DarkBlue;
+			this->button4->Location = System::Drawing::Point(8, 747);
+			this->button4->Margin = System::Windows::Forms::Padding(4);
+			this->button4->Name = L"button4";
+			this->button4->Size = System::Drawing::Size(319, 49);
+			this->button4->TabIndex = 10;
+			this->button4->Text = L"Log Out";
+			this->button4->UseVisualStyleBackColor = false;
+			// 
+			// user_name
+			// 
+			this->user_name->AutoSize = true;
+			this->user_name->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 14.25F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->user_name->ForeColor = System::Drawing::SystemColors::ControlLightLight;
+			this->user_name->Location = System::Drawing::Point(115, 196);
+			this->user_name->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
+			this->user_name->Name = L"user_name";
+			this->user_name->Size = System::Drawing::Size(89, 32);
+			this->user_name->TabIndex = 4;
+			this->user_name->Text = L"label15";
+			this->user_name->Click += gcnew System::EventHandler(this, &Dashboard::label15_Click);
+			// 
+			// pictureBox1
+			// 
+			this->pictureBox1->Location = System::Drawing::Point(73, 18);
+			this->pictureBox1->Margin = System::Windows::Forms::Padding(4);
+			this->pictureBox1->Name = L"pictureBox1";
+			this->pictureBox1->Size = System::Drawing::Size(183, 167);
+			this->pictureBox1->SizeMode = System::Windows::Forms::PictureBoxSizeMode::StretchImage;
+			this->pictureBox1->TabIndex = 9;
+			this->pictureBox1->TabStop = false;
 			// 
 			// button3
 			// 
 			this->button3->BackColor = System::Drawing::Color::SteelBlue;
-			this->button3->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 15.75F, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
-				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+			this->button3->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 14.25F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
 			this->button3->ForeColor = System::Drawing::SystemColors::ControlLightLight;
-			this->button3->Location = System::Drawing::Point(0, 252);
+			this->button3->Location = System::Drawing::Point(0, 352);
 			this->button3->Margin = System::Windows::Forms::Padding(4);
 			this->button3->Name = L"button3";
 			this->button3->Size = System::Drawing::Size(333, 58);
@@ -309,10 +465,10 @@ private: System::Windows::Forms::Panel^ panel7;
 			// button2
 			// 
 			this->button2->BackColor = System::Drawing::Color::SteelBlue;
-			this->button2->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 15.75F, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
-				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+			this->button2->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 14.25F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
 			this->button2->ForeColor = System::Drawing::SystemColors::ControlLightLight;
-			this->button2->Location = System::Drawing::Point(0, 187);
+			this->button2->Location = System::Drawing::Point(0, 294);
 			this->button2->Margin = System::Windows::Forms::Padding(4);
 			this->button2->Name = L"button2";
 			this->button2->Size = System::Drawing::Size(333, 58);
@@ -325,10 +481,10 @@ private: System::Windows::Forms::Panel^ panel7;
 			// button1
 			// 
 			this->button1->BackColor = System::Drawing::Color::SteelBlue;
-			this->button1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 15.75F, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
-				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+			this->button1->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 14.25F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
 			this->button1->ForeColor = System::Drawing::SystemColors::ControlLightLight;
-			this->button1->Location = System::Drawing::Point(0, 122);
+			this->button1->Location = System::Drawing::Point(0, 236);
 			this->button1->Margin = System::Windows::Forms::Padding(4);
 			this->button1->Name = L"button1";
 			this->button1->Size = System::Drawing::Size(333, 58);
@@ -362,42 +518,70 @@ private: System::Windows::Forms::Panel^ panel7;
 			this->tableLayoutPanel1->Name = L"tableLayoutPanel1";
 			this->tableLayoutPanel1->RowCount = 1;
 			this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 100)));
-			this->tableLayoutPanel1->Size = System::Drawing::Size(1342, 108);
+			this->tableLayoutPanel1->Size = System::Drawing::Size(1494, 108);
 			this->tableLayoutPanel1->TabIndex = 7;
 			// 
 			// panel13
 			// 
 			this->panel13->BackColor = System::Drawing::Color::CornflowerBlue;
+			this->panel13->Controls->Add(this->label21);
+			this->panel13->Controls->Add(this->label22);
 			this->panel13->Controls->Add(this->label11);
 			this->panel13->Controls->Add(this->label5);
 			this->panel13->Dock = System::Windows::Forms::DockStyle::Fill;
-			this->panel13->Location = System::Drawing::Point(1091, 3);
+			this->panel13->Location = System::Drawing::Point(1214, 3);
 			this->panel13->Margin = System::Windows::Forms::Padding(3, 2, 3, 2);
 			this->panel13->Name = L"panel13";
-			this->panel13->Size = System::Drawing::Size(247, 102);
+			this->panel13->Size = System::Drawing::Size(276, 102);
 			this->panel13->TabIndex = 4;
+			// 
+			// label21
+			// 
+			this->label21->AutoSize = true;
+			this->label21->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->label21->ForeColor = System::Drawing::SystemColors::ControlLightLight;
+			this->label21->Location = System::Drawing::Point(171, 54);
+			this->label21->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
+			this->label21->Name = L"label21";
+			this->label21->Size = System::Drawing::Size(74, 28);
+			this->label21->TabIndex = 13;
+			this->label21->Text = L"label21";
+			// 
+			// label22
+			// 
+			this->label22->AutoSize = true;
+			this->label22->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->label22->ForeColor = System::Drawing::SystemColors::ControlLightLight;
+			this->label22->Location = System::Drawing::Point(155, 54);
+			this->label22->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
+			this->label22->Name = L"label22";
+			this->label22->Size = System::Drawing::Size(20, 28);
+			this->label22->TabIndex = 14;
+			this->label22->Text = L"/";
 			// 
 			// label11
 			// 
 			this->label11->AutoSize = true;
-			this->label11->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			this->label11->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->label11->ForeColor = System::Drawing::SystemColors::ControlLightLight;
-			this->label11->Location = System::Drawing::Point(60, 54);
+			this->label11->Location = System::Drawing::Point(80, 54);
 			this->label11->Name = L"label11";
-			this->label11->Size = System::Drawing::Size(99, 29);
+			this->label11->Size = System::Drawing::Size(71, 28);
 			this->label11->TabIndex = 3;
 			this->label11->Text = L"label11";
 			// 
 			// label5
 			// 
 			this->label5->AutoSize = true;
-			this->label5->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
+			this->label5->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 14.25F, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 			this->label5->ForeColor = System::Drawing::SystemColors::ControlLightLight;
-			this->label5->Location = System::Drawing::Point(25, 15);
+			this->label5->Location = System::Drawing::Point(20, 15);
 			this->label5->Name = L"label5";
-			this->label5->Size = System::Drawing::Size(74, 29);
+			this->label5->Size = System::Drawing::Size(66, 32);
 			this->label5->TabIndex = 4;
 			this->label5->Text = L"Food";
 			// 
@@ -405,61 +589,117 @@ private: System::Windows::Forms::Panel^ panel7;
 			// 
 			this->panel12->BackColor = System::Drawing::Color::LightSkyBlue;
 			this->panel12->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
+			this->panel12->Controls->Add(this->label19);
+			this->panel12->Controls->Add(this->label20);
 			this->panel12->Controls->Add(this->label8);
 			this->panel12->Controls->Add(this->label3);
 			this->panel12->Dock = System::Windows::Forms::DockStyle::Fill;
-			this->panel12->Location = System::Drawing::Point(835, 3);
+			this->panel12->Location = System::Drawing::Point(929, 3);
 			this->panel12->Margin = System::Windows::Forms::Padding(3, 2, 3, 2);
 			this->panel12->Name = L"panel12";
-			this->panel12->Size = System::Drawing::Size(249, 102);
+			this->panel12->Size = System::Drawing::Size(278, 102);
 			this->panel12->TabIndex = 3;
+			// 
+			// label19
+			// 
+			this->label19->AutoSize = true;
+			this->label19->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->label19->ForeColor = System::Drawing::SystemColors::ControlLightLight;
+			this->label19->Location = System::Drawing::Point(156, 53);
+			this->label19->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
+			this->label19->Name = L"label19";
+			this->label19->Size = System::Drawing::Size(74, 28);
+			this->label19->TabIndex = 11;
+			this->label19->Text = L"label19";
+			// 
+			// label20
+			// 
+			this->label20->AutoSize = true;
+			this->label20->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->label20->ForeColor = System::Drawing::SystemColors::ControlLightLight;
+			this->label20->Location = System::Drawing::Point(140, 53);
+			this->label20->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
+			this->label20->Name = L"label20";
+			this->label20->Size = System::Drawing::Size(20, 28);
+			this->label20->TabIndex = 12;
+			this->label20->Text = L"/";
 			// 
 			// label8
 			// 
 			this->label8->AutoSize = true;
-			this->label8->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			this->label8->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->label8->ForeColor = System::Drawing::SystemColors::ControlLightLight;
 			this->label8->Location = System::Drawing::Point(77, 53);
 			this->label8->Name = L"label8";
-			this->label8->Size = System::Drawing::Size(85, 29);
+			this->label8->Size = System::Drawing::Size(66, 28);
 			this->label8->TabIndex = 2;
 			this->label8->Text = L"label8";
 			// 
 			// label3
 			// 
 			this->label3->AutoSize = true;
-			this->label3->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
+			this->label3->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 14.25F, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 			this->label3->ForeColor = System::Drawing::SystemColors::ControlLightLight;
 			this->label3->Location = System::Drawing::Point(3, 14);
 			this->label3->Name = L"label3";
-			this->label3->Size = System::Drawing::Size(146, 29);
+			this->label3->Size = System::Drawing::Size(140, 32);
 			this->label3->TabIndex = 2;
 			this->label3->Text = L"Health care";
 			// 
 			// panel6
 			// 
 			this->panel6->BackColor = System::Drawing::Color::CornflowerBlue;
+			this->panel6->Controls->Add(this->label17);
+			this->panel6->Controls->Add(this->label18);
 			this->panel6->Controls->Add(this->label9);
 			this->panel6->Controls->Add(this->label4);
 			this->panel6->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->panel6->ForeColor = System::Drawing::SystemColors::ControlLightLight;
-			this->panel6->Location = System::Drawing::Point(586, 3);
+			this->panel6->Location = System::Drawing::Point(652, 3);
 			this->panel6->Margin = System::Windows::Forms::Padding(3, 2, 3, 2);
 			this->panel6->Name = L"panel6";
-			this->panel6->Size = System::Drawing::Size(242, 102);
+			this->panel6->Size = System::Drawing::Size(270, 102);
 			this->panel6->TabIndex = 2;
+			// 
+			// label17
+			// 
+			this->label17->AutoSize = true;
+			this->label17->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->label17->ForeColor = System::Drawing::SystemColors::ControlLightLight;
+			this->label17->Location = System::Drawing::Point(155, 54);
+			this->label17->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
+			this->label17->Name = L"label17";
+			this->label17->Size = System::Drawing::Size(74, 28);
+			this->label17->TabIndex = 9;
+			this->label17->Text = L"label17";
+			// 
+			// label18
+			// 
+			this->label18->AutoSize = true;
+			this->label18->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->label18->ForeColor = System::Drawing::SystemColors::ControlLightLight;
+			this->label18->Location = System::Drawing::Point(137, 54);
+			this->label18->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
+			this->label18->Name = L"label18";
+			this->label18->Size = System::Drawing::Size(20, 28);
+			this->label18->TabIndex = 10;
+			this->label18->Text = L"/";
 			// 
 			// label9
 			// 
 			this->label9->AutoSize = true;
-			this->label9->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			this->label9->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->label9->ForeColor = System::Drawing::SystemColors::ControlLightLight;
-			this->label9->Location = System::Drawing::Point(61, 54);
+			this->label9->Location = System::Drawing::Point(76, 54);
 			this->label9->Name = L"label9";
-			this->label9->Size = System::Drawing::Size(85, 29);
+			this->label9->Size = System::Drawing::Size(66, 28);
 			this->label9->TabIndex = 3;
 			this->label9->Text = L"label9";
 			this->label9->Click += gcnew System::EventHandler(this, &Dashboard::label9_Click);
@@ -467,50 +707,78 @@ private: System::Windows::Forms::Panel^ panel7;
 			// label4
 			// 
 			this->label4->AutoSize = true;
-			this->label4->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
+			this->label4->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 14.25F, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 			this->label4->ForeColor = System::Drawing::SystemColors::ControlLightLight;
 			this->label4->Location = System::Drawing::Point(3, 15);
 			this->label4->Name = L"label4";
-			this->label4->Size = System::Drawing::Size(174, 29);
+			this->label4->Size = System::Drawing::Size(167, 32);
 			this->label4->TabIndex = 3;
 			this->label4->Text = L"Entertainment";
 			// 
 			// panel5
 			// 
 			this->panel5->BackColor = System::Drawing::Color::LightSkyBlue;
+			this->panel5->Controls->Add(this->label15);
+			this->panel5->Controls->Add(this->label16);
 			this->panel5->Controls->Add(this->label10);
 			this->panel5->Controls->Add(this->label2);
 			this->panel5->Dock = System::Windows::Forms::DockStyle::Fill;
-			this->panel5->Location = System::Drawing::Point(321, 3);
+			this->panel5->Location = System::Drawing::Point(357, 3);
 			this->panel5->Margin = System::Windows::Forms::Padding(3, 2, 3, 2);
 			this->panel5->Name = L"panel5";
-			this->panel5->Size = System::Drawing::Size(258, 102);
+			this->panel5->Size = System::Drawing::Size(288, 102);
 			this->panel5->TabIndex = 1;
+			// 
+			// label15
+			// 
+			this->label15->AutoSize = true;
+			this->label15->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->label15->ForeColor = System::Drawing::SystemColors::ControlLightLight;
+			this->label15->Location = System::Drawing::Point(169, 54);
+			this->label15->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
+			this->label15->Name = L"label15";
+			this->label15->Size = System::Drawing::Size(74, 28);
+			this->label15->TabIndex = 7;
+			this->label15->Text = L"label15";
+			// 
+			// label16
+			// 
+			this->label16->AutoSize = true;
+			this->label16->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->label16->ForeColor = System::Drawing::SystemColors::ControlLightLight;
+			this->label16->Location = System::Drawing::Point(152, 54);
+			this->label16->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
+			this->label16->Name = L"label16";
+			this->label16->Size = System::Drawing::Size(20, 28);
+			this->label16->TabIndex = 8;
+			this->label16->Text = L"/";
 			// 
 			// label10
 			// 
 			this->label10->AutoSize = true;
-			this->label10->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			this->label10->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->label10->ForeColor = System::Drawing::SystemColors::ControlLightLight;
-			this->label10->Location = System::Drawing::Point(69, 54);
+			this->label10->Location = System::Drawing::Point(83, 54);
 			this->label10->Name = L"label10";
-			this->label10->Size = System::Drawing::Size(99, 29);
+			this->label10->Size = System::Drawing::Size(74, 28);
 			this->label10->TabIndex = 4;
 			this->label10->Text = L"label10";
 			// 
 			// label2
 			// 
 			this->label2->AutoSize = true;
-			this->label2->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
+			this->label2->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 14.25F, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 			this->label2->ForeColor = System::Drawing::SystemColors::ControlLightLight;
-			this->label2->Location = System::Drawing::Point(25, 15);
+			this->label2->Location = System::Drawing::Point(20, 15);
 			this->label2->Name = L"label2";
-			this->label2->Size = System::Drawing::Size(101, 29);
+			this->label2->Size = System::Drawing::Size(80, 32);
 			this->label2->TabIndex = 1;
-			this->label2->Text = L"Utilities";
+			this->label2->Text = L"Utility";
 			// 
 			// panel4
 			// 
@@ -521,32 +789,33 @@ private: System::Windows::Forms::Panel^ panel7;
 			this->panel4->Location = System::Drawing::Point(4, 3);
 			this->panel4->Margin = System::Windows::Forms::Padding(3, 2, 3, 2);
 			this->panel4->Name = L"panel4";
-			this->panel4->Size = System::Drawing::Size(310, 102);
+			this->panel4->Size = System::Drawing::Size(346, 102);
 			this->panel4->TabIndex = 0;
 			// 
 			// label6
 			// 
 			this->label6->AutoSize = true;
-			this->label6->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			this->label6->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->label6->ForeColor = System::Drawing::SystemColors::ControlLightLight;
-			this->label6->Location = System::Drawing::Point(91, 54);
+			this->label6->Location = System::Drawing::Point(197, 54);
 			this->label6->Name = L"label6";
-			this->label6->Size = System::Drawing::Size(85, 29);
+			this->label6->Size = System::Drawing::Size(66, 28);
 			this->label6->TabIndex = 1;
 			this->label6->Text = L"label6";
 			// 
 			// label1
 			// 
 			this->label1->AutoSize = true;
-			this->label1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
+			this->label1->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 14.25F, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 			this->label1->ForeColor = System::Drawing::SystemColors::ControlLightLight;
-			this->label1->Location = System::Drawing::Point(31, 20);
+			this->label1->Location = System::Drawing::Point(49, 15);
 			this->label1->Name = L"label1";
-			this->label1->Size = System::Drawing::Size(107, 29);
+			this->label1->Size = System::Drawing::Size(101, 32);
 			this->label1->TabIndex = 0;
 			this->label1->Text = L"Balance";
+			this->label1->Click += gcnew System::EventHandler(this, &Dashboard::label1_Click);
 			// 
 			// panel11
 			// 
@@ -559,12 +828,13 @@ private: System::Windows::Forms::Panel^ panel7;
 			this->panel11->Location = System::Drawing::Point(333, 219);
 			this->panel11->Margin = System::Windows::Forms::Padding(3, 2, 3, 2);
 			this->panel11->Name = L"panel11";
-			this->panel11->Size = System::Drawing::Size(1073, 853);
+			this->panel11->Size = System::Drawing::Size(1529, 1025);
 			this->panel11->TabIndex = 8;
 			// 
 			// panel10
 			// 
 			this->panel10->BackColor = System::Drawing::Color::LightSteelBlue;
+			this->panel10->Controls->Add(this->label30);
 			this->panel10->Controls->Add(this->comboBox1);
 			this->panel10->Controls->Add(this->dataGridView1);
 			this->panel10->Controls->Add(this->label12);
@@ -576,6 +846,8 @@ private: System::Windows::Forms::Panel^ panel7;
 			// 
 			// comboBox1
 			// 
+			this->comboBox1->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 9, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
 			this->comboBox1->FormattingEnabled = true;
 			this->comboBox1->Items->AddRange(gcnew cli::array< System::Object^  >(12) {
 				L"January", L"February", L"March", L"April", L"May",
@@ -584,7 +856,7 @@ private: System::Windows::Forms::Panel^ panel7;
 			this->comboBox1->Location = System::Drawing::Point(629, 25);
 			this->comboBox1->Margin = System::Windows::Forms::Padding(4);
 			this->comboBox1->Name = L"comboBox1";
-			this->comboBox1->Size = System::Drawing::Size(187, 24);
+			this->comboBox1->Size = System::Drawing::Size(187, 28);
 			this->comboBox1->TabIndex = 6;
 			// 
 			// dataGridView1
@@ -602,12 +874,12 @@ private: System::Windows::Forms::Panel^ panel7;
 			// label12
 			// 
 			this->label12->AutoSize = true;
-			this->label12->Font = (gcnew System::Drawing::Font(L"Cambria", 11, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
+			this->label12->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 14.25F, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
+				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 			this->label12->ForeColor = System::Drawing::SystemColors::Window;
-			this->label12->Location = System::Drawing::Point(33, 25);
+			this->label12->Location = System::Drawing::Point(23, 20);
 			this->label12->Name = L"label12";
-			this->label12->Size = System::Drawing::Size(198, 22);
+			this->label12->Size = System::Drawing::Size(246, 32);
 			this->label12->TabIndex = 0;
 			this->label12->Text = L"Monthly Transactions";
 			this->label12->Click += gcnew System::EventHandler(this, &Dashboard::label12_Click);
@@ -619,69 +891,235 @@ private: System::Windows::Forms::Panel^ panel7;
 				| System::Windows::Forms::AnchorStyles::Right));
 			this->panel8->BackColor = System::Drawing::Color::Azure;
 			this->panel8->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
+			this->panel8->Controls->Add(this->panel9);
+			this->panel8->Controls->Add(this->radioButton4);
+			this->panel8->Controls->Add(this->radioButton3);
+			this->panel8->Controls->Add(this->radioButton2);
+			this->panel8->Controls->Add(this->label27);
+			this->panel8->Controls->Add(this->radioButton1);
+			this->panel8->Controls->Add(this->pictureBox2);
+			this->panel8->Controls->Add(this->label25);
+			this->panel8->Controls->Add(this->label23);
+			this->panel8->Controls->Add(this->label24);
 			this->panel8->Controls->Add(this->panel7);
-			this->panel8->Controls->Add(this->chart1);
 			this->panel8->Controls->Add(this->label13);
 			this->panel8->Controls->Add(this->progressBar1);
 			this->panel8->Location = System::Drawing::Point(1224, 219);
 			this->panel8->Margin = System::Windows::Forms::Padding(3, 2, 3, 2);
 			this->panel8->Name = L"panel8";
-			this->panel8->Size = System::Drawing::Size(451, 662);
+			this->panel8->Size = System::Drawing::Size(907, 834);
 			this->panel8->TabIndex = 9;
+			// 
+			// panel9
+			// 
+			this->panel9->BackColor = System::Drawing::Color::LightSteelBlue;
+			this->panel9->Controls->Add(this->label26);
+			this->panel9->Controls->Add(this->label29);
+			this->panel9->Location = System::Drawing::Point(120, 193);
+			this->panel9->Margin = System::Windows::Forms::Padding(3, 2, 3, 2);
+			this->panel9->Name = L"panel9";
+			this->panel9->Size = System::Drawing::Size(361, 86);
+			this->panel9->TabIndex = 19;
+			// 
+			// label26
+			// 
+			this->label26->AutoSize = true;
+			this->label26->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->label26->ForeColor = System::Drawing::SystemColors::ControlLightLight;
+			this->label26->Location = System::Drawing::Point(139, 44);
+			this->label26->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
+			this->label26->Name = L"label26";
+			this->label26->Size = System::Drawing::Size(77, 28);
+			this->label26->TabIndex = 2;
+			this->label26->Text = L"label26";
+			// 
+			// label29
+			// 
+			this->label29->AutoSize = true;
+			this->label29->BackColor = System::Drawing::Color::LightSteelBlue;
+			this->label29->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 14.25F, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
+				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+			this->label29->ForeColor = System::Drawing::SystemColors::Window;
+			this->label29->Location = System::Drawing::Point(56, 14);
+			this->label29->Name = L"label29";
+			this->label29->Size = System::Drawing::Size(229, 32);
+			this->label29->TabIndex = 1;
+			this->label29->Text = L"Total Amount Spent";
+			// 
+			// radioButton4
+			// 
+			this->radioButton4->AutoSize = true;
+			this->radioButton4->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 9, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->radioButton4->ForeColor = System::Drawing::Color::DarkBlue;
+			this->radioButton4->Location = System::Drawing::Point(225, 650);
+			this->radioButton4->Margin = System::Windows::Forms::Padding(4);
+			this->radioButton4->Name = L"radioButton4";
+			this->radioButton4->Size = System::Drawing::Size(58, 24);
+			this->radioButton4->TabIndex = 18;
+			this->radioButton4->TabStop = true;
+			this->radioButton4->Text = L"EUR";
+			this->radioButton4->UseVisualStyleBackColor = true;
+			this->radioButton4->CheckedChanged += gcnew System::EventHandler(this, &Dashboard::radioButton4_CheckedChanged);
+			// 
+			// radioButton3
+			// 
+			this->radioButton3->AutoSize = true;
+			this->radioButton3->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 9, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->radioButton3->ForeColor = System::Drawing::Color::DarkBlue;
+			this->radioButton3->Location = System::Drawing::Point(311, 650);
+			this->radioButton3->Margin = System::Windows::Forms::Padding(4);
+			this->radioButton3->Name = L"radioButton3";
+			this->radioButton3->Size = System::Drawing::Size(60, 24);
+			this->radioButton3->TabIndex = 17;
+			this->radioButton3->TabStop = true;
+			this->radioButton3->Text = L"USD";
+			this->radioButton3->UseVisualStyleBackColor = true;
+			this->radioButton3->CheckedChanged += gcnew System::EventHandler(this, &Dashboard::radioButton3_CheckedChanged);
+			// 
+			// radioButton2
+			// 
+			this->radioButton2->AutoSize = true;
+			this->radioButton2->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 9, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->radioButton2->ForeColor = System::Drawing::Color::DarkBlue;
+			this->radioButton2->Location = System::Drawing::Point(384, 650);
+			this->radioButton2->Margin = System::Windows::Forms::Padding(4);
+			this->radioButton2->Name = L"radioButton2";
+			this->radioButton2->Size = System::Drawing::Size(58, 24);
+			this->radioButton2->TabIndex = 16;
+			this->radioButton2->TabStop = true;
+			this->radioButton2->Text = L"GBP";
+			this->radioButton2->UseVisualStyleBackColor = true;
+			this->radioButton2->CheckedChanged += gcnew System::EventHandler(this, &Dashboard::radioButton2_CheckedChanged);
+			// 
+			// label27
+			// 
+			this->label27->AutoSize = true;
+			this->label27->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 11.25F, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
+				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+			this->label27->ForeColor = System::Drawing::Color::DarkBlue;
+			this->label27->Location = System::Drawing::Point(25, 603);
+			this->label27->Name = L"label27";
+			this->label27->Size = System::Drawing::Size(167, 25);
+			this->label27->TabIndex = 15;
+			this->label27->Text = L"Currency Switcher";
+			// 
+			// radioButton1
+			// 
+			this->radioButton1->AutoSize = true;
+			this->radioButton1->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 9, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->radioButton1->ForeColor = System::Drawing::Color::DarkBlue;
+			this->radioButton1->Location = System::Drawing::Point(135, 650);
+			this->radioButton1->Margin = System::Windows::Forms::Padding(4);
+			this->radioButton1->Name = L"radioButton1";
+			this->radioButton1->Size = System::Drawing::Size(57, 24);
+			this->radioButton1->TabIndex = 11;
+			this->radioButton1->TabStop = true;
+			this->radioButton1->Text = L"PKR";
+			this->radioButton1->UseVisualStyleBackColor = true;
+			this->radioButton1->CheckedChanged += gcnew System::EventHandler(this, &Dashboard::radioButton1_CheckedChanged);
+			// 
+			// pictureBox2
+			// 
+			this->pictureBox2->Location = System::Drawing::Point(264, 143);
+			this->pictureBox2->Margin = System::Windows::Forms::Padding(4);
+			this->pictureBox2->Name = L"pictureBox2";
+			this->pictureBox2->Size = System::Drawing::Size(51, 44);
+			this->pictureBox2->SizeMode = System::Windows::Forms::PictureBoxSizeMode::StretchImage;
+			this->pictureBox2->TabIndex = 2;
+			this->pictureBox2->TabStop = false;
+			// 
+			// label25
+			// 
+			this->label25->AutoSize = true;
+			this->label25->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 9.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->label25->ForeColor = System::Drawing::Color::DarkBlue;
+			this->label25->Location = System::Drawing::Point(439, 318);
+			this->label25->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
+			this->label25->Name = L"label25";
+			this->label25->Size = System::Drawing::Size(17, 23);
+			this->label25->TabIndex = 9;
+			this->label25->Text = L"/";
+			// 
+			// label23
+			// 
+			this->label23->AutoSize = true;
+			this->label23->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 9.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->label23->ForeColor = System::Drawing::Color::DarkBlue;
+			this->label23->Location = System::Drawing::Point(364, 318);
+			this->label23->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
+			this->label23->Name = L"label23";
+			this->label23->Size = System::Drawing::Size(64, 23);
+			this->label23->TabIndex = 8;
+			this->label23->Text = L"label23";
+			// 
+			// label24
+			// 
+			this->label24->AutoSize = true;
+			this->label24->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 9.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->label24->ForeColor = System::Drawing::Color::DarkBlue;
+			this->label24->Location = System::Drawing::Point(464, 318);
+			this->label24->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
+			this->label24->Name = L"label24";
+			this->label24->Size = System::Drawing::Size(65, 23);
+			this->label24->TabIndex = 7;
+			this->label24->Text = L"label24";
 			// 
 			// panel7
 			// 
 			this->panel7->BackColor = System::Drawing::Color::LightSteelBlue;
+			this->panel7->Controls->Add(this->label28);
 			this->panel7->Controls->Add(this->label14);
-			this->panel7->Location = System::Drawing::Point(7, 164);
+			this->panel7->Location = System::Drawing::Point(120, 50);
+			this->panel7->Margin = System::Windows::Forms::Padding(3, 2, 3, 2);
 			this->panel7->Name = L"panel7";
-			this->panel7->Size = System::Drawing::Size(422, 169);
+			this->panel7->Size = System::Drawing::Size(361, 86);
 			this->panel7->TabIndex = 5;
 			this->panel7->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &Dashboard::panel7_Paint);
+			// 
+			// label28
+			// 
+			this->label28->AutoSize = true;
+			this->label28->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->label28->ForeColor = System::Drawing::SystemColors::ControlLightLight;
+			this->label28->Location = System::Drawing::Point(139, 44);
+			this->label28->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
+			this->label28->Name = L"label28";
+			this->label28->Size = System::Drawing::Size(77, 28);
+			this->label28->TabIndex = 2;
+			this->label28->Text = L"label28";
 			// 
 			// label14
 			// 
 			this->label14->AutoSize = true;
 			this->label14->BackColor = System::Drawing::Color::LightSteelBlue;
-			this->label14->Font = (gcnew System::Drawing::Font(L"Cambria", 11.25F, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
+			this->label14->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 14.25F, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 			this->label14->ForeColor = System::Drawing::SystemColors::Window;
-			this->label14->Location = System::Drawing::Point(26, 42);
+			this->label14->Location = System::Drawing::Point(56, 14);
 			this->label14->Name = L"label14";
-			this->label14->Size = System::Drawing::Size(140, 22);
+			this->label14->Size = System::Drawing::Size(244, 32);
 			this->label14->TabIndex = 1;
-			this->label14->Text = L"Your Net Worth";
-			// 
-			// chart1
-			// 
-			this->chart1->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Left)
-				| System::Windows::Forms::AnchorStyles::Right));
-			this->chart1->BackColor = System::Drawing::Color::LightSteelBlue;
-			chartArea1->Name = L"ChartArea1";
-			this->chart1->ChartAreas->Add(chartArea1);
-			legend1->Name = L"Legend1";
-			this->chart1->Legends->Add(legend1);
-			this->chart1->Location = System::Drawing::Point(7, 369);
-			this->chart1->Margin = System::Windows::Forms::Padding(4);
-			this->chart1->Name = L"chart1";
-			series1->ChartArea = L"ChartArea1";
-			series1->Legend = L"Legend1";
-			series1->Name = L"Series1";
-			this->chart1->Series->Add(series1);
-			this->chart1->Size = System::Drawing::Size(431, 223);
-			this->chart1->TabIndex = 4;
-			this->chart1->Text = L"chart1";
-			this->chart1->Click += gcnew System::EventHandler(this, &Dashboard::chart1_Click);
+			this->label14->Text = L"Total Amount Earned";
+			this->label14->Click += gcnew System::EventHandler(this, &Dashboard::label14_Click);
 			// 
 			// label13
 			// 
 			this->label13->AutoSize = true;
-			this->label13->Font = (gcnew System::Drawing::Font(L"Cambria", 11, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->label13->ForeColor = System::Drawing::SystemColors::MenuText;
-			this->label13->Location = System::Drawing::Point(3, 86);
+			this->label13->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 14.25F, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
+				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+			this->label13->ForeColor = System::Drawing::Color::DarkBlue;
+			this->label13->Location = System::Drawing::Point(43, 310);
 			this->label13->Name = L"label13";
-			this->label13->Size = System::Drawing::Size(118, 22);
+			this->label13->Size = System::Drawing::Size(150, 32);
 			this->label13->TabIndex = 3;
 			this->label13->Text = L"Income Goal";
 			this->label13->Click += gcnew System::EventHandler(this, &Dashboard::label13_Click);
@@ -692,13 +1130,23 @@ private: System::Windows::Forms::Panel^ panel7;
 				| System::Windows::Forms::AnchorStyles::Right));
 			this->progressBar1->BackColor = System::Drawing::SystemColors::ButtonHighlight;
 			this->progressBar1->ForeColor = System::Drawing::SystemColors::InactiveCaptionText;
-			this->progressBar1->Location = System::Drawing::Point(160, 77);
+			this->progressBar1->Location = System::Drawing::Point(49, 357);
 			this->progressBar1->Margin = System::Windows::Forms::Padding(3, 2, 3, 2);
 			this->progressBar1->Name = L"progressBar1";
-			this->progressBar1->Size = System::Drawing::Size(269, 42);
+			this->progressBar1->Size = System::Drawing::Size(496, 23);
 			this->progressBar1->TabIndex = 2;
 			this->progressBar1->Value = 20;
 			this->progressBar1->Click += gcnew System::EventHandler(this, &Dashboard::progressBar1_Click);
+			// 
+			// label30
+			// 
+			this->label30->AutoSize = true;
+			this->label30->ForeColor = System::Drawing::Color::SteelBlue;
+			this->label30->Location = System::Drawing::Point(73, 216);
+			this->label30->Name = L"label30";
+			this->label30->Size = System::Drawing::Size(51, 16);
+			this->label30->TabIndex = 11;
+			this->label30->Text = L"label30";
 			// 
 			// Dashboard
 			// 
@@ -708,7 +1156,7 @@ private: System::Windows::Forms::Panel^ panel7;
 			this->AutoSize = true;
 			this->AutoSizeMode = System::Windows::Forms::AutoSizeMode::GrowAndShrink;
 			this->BackColor = System::Drawing::Color::AliceBlue;
-			this->ClientSize = System::Drawing::Size(1675, 829);
+			this->ClientSize = System::Drawing::Size(1827, 922);
 			this->Controls->Add(this->panel8);
 			this->Controls->Add(this->panel11);
 			this->Controls->Add(this->tableLayoutPanel1);
@@ -716,7 +1164,6 @@ private: System::Windows::Forms::Panel^ panel7;
 			this->Controls->Add(this->panel1);
 			this->Margin = System::Windows::Forms::Padding(4);
 			this->Name = L"Dashboard";
-			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"Budget_Setter";
 			this->WindowState = System::Windows::Forms::FormWindowState::Maximized;
 			this->Load += gcnew System::EventHandler(this, &Dashboard::Budget_Setter_Load);
@@ -724,6 +1171,8 @@ private: System::Windows::Forms::Panel^ panel7;
 			this->panel2->ResumeLayout(false);
 			this->panel2->PerformLayout();
 			this->panel3->ResumeLayout(false);
+			this->panel3->PerformLayout();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->EndInit();
 			this->tableLayoutPanel1->ResumeLayout(false);
 			this->panel13->ResumeLayout(false);
 			this->panel13->PerformLayout();
@@ -741,9 +1190,11 @@ private: System::Windows::Forms::Panel^ panel7;
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView1))->EndInit();
 			this->panel8->ResumeLayout(false);
 			this->panel8->PerformLayout();
+			this->panel9->ResumeLayout(false);
+			this->panel9->PerformLayout();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox2))->EndInit();
 			this->panel7->ResumeLayout(false);
 			this->panel7->PerformLayout();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->chart1))->EndInit();
 			this->ResumeLayout(false);
 
 		}
@@ -780,13 +1231,37 @@ private: System::Windows::Forms::Panel^ panel7;
 
 
 
-private: System::Void panel9_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
+	private: System::Void panel9_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
+	}
+	private: System::Void chart1_Click(System::Object^ sender, System::EventArgs^ e) {
+	}
+	private: System::Void panel7_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
+	}
+	private: System::Void pictureBox1_Click(System::Object^ sender, System::EventArgs^ e) {
+	}
+	private: System::Void label15_Click(System::Object^ sender, System::EventArgs^ e) {
+	}
+	private: System::Void label1_Click(System::Object^ sender, System::EventArgs^ e) {
+	}
+	private: System::Void label14_Click(System::Object^ sender, System::EventArgs^ e) {
+	}
+	public: String^ currency = "PKR";
+private: System::Void radioButton1_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
+	this->currency = "PKR";
+	this->label30->Text = this->currency;
 }
-private: System::Void chart1_Click(System::Object^ sender, System::EventArgs^ e) {
+private: System::Void radioButton4_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
+	this->currency = "EUR";
+	this->label30->Text = this->currency;
 }
-private: System::Void panel7_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
+private: System::Void radioButton3_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
+	this->currency = "USD";
+	this->label30->Text = this->currency;
 }
-private: System::Void panel1_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
+
+private: System::Void radioButton2_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
+	this->currency = "GBD";
+	this->label30->Text = this->currency;
 }
 };
 }
