@@ -186,9 +186,9 @@ namespace Project {
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			System::Windows::Forms::DataVisualization::Charting::ChartArea^ chartArea3 = (gcnew System::Windows::Forms::DataVisualization::Charting::ChartArea());
-			System::Windows::Forms::DataVisualization::Charting::Legend^ legend3 = (gcnew System::Windows::Forms::DataVisualization::Charting::Legend());
-			System::Windows::Forms::DataVisualization::Charting::Series^ series3 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
+			System::Windows::Forms::DataVisualization::Charting::ChartArea^ chartArea1 = (gcnew System::Windows::Forms::DataVisualization::Charting::ChartArea());
+			System::Windows::Forms::DataVisualization::Charting::Legend^ legend1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Legend());
+			System::Windows::Forms::DataVisualization::Charting::Series^ series1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
 			this->panel2 = (gcnew System::Windows::Forms::Panel());
 			this->label7 = (gcnew System::Windows::Forms::Label());
@@ -218,11 +218,11 @@ namespace Project {
 			this->dataGridView1 = (gcnew System::Windows::Forms::DataGridView());
 			this->label12 = (gcnew System::Windows::Forms::Label());
 			this->panel8 = (gcnew System::Windows::Forms::Panel());
-			this->chart1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Chart());
+			this->panel7 = (gcnew System::Windows::Forms::Panel());
 			this->label14 = (gcnew System::Windows::Forms::Label());
+			this->chart1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Chart());
 			this->label13 = (gcnew System::Windows::Forms::Label());
 			this->progressBar1 = (gcnew System::Windows::Forms::ProgressBar());
-			this->panel7 = (gcnew System::Windows::Forms::Panel());
 			this->panel1->SuspendLayout();
 			this->panel2->SuspendLayout();
 			this->panel3->SuspendLayout();
@@ -236,8 +236,8 @@ namespace Project {
 			this->panel10->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView1))->BeginInit();
 			this->panel8->SuspendLayout();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->chart1))->BeginInit();
 			this->panel7->SuspendLayout();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->chart1))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// panel1
@@ -284,7 +284,7 @@ namespace Project {
 			this->panel3->Controls->Add(this->button1);
 			this->panel3->Dock = System::Windows::Forms::DockStyle::Left;
 			this->panel3->Location = System::Drawing::Point(0, 110);
-			this->panel3->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->panel3->Margin = System::Windows::Forms::Padding(4);
 			this->panel3->Name = L"panel3";
 			this->panel3->Size = System::Drawing::Size(333, 719);
 			this->panel3->TabIndex = 4;
@@ -296,7 +296,7 @@ namespace Project {
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 			this->button3->ForeColor = System::Drawing::SystemColors::ControlLightLight;
 			this->button3->Location = System::Drawing::Point(0, 252);
-			this->button3->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->button3->Margin = System::Windows::Forms::Padding(4);
 			this->button3->Name = L"button3";
 			this->button3->Size = System::Drawing::Size(333, 58);
 			this->button3->TabIndex = 8;
@@ -312,7 +312,7 @@ namespace Project {
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 			this->button2->ForeColor = System::Drawing::SystemColors::ControlLightLight;
 			this->button2->Location = System::Drawing::Point(0, 187);
-			this->button2->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->button2->Margin = System::Windows::Forms::Padding(4);
 			this->button2->Name = L"button2";
 			this->button2->Size = System::Drawing::Size(333, 58);
 			this->button2->TabIndex = 7;
@@ -328,7 +328,7 @@ namespace Project {
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 			this->button1->ForeColor = System::Drawing::SystemColors::ControlLightLight;
 			this->button1->Location = System::Drawing::Point(0, 122);
-			this->button1->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->button1->Margin = System::Windows::Forms::Padding(4);
 			this->button1->Name = L"button1";
 			this->button1->Size = System::Drawing::Size(333, 58);
 			this->button1->TabIndex = 6;
@@ -581,10 +581,11 @@ namespace Project {
 					L"June", L"July", L"August", L"September", L"October", L"November", L"December"
 			});
 			this->comboBox1->Location = System::Drawing::Point(629, 25);
-			this->comboBox1->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->comboBox1->Margin = System::Windows::Forms::Padding(4);
 			this->comboBox1->Name = L"comboBox1";
 			this->comboBox1->Size = System::Drawing::Size(187, 24);
 			this->comboBox1->TabIndex = 6;
+			this->comboBox1->SelectedIndexChanged += gcnew System::EventHandler(this, &Dashboard::comboBox1_SelectedIndexChanged_1);
 			// 
 			// dataGridView1
 			// 
@@ -597,6 +598,7 @@ namespace Project {
 			this->dataGridView1->RowTemplate->Height = 28;
 			this->dataGridView1->Size = System::Drawing::Size(788, 497);
 			this->dataGridView1->TabIndex = 4;
+			this->dataGridView1->CellContentClick += gcnew System::Windows::Forms::DataGridViewCellEventHandler(this, &Dashboard::dataGridView1_CellContentClick);
 			// 
 			// label12
 			// 
@@ -628,26 +630,15 @@ namespace Project {
 			this->panel8->Size = System::Drawing::Size(451, 662);
 			this->panel8->TabIndex = 9;
 			// 
-			// chart1
+			// panel7
 			// 
-			this->chart1->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Left)
-				| System::Windows::Forms::AnchorStyles::Right));
-			this->chart1->BackColor = System::Drawing::Color::LightSteelBlue;
-			chartArea3->Name = L"ChartArea1";
-			this->chart1->ChartAreas->Add(chartArea3);
-			legend3->Name = L"Legend1";
-			this->chart1->Legends->Add(legend3);
-			this->chart1->Location = System::Drawing::Point(7, 369);
-			this->chart1->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
-			this->chart1->Name = L"chart1";
-			series3->ChartArea = L"ChartArea1";
-			series3->Legend = L"Legend1";
-			series3->Name = L"Series1";
-			this->chart1->Series->Add(series3);
-			this->chart1->Size = System::Drawing::Size(431, 223);
-			this->chart1->TabIndex = 4;
-			this->chart1->Text = L"chart1";
-			this->chart1->Click += gcnew System::EventHandler(this, &Dashboard::chart1_Click);
+			this->panel7->BackColor = System::Drawing::Color::LightSteelBlue;
+			this->panel7->Controls->Add(this->label14);
+			this->panel7->Location = System::Drawing::Point(7, 164);
+			this->panel7->Name = L"panel7";
+			this->panel7->Size = System::Drawing::Size(422, 169);
+			this->panel7->TabIndex = 5;
+			this->panel7->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &Dashboard::panel7_Paint);
 			// 
 			// label14
 			// 
@@ -661,6 +652,27 @@ namespace Project {
 			this->label14->Size = System::Drawing::Size(140, 22);
 			this->label14->TabIndex = 1;
 			this->label14->Text = L"Your Net Worth";
+			// 
+			// chart1
+			// 
+			this->chart1->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Left)
+				| System::Windows::Forms::AnchorStyles::Right));
+			this->chart1->BackColor = System::Drawing::Color::LightSteelBlue;
+			chartArea1->Name = L"ChartArea1";
+			this->chart1->ChartAreas->Add(chartArea1);
+			legend1->Name = L"Legend1";
+			this->chart1->Legends->Add(legend1);
+			this->chart1->Location = System::Drawing::Point(7, 369);
+			this->chart1->Margin = System::Windows::Forms::Padding(4);
+			this->chart1->Name = L"chart1";
+			series1->ChartArea = L"ChartArea1";
+			series1->Legend = L"Legend1";
+			series1->Name = L"Series1";
+			this->chart1->Series->Add(series1);
+			this->chart1->Size = System::Drawing::Size(431, 223);
+			this->chart1->TabIndex = 4;
+			this->chart1->Text = L"chart1";
+			this->chart1->Click += gcnew System::EventHandler(this, &Dashboard::chart1_Click);
 			// 
 			// label13
 			// 
@@ -689,16 +701,6 @@ namespace Project {
 			this->progressBar1->Value = 20;
 			this->progressBar1->Click += gcnew System::EventHandler(this, &Dashboard::progressBar1_Click);
 			// 
-			// panel7
-			// 
-			this->panel7->BackColor = System::Drawing::Color::LightSteelBlue;
-			this->panel7->Controls->Add(this->label14);
-			this->panel7->Location = System::Drawing::Point(7, 164);
-			this->panel7->Name = L"panel7";
-			this->panel7->Size = System::Drawing::Size(422, 169);
-			this->panel7->TabIndex = 5;
-			this->panel7->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &Dashboard::panel7_Paint);
-			// 
 			// Dashboard
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
@@ -713,7 +715,7 @@ namespace Project {
 			this->Controls->Add(this->tableLayoutPanel1);
 			this->Controls->Add(this->panel3);
 			this->Controls->Add(this->panel1);
-			this->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->Margin = System::Windows::Forms::Padding(4);
 			this->Name = L"Dashboard";
 			this->Text = L"Budget_Setter";
 			this->WindowState = System::Windows::Forms::FormWindowState::Maximized;
@@ -739,9 +741,9 @@ namespace Project {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView1))->EndInit();
 			this->panel8->ResumeLayout(false);
 			this->panel8->PerformLayout();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->chart1))->EndInit();
 			this->panel7->ResumeLayout(false);
 			this->panel7->PerformLayout();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->chart1))->EndInit();
 			this->ResumeLayout(false);
 
 		}
@@ -784,7 +786,41 @@ namespace Project {
 	}
 	private: System::Void panel7_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
 	}
-	};
+    private: System::Void comboBox1_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
+					// Step 3: Retrieve the selected month from the ComboBox
+					String^ selectedMonth = comboBox1->SelectedItem->ToString();
+
+					// Step 3 (continued): Convert the selected month to month number
+                    int monthNumber = DateTime::ParseExact(selectedMonth, "MMMM", System::Globalization::CultureInfo::CurrentCulture).Month;
+					try {
+						// Step 4: Construct the SQL query to fetch transactions for the selected month
+						String^ conn_str = "Data Source=MIANZAIN\\SQLEXPRESS;Initial Catalog=APP;Integrated Security=True";
+						SqlConnection sqlConn(conn_str);
+
+						sqlConn.Open();
+
+						String^ tmpQuery = "SELECT * FROM Transactions WHERE MONTH(date) = @month";
+
+						SqlCommand^ command = gcnew SqlCommand(tmpQuery, % sqlConn);
+						command->Parameters->AddWithValue("@month", monthNumber);
+
+						// Step 5: Execute the SQL query and retrieve the results
+						SqlDataAdapter^ adapter = gcnew SqlDataAdapter(command);
+						DataTable^ dataTable = gcnew DataTable();
+						adapter->Fill(dataTable);
+
+						// Step 6: Populate the DataGridView with the retrieved transaction data
+						dataGridView1->DataSource = dataTable;
+					}
+					catch (Exception^ ex) {
+						MessageBox::Show(ex->Message);
+					}
+    }
+private: System::Void dataGridView1_CellContentClick(System::Object^ sender, System::Windows::Forms::DataGridViewCellEventArgs^ e) {
+}
+private: System::Void comboBox1_SelectedIndexChanged_1(System::Object^ sender, System::EventArgs^ e) {
+}
+};
 }
 #pragma once
 
