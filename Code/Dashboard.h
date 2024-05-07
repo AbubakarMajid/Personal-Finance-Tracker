@@ -18,11 +18,24 @@ namespace Project {
 	public:
 		Dashboard(USER^ user)
 		{
+			
 			InitializeComponent();
 			//
 			//TODO: Add the constructor code here
 			//
-
+			if (user == nullptr)
+			{
+				MessageBox::Show("User not found", "Error", MessageBoxButtons::OK);
+				this->Close();
+			}
+			else
+			{
+				// Ensure that name_label is not null before trying to access its Text property
+				if (this->name_label != nullptr)
+				{
+					this->name_label->Text = user->username;
+				}
+			}
 			this->label6->Text = Convert::ToString(user->balance);
 
 			cat_label_data(this->label10, "Utility", user->username);
@@ -72,6 +85,7 @@ namespace Project {
 				delete components;
 			}
 		}
+	private: System::Windows::Forms::Label^ name_label;
 	private: System::Windows::Forms::Panel^ panel1;
 	protected:
 	private: System::Windows::Forms::Panel^ panel2;
@@ -782,8 +796,30 @@ namespace Project {
 
 	private: System::Void panel9_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
 	}
-	private: System::Void chart1_Click(System::Object^ sender, System::EventArgs^ e) {
-	}
+    private: System::Void chart1_Click(System::Object^ sender, System::EventArgs^ e) {
+        // Example code to populate the chart with data from SQL
+        try {
+            String^ conn_str = "Data Source=MIANZAIN\\SQLEXPRESS;Initial Catalog=APP;Integrated Security=True";
+            SqlConnection sqlConn(conn_str);
+
+            sqlConn.Open();
+
+            String^ tmpQuery = "SELECT Category, SUM(Amount) FROM Transactions WHERE Username = @user GROUP BY Category";
+
+            SqlCommand^ command = gcnew SqlCommand(tmpQuery, % sqlConn);
+            command->Parameters->AddWithValue("@user", this->name_label->Text);
+            SqlDataReader^ reader = command->ExecuteReader();
+
+            while (reader->Read()) {
+                String^ category = reader->GetString(0);
+                int amount = reader->GetInt32(1);
+                chart1->Series["Series1"]->Points->AddXY(category, amount);
+            }
+        }
+        catch (Exception^ e) {
+            MessageBox::Show(e->Message);
+        }
+    }
 	private: System::Void panel7_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
 	}
     private: System::Void comboBox1_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
