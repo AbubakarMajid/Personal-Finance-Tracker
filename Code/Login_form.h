@@ -167,8 +167,8 @@ namespace Project {
 			SqlConnection sqlConn(conn_str);
 
 			sqlConn.Open();
-
-			String^ query = "SELECT * FROM Credentials WHERE Username=@username AND Passkey=@pwd;";
+			// COLLATE Latin1_General_CS_AS specifies a case-sensitive collation for the comparison.
+			String^ query = "SELECT * FROM Credentials WHERE Username=@username COLLATE Latin1_General_CS_AS AND Passkey=@pwd COLLATE Latin1_General_CS_AS;";
 			SqlCommand^ command = gcnew SqlCommand(query, % sqlConn);
 			command->Parameters->AddWithValue("@username", username);
 			command->Parameters->AddWithValue("@pwd", password);

@@ -185,35 +185,35 @@ namespace Project {
 			return;
 		}
 
-		try {
+        try {
+            String^ conn_str = "Data Source=MIANZAIN\\SQLEXPRESS;Initial Catalog=APP;Integrated Security=True";
+            SqlConnection sqlConn(conn_str);
 
-			String^ conn_str = "Data Source=MIANZAIN\\SQLEXPRESS;Initial Catalog=APP;Integrated Security=True";
-			SqlConnection sqlConn(conn_str);
+            sqlConn.Open();
 
-			sqlConn.Open();
+            String^ sqlQuery = "INSERT INTO Credentials (Username , Passkey , Income , Balance) VALUES (@user  , @pwd , @income , @balance)";
 
-			String^ sqlQuery = "INSERT INTO Credentials (Username , Passkey , Income , Balance) VALUES (@user  , @pwd , @income , @balance)";
+            SqlCommand^ command = gcnew SqlCommand(sqlQuery, % sqlConn);
+            command->Parameters->AddWithValue("@user", username);
+            command->Parameters->AddWithValue("@pwd", password);
+            command->Parameters->AddWithValue("@income", incomeInt);
+            command->Parameters->AddWithValue("@balance", incomeInt);
 
-			SqlCommand^ command = gcnew SqlCommand(sqlQuery, % sqlConn);
-			command->Parameters->AddWithValue("@user", username);
-			command->Parameters->AddWithValue("@pwd", password);
-			command->Parameters->AddWithValue("@income", incomeInt);
-			command->Parameters->AddWithValue("@balance", incomeInt);
+            if (Char::IsDigit(username[0])) {
+                throw gcnew Exception("Username cannot start with a number");
+            }
 
-			command->ExecuteNonQuery();
+            command->ExecuteNonQuery();
 
-			user = gcnew USER;
-			user->username = username;
-			user->income = incomeInt;
-			user->balance = incomeInt;
+            user = gcnew USER;
+            user->username = username;
+            user->income = incomeInt;
+            user->balance = incomeInt;
 
-			this->Close();
-
-		}
-		catch (Exception^ e) {
-			MessageBox::Show("Failed to Create Account", "Account Creation Failed", MessageBoxButtons::OK);
-		}
-
-	}
+            this->Close();
+        }
+        catch (Exception^ e) {
+            MessageBox::Show("Failed to Create Account: " + e->Message, "Account Creation Failed", MessageBoxButtons::OK);
+        }
 	};
 }
