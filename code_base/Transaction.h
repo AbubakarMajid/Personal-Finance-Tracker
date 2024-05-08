@@ -16,6 +16,7 @@ namespace codebase {
 	public ref class Transaction : public System::Windows::Forms::Form
 	{
 	public:
+		int utility_budget, healthcare_budget, ent_budget, food_budget ,balance , utility_spent , health_spent , ent_spent , food_spent;
 		Transaction(USER^ user)
 		{
 			InitializeComponent(); // Move this line to the top
@@ -31,6 +32,200 @@ namespace codebase {
 				if (this->name_label != nullptr)
 				{
 					this->name_label->Text = user->username;
+
+					try {
+						String^ conn_str = "Data Source=(localdb)\\tracker-app;Initial Catalog=tracker_db;Integrated Security=True";
+						SqlConnection sqlConn(conn_str);
+						sqlConn.Open();
+						String^ sqlQuery1 = "select Balance , Budget from Credentials JOIN Budget On Credentials.Username = Budget.Username Where Credentials.Username = @user AND Category = @cat";
+						SqlCommand^ command1 = gcnew SqlCommand(sqlQuery1, % sqlConn);
+						command1->Parameters->AddWithValue("@user", user->username);
+						command1->Parameters->AddWithValue("@cat", "Utility");
+						SqlDataReader^ reader1 = command1->ExecuteReader();
+
+						if (reader1->Read()) {
+							balance = reader1->GetInt64(0);
+							utility_budget = reader1->GetInt64(1);
+						}
+						reader1->Close();
+					}
+
+					catch (Exception^ ex) {
+
+					}
+
+					try {
+						String^ conn_str = "Data Source=(localdb)\\tracker-app;Initial Catalog=tracker_db;Integrated Security=True";
+						SqlConnection sqlConn(conn_str);
+						sqlConn.Open();
+						String^ sqlQuery1 = "select Budget from Credentials JOIN Budget On Credentials.Username = Budget.Username Where Credentials.Username = @user AND Category = @cat";
+						SqlCommand^ command1 = gcnew SqlCommand(sqlQuery1, % sqlConn);
+						command1->Parameters->AddWithValue("@user", user->username);
+						command1->Parameters->AddWithValue("@cat", "Entertainment");
+						SqlDataReader^ reader1 = command1->ExecuteReader();
+
+						if (reader1->Read()) {
+							ent_budget = reader1->GetInt64(0);
+						}
+						reader1->Close();
+					}
+
+					catch (Exception^ ex) {
+
+					}
+					try {
+						String^ conn_str = "Data Source=(localdb)\\tracker-app;Initial Catalog=tracker_db;Integrated Security=True";
+						SqlConnection sqlConn(conn_str);
+						sqlConn.Open();
+						String^ sqlQuery1 = "select  Budget from Credentials JOIN Budget On Credentials.Username = Budget.Username Where Credentials.Username = @user AND Category = @cat";
+						SqlCommand^ command1 = gcnew SqlCommand(sqlQuery1, % sqlConn);
+						command1->Parameters->AddWithValue("@user", user->username);
+						command1->Parameters->AddWithValue("@cat", "Healthcare");
+						SqlDataReader^ reader1 = command1->ExecuteReader();
+
+						if (reader1->Read()) {
+							
+							healthcare_budget = reader1->GetInt64(0);
+						}
+						reader1->Close();
+					}
+
+					catch (Exception^ ex) {
+
+					}
+					try {
+						String^ conn_str = "Data Source=(localdb)\\tracker-app;Initial Catalog=tracker_db;Integrated Security=True";
+						SqlConnection sqlConn(conn_str);
+						sqlConn.Open();
+						String^ sqlQuery1 = "select Budget from Credentials JOIN Budget On Credentials.Username = Budget.Username Where Credentials.Username = @user AND Category = @cat";
+						SqlCommand^ command1 = gcnew SqlCommand(sqlQuery1, % sqlConn);
+						command1->Parameters->AddWithValue("@user", user->username);
+						command1->Parameters->AddWithValue("@cat", "Food");
+						SqlDataReader^ reader1 = command1->ExecuteReader();
+
+						if (reader1->Read()) {
+
+							food_budget = reader1->GetInt64(0);
+						}
+						reader1->Close();
+					}
+
+					catch (Exception^ ex) {
+
+					}
+
+					// transactions sum for the category
+
+					try {
+						String^ conn_str = "Data Source=(localdb)\\tracker-app;Initial Catalog=tracker_db;Integrated Security=True";
+						SqlConnection sqlConn(conn_str);
+
+						sqlConn.Open();
+
+						String^ tmpQuery = "select COALESCE(SUM(Amount), 0), COALESCE(MAX(Budget), 0) from Budget as b JOIN Transactions as t on  b.Category = t.Category AND b.Username = t.Username WHERE  b.Username = @user AND b.Category = @cat";
+
+						SqlCommand^ command = gcnew SqlCommand(tmpQuery, % sqlConn);
+						command->Parameters->AddWithValue("@user", user->username);
+						command->Parameters->AddWithValue("@cat", "Utility");
+						SqlDataReader^ reader = command->ExecuteReader();
+
+						if (reader->Read()) {
+							utility_spent = reader->GetInt64(0);
+						}
+						else {
+							utility_spent = 0;
+						}
+
+						reader->Close();
+					}
+
+					catch (Exception^ e) {
+						MessageBox::Show(e->Message);
+						//label2->Text = e->Message;
+					}
+
+					try {
+						String^ conn_str = "Data Source=(localdb)\\tracker-app;Initial Catalog=tracker_db;Integrated Security=True";
+						SqlConnection sqlConn(conn_str);
+
+						sqlConn.Open();
+
+						String^ tmpQuery = "select COALESCE(SUM(Amount), 0), COALESCE(MAX(Budget), 0) from Budget as b JOIN Transactions as t on  b.Category = t.Category AND b.Username = t.Username WHERE  b.Username = @user AND b.Category = @cat";
+
+						SqlCommand^ command = gcnew SqlCommand(tmpQuery, % sqlConn);
+						command->Parameters->AddWithValue("@user", user->username);
+						command->Parameters->AddWithValue("@cat", "Food");
+						SqlDataReader^ reader = command->ExecuteReader();
+
+						if (reader->Read()) {
+							food_spent = reader->GetInt64(0);
+						}
+						else {
+							food_spent = 0;
+						}
+						reader->Close();
+					}
+
+					catch (Exception^ e) {
+						MessageBox::Show(e->Message);
+						//label2->Text = e->Message;
+					}
+
+					try {
+						String^ conn_str = "Data Source=(localdb)\\tracker-app;Initial Catalog=tracker_db;Integrated Security=True";
+						SqlConnection sqlConn(conn_str);
+
+						sqlConn.Open();
+
+						String^ tmpQuery = "select COALESCE(SUM(Amount), 0), COALESCE(MAX(Budget), 0) from Budget as b JOIN Transactions as t on  b.Category = t.Category AND b.Username = t.Username WHERE  b.Username = @user AND b.Category = @cat";
+
+						SqlCommand^ command = gcnew SqlCommand(tmpQuery, % sqlConn);
+						command->Parameters->AddWithValue("@user", user->username);
+						command->Parameters->AddWithValue("@cat", "Healthcare");
+						SqlDataReader^ reader = command->ExecuteReader();
+
+						if (reader->Read()) {
+							health_spent = reader->GetInt64(0);
+						}
+						else {
+							health_spent = 0;
+						}
+						reader->Close();
+					}
+
+					catch (Exception^ e) {
+						MessageBox::Show(e->Message);
+						//label2->Text = e->Message;
+					}
+
+					try {
+						String^ conn_str = "Data Source=(localdb)\\tracker-app;Initial Catalog=tracker_db;Integrated Security=True";
+						SqlConnection sqlConn(conn_str);
+
+						sqlConn.Open();
+
+						String^ tmpQuery = "select COALESCE(SUM(Amount), 0), COALESCE(MAX(Budget), 0) from Budget as b JOIN Transactions as t on  b.Category = t.Category AND b.Username = t.Username WHERE  b.Username = @user AND b.Category = @cat";
+
+						SqlCommand^ command = gcnew SqlCommand(tmpQuery, % sqlConn);
+						command->Parameters->AddWithValue("@user", user->username);
+						command->Parameters->AddWithValue("@cat", "Entertainment");
+						SqlDataReader^ reader = command->ExecuteReader();
+
+						if (reader->Read()) {
+							ent_spent = reader->GetInt64(0);
+							
+						}
+						else {
+							ent_spent = 0;
+						}
+						reader->Close();
+					}
+
+					catch (Exception^ e) {
+						MessageBox::Show(e->Message);
+						//label2->Text = e->Message;
+					}
+
 				}
 				else
 				{
@@ -94,6 +289,7 @@ namespace codebase {
 			this->panel2 = (gcnew System::Windows::Forms::Panel());
 			this->label7 = (gcnew System::Windows::Forms::Label());
 			this->panel3 = (gcnew System::Windows::Forms::Panel());
+			this->name_label = (gcnew System::Windows::Forms::Label());
 			this->button3 = (gcnew System::Windows::Forms::Button());
 			this->button2 = (gcnew System::Windows::Forms::Button());
 			this->button1 = (gcnew System::Windows::Forms::Button());
@@ -111,7 +307,6 @@ namespace codebase {
 			this->label3 = (gcnew System::Windows::Forms::Label());
 			this->label2 = (gcnew System::Windows::Forms::Label());
 			this->label1 = (gcnew System::Windows::Forms::Label());
-			this->name_label = (gcnew System::Windows::Forms::Label());
 			this->panel1->SuspendLayout();
 			this->panel2->SuspendLayout();
 			this->panel3->SuspendLayout();
@@ -169,6 +364,14 @@ namespace codebase {
 			this->panel3->Name = L"panel3";
 			this->panel3->Size = System::Drawing::Size(333, 451);
 			this->panel3->TabIndex = 4;
+			// 
+			// name_label
+			// 
+			this->name_label->Location = System::Drawing::Point(98, -14);
+			this->name_label->Name = L"name_label";
+			this->name_label->Size = System::Drawing::Size(100, 23);
+			this->name_label->TabIndex = 0;
+			this->name_label->Click += gcnew System::EventHandler(this, &Transaction::name_label_Click);
 			// 
 			// button3
 			// 
@@ -299,7 +502,7 @@ namespace codebase {
 				| System::Windows::Forms::AnchorStyles::Left)
 				| System::Windows::Forms::AnchorStyles::Right));
 			this->comboBox2->FormattingEnabled = true;
-			this->comboBox2->Items->AddRange(gcnew cli::array< System::Object^  >(4) { L"USD", L"GBP", L"EUR", L"Rs" });
+			this->comboBox2->Items->AddRange(gcnew cli::array< System::Object^  >(4) { L"USD", L"GBP", L"EUR", L"PKR" });
 			this->comboBox2->Location = System::Drawing::Point(243, 260);
 			this->comboBox2->Margin = System::Windows::Forms::Padding(4);
 			this->comboBox2->Name = L"comboBox2";
@@ -417,14 +620,6 @@ namespace codebase {
 			this->label1->Text = L"Category";
 			this->label1->Click += gcnew System::EventHandler(this, &Transaction::label1_Click);
 			// 
-			// name_label
-			// 
-			this->name_label->Location = System::Drawing::Point(98, -14);
-			this->name_label->Name = L"name_label";
-			this->name_label->Size = System::Drawing::Size(100, 23);
-			this->name_label->TabIndex = 0;
-			this->name_label->Click += gcnew System::EventHandler(this, &Transaction::name_label_Click);
-			// 
 			// Transaction
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
@@ -492,34 +687,100 @@ namespace codebase {
 	}
 	private: System::Void label1_Click(System::Object^ sender, System::EventArgs^ e) {
 	}
+
+		   bool ContainsDigit(String^ str)
+		   {
+			   if (str == nullptr || str->Length == 0)
+			   {
+				   // Handle empty string or null reference
+				   return false;
+			   }
+			   else
+			   {
+				   for each (wchar_t ch in str)
+				   {
+					   // Check if the character is a digit
+					   if (Char::IsLetter(ch))
+					   {
+						   return true; // Return true if any character is a digit
+					   }
+				   }
+				   return false; // Return false if no character is a digit
+			   }
+		   }
+
 	private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e) {
 		String^ category = this->comboBox3->Text;
 		String^ type = this->comboBox1->Text;
 		String^ amount = this->textBox3->Text;
 		String^ currency = this->comboBox2->Text;
 		String^ date = this->textBox2->Text;
+		bool amount_validation = ContainsDigit(amount);
 
-		try {
-			String^ conn_str = "Data Source=(localdb)\\tracker-app;Initial Catalog=tracker_db;Integrated Security=True";
-			SqlConnection sqlConn(conn_str);
-			sqlConn.Open();
-			String^ sqlQuery = "INSERT INTO Transactions (Username, Category, Type, Date, Amount, Currency) VALUES (@user, @cat, @type, @date, @amount, @currency)";
-			SqlCommand^ command = gcnew SqlCommand(sqlQuery, % sqlConn);
-			command->Parameters->AddWithValue("@user", this->name_label->Text);
-			command->Parameters->AddWithValue("@cat", category);
-			command->Parameters->AddWithValue("@type", type);
-			command->Parameters->AddWithValue("@date", date);
-			command->Parameters->AddWithValue("@amount", amount);
-			command->Parameters->AddWithValue("@currency", currency);
-			command->ExecuteNonQuery();
-			MessageBox::Show("Transaction Added Successfully", "Success", MessageBoxButtons::OK);
+
+		if (amount->Length == 0 || amount_validation) {
+			MessageBox::Show("Enter Valid Data");
 		}
-		catch (SqlException^ ex) {
-			MessageBox::Show("SQL Error: " + ex->Message, "Transaction Failed", MessageBoxButtons::OK);
+
+		else {
+			int amount_int = Convert::ToInt32(amount);
+			if (amount_int > balance) {
+				MessageBox::Show("Not Enough balance to Process this Transaction!!");
+			}
+			else if (category == "Utility" && amount_int > utility_budget - utility_spent){
+				MessageBox::Show("You're reaching limit for this Category!!");
+			}
+			else if (category == "Entertainment" && amount_int > ent_budget - ent_spent) {
+				MessageBox::Show("You're reaching limit for this Category!!");
+			}
+			else if (category == "Healthcare" && amount_int > healthcare_budget - health_spent) {
+				MessageBox::Show("You're reaching limit for this Category!!");
+			}
+			else if (category == "Food" && amount_int > food_budget - food_spent) {
+				MessageBox::Show("You're reaching limit for this Category!!");
+			}
+			else {
+				try {
+
+					String^ conn_str = "Data Source=(localdb)\\tracker-app;Initial Catalog=tracker_db;Integrated Security=True";
+					SqlConnection sqlConn(conn_str);
+					sqlConn.Open();
+					String^ sqlQuery = "INSERT INTO Transactions (Username, Category, Type, Date, Amount, Currency) VALUES (@user, @cat, @type, @date, @amount, @currency)";
+					SqlCommand^ command = gcnew SqlCommand(sqlQuery, % sqlConn);
+					command->Parameters->AddWithValue("@user", this->name_label->Text);
+					command->Parameters->AddWithValue("@cat", category);
+					command->Parameters->AddWithValue("@type", type);
+					command->Parameters->AddWithValue("@date", date);
+					command->Parameters->AddWithValue("@amount", amount_int);
+					command->Parameters->AddWithValue("@currency", currency);
+					command->ExecuteNonQuery();
+					MessageBox::Show("Transaction Added Successfully", "Success", MessageBoxButtons::OK);
+
+					if (type == "Expense") {
+						String^ sqlQuery2 = "UPDATE CREDENTIALS SET Balance  = Balance - @amount where Username = @user";
+						SqlCommand^ command2 = gcnew SqlCommand(sqlQuery2, % sqlConn);
+						command2->Parameters->AddWithValue("@user", this->name_label->Text);
+						command2->Parameters->AddWithValue("@amount", amount_int);
+						command2->ExecuteNonQuery();
+					}
+					else {
+						String^ sqlQuery2 = "UPDATE CREDENTIALS SET Balance  = Balance + @amount where Username = @user";
+						SqlCommand^ command2 = gcnew SqlCommand(sqlQuery2, % sqlConn);
+						command2->Parameters->AddWithValue("@user", this->name_label->Text);
+						command2->Parameters->AddWithValue("@amount", amount_int);
+						command2->ExecuteNonQuery();
+					}
+
+				}
+
+				catch (SqlException^ ex) {
+					MessageBox::Show("SQL Error: " + ex->Message, "Transaction Failed", MessageBoxButtons::OK);
+				}
+			}
+			/*catch (Exception^ ex) {
+				MessageBox::Show("Error: " + ex->Message, "Transaction Failed", MessageBoxButtons::OK);
+			}*/
 		}
-		/*catch (Exception^ ex) {
-			MessageBox::Show("Error: " + ex->Message, "Transaction Failed", MessageBoxButtons::OK);
-		}*/
 	}
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
 		this->switch_to_dashboard = true;

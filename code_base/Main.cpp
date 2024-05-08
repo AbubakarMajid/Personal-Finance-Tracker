@@ -64,6 +64,11 @@ int main(array<String^>^ args)
 			}
 
 		}
+
+		else if (dash.switch_to_login) {
+			codebase::login_form log;
+			log.ShowDialog();
+		}
 		else {
 			break;
 		}

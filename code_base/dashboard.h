@@ -17,13 +17,15 @@ namespace codebase
 	public ref class Dashboard : public System::Windows::Forms::Form
 	{
 	public:
+		String ^ name;
 		Dashboard(USER^ user)
 		{
 			InitializeComponent();
 			//
 			//TODO: Add the constructor code here
 			//	
-				
+				this->label15->Text = Convert::ToString(user->username);
+				this->name = user->username;
 				this->label6->Text = Convert::ToString(user->balance);
 				cat_label_data(this->label10, this->label15, "Utility", user->username);
 				cat_label_data(this->label9, this->label17, "Entertainment", user->username);
@@ -32,7 +34,6 @@ namespace codebase
 
 				spent_vs_earned(this->label26, this->label28, user->username);
 
-			
 
 			try {
 				String^ conn_str = "Data Source=(localdb)\\tracker-app;Initial Catalog=tracker_db;Integrated Security=True";
@@ -40,8 +41,7 @@ namespace codebase
 
 				sqlConn.Open();
 
-				String^ tmpQuery = "Select i.income_goal ,c.Balance from Income_goal as i JOIN Credentials as c ON i.Username = c.Username WHERE c.Username = @user";
-
+				String^ tmpQuery = tmpQuery = "Select i.income_goal ,c.Balance from Income_goal as i JOIN Credentials as c ON i.Username = c.Username WHERE c.Username = @user";
 				SqlCommand^ command = gcnew SqlCommand(tmpQuery, % sqlConn);
 				command->Parameters->AddWithValue("@user", user->username);
 				//command->Parameters->AddWithValue("@cat", "Utility");
@@ -57,6 +57,8 @@ namespace codebase
 
 				}
 				else {
+					this->label24->Text = "0";
+					this->label23->Text = "0";
 					//this->label10->Text = "0";
 				}
 			}
@@ -122,7 +124,7 @@ namespace codebase
 	private: System::Windows::Forms::Label^ label14;
 	private: System::Windows::Forms::ComboBox^ comboBox1;
 	private: System::Windows::Forms::PictureBox^ pictureBox1;
-	private: System::Windows::Forms::Label^ user_name;
+
 	private: System::Windows::Forms::Label^ label17;
 	private: System::Windows::Forms::Label^ label18;
 	private: System::Windows::Forms::Label^ label15;
@@ -139,21 +141,25 @@ namespace codebase
 	private: System::Windows::Forms::Label^ label25;
 	private: System::Windows::Forms::Label^ label23;
 	private: System::Windows::Forms::PictureBox^ pictureBox2;
-	private: System::Windows::Forms::Label^ label27;
 
 
 
-	private: System::Windows::Forms::RadioButton^ radioButton1;
 
-	private: System::Windows::Forms::RadioButton^ radioButton3;
-	private: System::Windows::Forms::RadioButton^ radioButton2;
+
+
+
+
 	private: System::Windows::Forms::Button^ button4;
-	private: System::Windows::Forms::RadioButton^ radioButton4;
+
 	private: System::Windows::Forms::Panel^ panel9;
 	private: System::Windows::Forms::Label^ label26;
 	private: System::Windows::Forms::Label^ label29;
 	private: System::Windows::Forms::Label^ label28;
 private: System::Windows::Forms::Label^ label30;
+private: System::Windows::Forms::DataVisualization::Charting::Chart^ chart1;
+private: System::Windows::Forms::Button^ button5;
+private: System::Windows::Forms::Button^ button7;
+
 
 
 
@@ -170,16 +176,14 @@ private: System::Windows::Forms::Label^ label30;
 
 				   sqlConn.Open();
 
-				   String^ tmpQuery = "Select Sum(Amount) from Transactions where Username = @user AND Type = 'Expense'";
+				   String^ tmpQuery = "Select COALESCE(SUM(Amount), 0) from Transactions where Username = @user AND Type = 'Expense'";
 
 				   SqlCommand^ command = gcnew SqlCommand(tmpQuery, % sqlConn);
 				   command->Parameters->AddWithValue("@user", username);
 				   SqlDataReader^ reader = command->ExecuteReader();
 
 				   if (reader->Read()) {
-					   if (reader->GetInt64(0)) {
 						   label1->Text = Convert::ToString(reader->GetInt64(0));
-					   }
 				   }
 				   else {
 					   label1->Text = "0";
@@ -187,16 +191,14 @@ private: System::Windows::Forms::Label^ label30;
 
 				   reader->Close();
 
-				   String^ tmpQuery2 = "Select Sum(Amount) from Transactions where Username = @user AND Type = 'Income'";
+				   String^ tmpQuery2 = "Select COALESCE(SUM(Amount), 0) from Transactions where Username = @user AND Type = 'Income'";
 
 				   SqlCommand^ command2 = gcnew SqlCommand(tmpQuery2, % sqlConn);
 				   command2->Parameters->AddWithValue("@user", username);
 				   SqlDataReader^ reader2 = command2->ExecuteReader();
 
 				   if (reader2->Read()) {
-					   if (reader2->GetInt64(0)) {
 						   label2->Text = Convert::ToString(reader2->GetInt64(0));
-					   }
 				   }
 				   else {
 					   label2->Text = "0";
@@ -278,12 +280,15 @@ private: System::Windows::Forms::Label^ label30;
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			System::Windows::Forms::DataVisualization::Charting::ChartArea^ chartArea1 = (gcnew System::Windows::Forms::DataVisualization::Charting::ChartArea());
+			System::Windows::Forms::DataVisualization::Charting::Legend^ legend1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Legend());
+			System::Windows::Forms::DataVisualization::Charting::Series^ series1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
 			this->panel2 = (gcnew System::Windows::Forms::Panel());
 			this->label7 = (gcnew System::Windows::Forms::Label());
 			this->panel3 = (gcnew System::Windows::Forms::Panel());
+			this->label30 = (gcnew System::Windows::Forms::Label());
 			this->button4 = (gcnew System::Windows::Forms::Button());
-			this->user_name = (gcnew System::Windows::Forms::Label());
 			this->pictureBox1 = (gcnew System::Windows::Forms::PictureBox());
 			this->button3 = (gcnew System::Windows::Forms::Button());
 			this->button2 = (gcnew System::Windows::Forms::Button());
@@ -314,18 +319,16 @@ private: System::Windows::Forms::Label^ label30;
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->panel11 = (gcnew System::Windows::Forms::Panel());
 			this->panel10 = (gcnew System::Windows::Forms::Panel());
+			this->button7 = (gcnew System::Windows::Forms::Button());
 			this->comboBox1 = (gcnew System::Windows::Forms::ComboBox());
 			this->dataGridView1 = (gcnew System::Windows::Forms::DataGridView());
 			this->label12 = (gcnew System::Windows::Forms::Label());
 			this->panel8 = (gcnew System::Windows::Forms::Panel());
+			this->button5 = (gcnew System::Windows::Forms::Button());
+			this->chart1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Chart());
 			this->panel9 = (gcnew System::Windows::Forms::Panel());
 			this->label26 = (gcnew System::Windows::Forms::Label());
 			this->label29 = (gcnew System::Windows::Forms::Label());
-			this->radioButton4 = (gcnew System::Windows::Forms::RadioButton());
-			this->radioButton3 = (gcnew System::Windows::Forms::RadioButton());
-			this->radioButton2 = (gcnew System::Windows::Forms::RadioButton());
-			this->label27 = (gcnew System::Windows::Forms::Label());
-			this->radioButton1 = (gcnew System::Windows::Forms::RadioButton());
 			this->pictureBox2 = (gcnew System::Windows::Forms::PictureBox());
 			this->label25 = (gcnew System::Windows::Forms::Label());
 			this->label23 = (gcnew System::Windows::Forms::Label());
@@ -335,7 +338,6 @@ private: System::Windows::Forms::Label^ label30;
 			this->label14 = (gcnew System::Windows::Forms::Label());
 			this->label13 = (gcnew System::Windows::Forms::Label());
 			this->progressBar1 = (gcnew System::Windows::Forms::ProgressBar());
-			this->label30 = (gcnew System::Windows::Forms::Label());
 			this->panel1->SuspendLayout();
 			this->panel2->SuspendLayout();
 			this->panel3->SuspendLayout();
@@ -350,6 +352,7 @@ private: System::Windows::Forms::Label^ label30;
 			this->panel10->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView1))->BeginInit();
 			this->panel8->SuspendLayout();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->chart1))->BeginInit();
 			this->panel9->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox2))->BeginInit();
 			this->panel7->SuspendLayout();
@@ -395,8 +398,8 @@ private: System::Windows::Forms::Label^ label30;
 			// panel3
 			// 
 			this->panel3->BackColor = System::Drawing::Color::SteelBlue;
+			this->panel3->Controls->Add(this->label30);
 			this->panel3->Controls->Add(this->button4);
-			this->panel3->Controls->Add(this->user_name);
 			this->panel3->Controls->Add(this->pictureBox1);
 			this->panel3->Controls->Add(this->button3);
 			this->panel3->Controls->Add(this->button2);
@@ -407,6 +410,16 @@ private: System::Windows::Forms::Label^ label30;
 			this->panel3->Name = L"panel3";
 			this->panel3->Size = System::Drawing::Size(333, 812);
 			this->panel3->TabIndex = 4;
+			// 
+			// label30
+			// 
+			this->label30->AutoSize = true;
+			this->label30->ForeColor = System::Drawing::Color::SteelBlue;
+			this->label30->Location = System::Drawing::Point(153, 449);
+			this->label30->Name = L"label30";
+			this->label30->Size = System::Drawing::Size(51, 16);
+			this->label30->TabIndex = 11;
+			this->label30->Text = L"label30";
 			// 
 			// button4
 			// 
@@ -421,20 +434,7 @@ private: System::Windows::Forms::Label^ label30;
 			this->button4->TabIndex = 10;
 			this->button4->Text = L"Log Out";
 			this->button4->UseVisualStyleBackColor = false;
-			// 
-			// user_name
-			// 
-			this->user_name->AutoSize = true;
-			this->user_name->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 14.25F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->user_name->ForeColor = System::Drawing::SystemColors::ControlLightLight;
-			this->user_name->Location = System::Drawing::Point(115, 196);
-			this->user_name->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
-			this->user_name->Name = L"user_name";
-			this->user_name->Size = System::Drawing::Size(89, 32);
-			this->user_name->TabIndex = 4;
-			this->user_name->Text = L"label15";
-			this->user_name->Click += gcnew System::EventHandler(this, &Dashboard::label15_Click);
+			this->button4->Click += gcnew System::EventHandler(this, &Dashboard::button4_Click);
 			// 
 			// pictureBox1
 			// 
@@ -834,7 +834,7 @@ private: System::Windows::Forms::Label^ label30;
 			// panel10
 			// 
 			this->panel10->BackColor = System::Drawing::Color::LightSteelBlue;
-			this->panel10->Controls->Add(this->label30);
+			this->panel10->Controls->Add(this->button7);
 			this->panel10->Controls->Add(this->comboBox1);
 			this->panel10->Controls->Add(this->dataGridView1);
 			this->panel10->Controls->Add(this->label12);
@@ -843,6 +843,16 @@ private: System::Windows::Forms::Label^ label30;
 			this->panel10->Name = L"panel10";
 			this->panel10->Size = System::Drawing::Size(855, 662);
 			this->panel10->TabIndex = 3;
+			// 
+			// button7
+			// 
+			this->button7->Location = System::Drawing::Point(353, 29);
+			this->button7->Name = L"button7";
+			this->button7->Size = System::Drawing::Size(114, 23);
+			this->button7->TabIndex = 4;
+			this->button7->Text = L"Reload Table";
+			this->button7->UseVisualStyleBackColor = true;
+			this->button7->Click += gcnew System::EventHandler(this, &Dashboard::button7_Click);
 			// 
 			// comboBox1
 			// 
@@ -891,12 +901,9 @@ private: System::Windows::Forms::Label^ label30;
 				| System::Windows::Forms::AnchorStyles::Right));
 			this->panel8->BackColor = System::Drawing::Color::Azure;
 			this->panel8->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
+			this->panel8->Controls->Add(this->button5);
+			this->panel8->Controls->Add(this->chart1);
 			this->panel8->Controls->Add(this->panel9);
-			this->panel8->Controls->Add(this->radioButton4);
-			this->panel8->Controls->Add(this->radioButton3);
-			this->panel8->Controls->Add(this->radioButton2);
-			this->panel8->Controls->Add(this->label27);
-			this->panel8->Controls->Add(this->radioButton1);
 			this->panel8->Controls->Add(this->pictureBox2);
 			this->panel8->Controls->Add(this->label25);
 			this->panel8->Controls->Add(this->label23);
@@ -909,6 +916,32 @@ private: System::Windows::Forms::Label^ label30;
 			this->panel8->Name = L"panel8";
 			this->panel8->Size = System::Drawing::Size(907, 834);
 			this->panel8->TabIndex = 9;
+			// 
+			// button5
+			// 
+			this->button5->Location = System::Drawing::Point(482, 646);
+			this->button5->Name = L"button5";
+			this->button5->Size = System::Drawing::Size(84, 44);
+			this->button5->TabIndex = 20;
+			this->button5->Text = L"Unlock Insights";
+			this->button5->UseVisualStyleBackColor = true;
+			this->button5->Click += gcnew System::EventHandler(this, &Dashboard::button5_Click);
+			// 
+			// chart1
+			// 
+			chartArea1->Name = L"ChartArea1";
+			this->chart1->ChartAreas->Add(chartArea1);
+			legend1->Name = L"Legend1";
+			this->chart1->Legends->Add(legend1);
+			this->chart1->Location = System::Drawing::Point(47, 410);
+			this->chart1->Name = L"chart1";
+			series1->ChartArea = L"ChartArea1";
+			series1->Legend = L"Legend1";
+			series1->Name = L"Series1";
+			this->chart1->Series->Add(series1);
+			this->chart1->Size = System::Drawing::Size(543, 221);
+			this->chart1->TabIndex = 4;
+			this->chart1->Text = L"chart1";
 			// 
 			// panel9
 			// 
@@ -946,82 +979,6 @@ private: System::Windows::Forms::Label^ label30;
 			this->label29->Size = System::Drawing::Size(229, 32);
 			this->label29->TabIndex = 1;
 			this->label29->Text = L"Total Amount Spent";
-			// 
-			// radioButton4
-			// 
-			this->radioButton4->AutoSize = true;
-			this->radioButton4->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 9, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->radioButton4->ForeColor = System::Drawing::Color::DarkBlue;
-			this->radioButton4->Location = System::Drawing::Point(225, 650);
-			this->radioButton4->Margin = System::Windows::Forms::Padding(4);
-			this->radioButton4->Name = L"radioButton4";
-			this->radioButton4->Size = System::Drawing::Size(58, 24);
-			this->radioButton4->TabIndex = 18;
-			this->radioButton4->TabStop = true;
-			this->radioButton4->Text = L"EUR";
-			this->radioButton4->UseVisualStyleBackColor = true;
-			this->radioButton4->CheckedChanged += gcnew System::EventHandler(this, &Dashboard::radioButton4_CheckedChanged);
-			// 
-			// radioButton3
-			// 
-			this->radioButton3->AutoSize = true;
-			this->radioButton3->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 9, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->radioButton3->ForeColor = System::Drawing::Color::DarkBlue;
-			this->radioButton3->Location = System::Drawing::Point(311, 650);
-			this->radioButton3->Margin = System::Windows::Forms::Padding(4);
-			this->radioButton3->Name = L"radioButton3";
-			this->radioButton3->Size = System::Drawing::Size(60, 24);
-			this->radioButton3->TabIndex = 17;
-			this->radioButton3->TabStop = true;
-			this->radioButton3->Text = L"USD";
-			this->radioButton3->UseVisualStyleBackColor = true;
-			this->radioButton3->CheckedChanged += gcnew System::EventHandler(this, &Dashboard::radioButton3_CheckedChanged);
-			// 
-			// radioButton2
-			// 
-			this->radioButton2->AutoSize = true;
-			this->radioButton2->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 9, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->radioButton2->ForeColor = System::Drawing::Color::DarkBlue;
-			this->radioButton2->Location = System::Drawing::Point(384, 650);
-			this->radioButton2->Margin = System::Windows::Forms::Padding(4);
-			this->radioButton2->Name = L"radioButton2";
-			this->radioButton2->Size = System::Drawing::Size(58, 24);
-			this->radioButton2->TabIndex = 16;
-			this->radioButton2->TabStop = true;
-			this->radioButton2->Text = L"GBP";
-			this->radioButton2->UseVisualStyleBackColor = true;
-			this->radioButton2->CheckedChanged += gcnew System::EventHandler(this, &Dashboard::radioButton2_CheckedChanged);
-			// 
-			// label27
-			// 
-			this->label27->AutoSize = true;
-			this->label27->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 11.25F, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
-				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			this->label27->ForeColor = System::Drawing::Color::DarkBlue;
-			this->label27->Location = System::Drawing::Point(25, 603);
-			this->label27->Name = L"label27";
-			this->label27->Size = System::Drawing::Size(167, 25);
-			this->label27->TabIndex = 15;
-			this->label27->Text = L"Currency Switcher";
-			// 
-			// radioButton1
-			// 
-			this->radioButton1->AutoSize = true;
-			this->radioButton1->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 9, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->radioButton1->ForeColor = System::Drawing::Color::DarkBlue;
-			this->radioButton1->Location = System::Drawing::Point(135, 650);
-			this->radioButton1->Margin = System::Windows::Forms::Padding(4);
-			this->radioButton1->Name = L"radioButton1";
-			this->radioButton1->Size = System::Drawing::Size(57, 24);
-			this->radioButton1->TabIndex = 11;
-			this->radioButton1->TabStop = true;
-			this->radioButton1->Text = L"PKR";
-			this->radioButton1->UseVisualStyleBackColor = true;
-			this->radioButton1->CheckedChanged += gcnew System::EventHandler(this, &Dashboard::radioButton1_CheckedChanged);
 			// 
 			// pictureBox2
 			// 
@@ -1138,16 +1095,6 @@ private: System::Windows::Forms::Label^ label30;
 			this->progressBar1->Value = 20;
 			this->progressBar1->Click += gcnew System::EventHandler(this, &Dashboard::progressBar1_Click);
 			// 
-			// label30
-			// 
-			this->label30->AutoSize = true;
-			this->label30->ForeColor = System::Drawing::Color::SteelBlue;
-			this->label30->Location = System::Drawing::Point(73, 216);
-			this->label30->Name = L"label30";
-			this->label30->Size = System::Drawing::Size(51, 16);
-			this->label30->TabIndex = 11;
-			this->label30->Text = L"label30";
-			// 
 			// Dashboard
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
@@ -1190,6 +1137,7 @@ private: System::Windows::Forms::Label^ label30;
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView1))->EndInit();
 			this->panel8->ResumeLayout(false);
 			this->panel8->PerformLayout();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->chart1))->EndInit();
 			this->panel9->ResumeLayout(false);
 			this->panel9->PerformLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox2))->EndInit();
@@ -1229,12 +1177,21 @@ private: System::Windows::Forms::Label^ label30;
 	}
 
 
+private: System::Void chart1_Click(System::Object^ sender, System::EventArgs^ e) {
+	// Example code to populate the chart with data from SQL
+}
+
+
+	private: System::Void dataGridView1_CellContentClick(System::Object^ sender, System::Windows::Forms::DataGridViewCellEventArgs^ e) {
+		// Step 3: Retrieve the selected month from the ComboBox
+		
+	}
 
 
 	private: System::Void panel9_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
 	}
-	private: System::Void chart1_Click(System::Object^ sender, System::EventArgs^ e) {
-	}
+	/*private: System::Void chart1_Click(System::Object^ sender, System::EventArgs^ e) {
+	}*/
 	private: System::Void panel7_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
 	}
 	private: System::Void pictureBox1_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -1262,6 +1219,93 @@ private: System::Void radioButton3_CheckedChanged(System::Object^ sender, System
 private: System::Void radioButton2_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
 	this->currency = "GBD";
 	this->label30->Text = this->currency;
+}
+private: System::Void button5_Click(System::Object^ sender, System::EventArgs^ e) {
+
+	try {
+		String^ conn_str = "Data Source=(localdb)\\tracker-app;Initial Catalog=tracker_db;Integrated Security=True;";
+		SqlConnection sqlConn(conn_str);
+
+		sqlConn.Open();
+
+		String^ tmpQuery = "SELECT Category, SUM(Amount) FROM Transactions WHERE Username = @user GROUP BY Category";
+
+		SqlCommand^ command = gcnew SqlCommand(tmpQuery, % sqlConn);
+		//if (this->name_label != nullptr)
+		//{
+		command->Parameters->AddWithValue("@user", this->name);
+		//}
+		SqlDataReader^ reader = command->ExecuteReader();
+
+		while (reader->Read()) {
+			String^ category = reader->GetString(0);
+			int amount = reader->GetInt64(1);
+			chart1->Series["Series1"]->Points->AddXY(category, amount);
+		}
+	}
+	catch (Exception^ e) {
+		MessageBox::Show(e->Message);
+	}
+
+}
+private: System::Void button7_Click(System::Object^ sender, System::EventArgs^ e) {
+	try {
+		String^ selectedMonth = comboBox1->SelectedItem->ToString();
+		int monthNumber = DateTime::ParseExact(selectedMonth, "MMMM", System::Globalization::CultureInfo::CurrentCulture).Month;
+
+		String^ conn_str = "Data Source=(localdb)\\tracker-app;Initial Catalog=tracker_db;Integrated Security=True;";
+		SqlConnection sqlConn(conn_str);
+
+		sqlConn.Open();
+
+		String^ tmpQuery = "SELECT Category , Type , date , Amount, Currency FROM Transactions WHERE MONTH(date) = @month";
+
+		SqlCommand^ command = gcnew SqlCommand(tmpQuery, % sqlConn);
+		command->Parameters->AddWithValue("@month", monthNumber);
+
+		// Step 5: Execute the SQL query and retrieve the results
+		SqlDataAdapter^ adapter = gcnew SqlDataAdapter(command);
+		DataTable^ dataTable = gcnew DataTable();
+		adapter->Fill(dataTable);
+
+		// Step 6: Populate the DataGridView with the retrieved transaction data
+		dataGridView1->DataSource = dataTable;
+	}
+	catch (Exception^ e) {
+		MessageBox::Show("Kindly Select a month!!");
+	}
+
+	// Step 3 (continued): Convert the selected month to month number
+	
+	//try {
+	//	// Step 4: Construct the SQL query to fetch transactions for the selected month
+	//	String^ conn_str = "Data Source=(localdb)\\tracker-app;Initial Catalog=tracker_db;Integrated Security=True;";
+	//	SqlConnection sqlConn(conn_str);
+
+	//	sqlConn.Open();
+
+	//	String^ tmpQuery = "SELECT Category , Type , date , Amount, Currency FROM Transactions WHERE MONTH(date) = @month";
+
+	//	SqlCommand^ command = gcnew SqlCommand(tmpQuery, % sqlConn);
+	//	command->Parameters->AddWithValue("@month", monthNumber);
+
+	//	// Step 5: Execute the SQL query and retrieve the results
+	//	SqlDataAdapter^ adapter = gcnew SqlDataAdapter(command);
+	//	DataTable^ dataTable = gcnew DataTable();
+	//	adapter->Fill(dataTable);
+
+	//	// Step 6: Populate the DataGridView with the retrieved transaction data
+	//	dataGridView1->DataSource = dataTable;
+	//}
+	//catch (Exception^ ex) {
+	//	MessageBox::Show(ex->Message);
+	//}
+
+}
+	   public: bool switch_to_login = false;
+private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e) {
+	this->switch_to_login = true;
+	this->Close();
 }
 };
 }

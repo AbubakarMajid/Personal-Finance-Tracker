@@ -167,6 +167,44 @@ namespace codebase {
 		this->switch_to_login = true;
 		this->Close();
 	}
+
+		   bool IsFirstCharacterAlphabet(String^ str)
+		   {
+			   if (str == nullptr || str->Length == 0)
+			   {
+				   // Handle empty string or null reference
+				   return true;
+			   }
+			   else
+			   {
+				   wchar_t firstChar = str[0]; // Get the first character
+
+				   // Check if the first character is a letter (alphabet)
+				   return Char::IsLetter(firstChar);
+			   }
+		   }
+
+		   bool ContainsDigit(String^ str)
+		   {
+			   if (str == nullptr || str->Length == 0)
+			   {
+				   // Handle empty string or null reference
+				   return false;
+			   }
+			   else
+			   {
+				   for each (wchar_t ch in str)
+				   {
+					   // Check if the character is a digit
+					   if (Char::IsLetter(ch))
+					   {
+						   return true; // Return true if any character is a digit
+					   }
+				   }
+				   return false; // Return false if no character is a digit
+			   }
+		   }
+
 	public: USER^ user = nullptr;
 	private: System::Void account_button_Click(System::Object^ sender, System::EventArgs^ e) {
 		String^ username = username_box->Text;
@@ -176,42 +214,47 @@ namespace codebase {
 		/*msclr::interop::marshal_context context;
 		std::wstring incomeStr = context.marshal_as<std::wstring>(income);
 		int incomeInt = std::stoi(incomeStr);*/
-		int incomeInt = Convert::ToInt32(income);
 
-		if (username->Length == 0 || password->Length == 0 || income->Length == 0) {
-			MessageBox::Show("PlEASE ENTER ALL THE FIELDS!!", "One or More Empty Fields", MessageBoxButtons::OK);
+		
+		bool username_validation = IsFirstCharacterAlphabet(username);
+		bool income_validation = ContainsDigit(income);
+
+		if (username->Length == 0 || password->Length == 0 || income->Length == 0 || (!username_validation) || (income_validation) ) {
+			MessageBox::Show("PlEASE ENTER ALL THE FIELDS AND ENTER VALID DATA!!", "One or More Empty Fields", MessageBoxButtons::OK);
 			return;
 		}
+		else {
+			int incomeInt = Convert::ToInt32(income);
+			try {
 
-		try {
+				String^ conn_str = "Data Source=(localdb)\\tracker-app;Initial Catalog=tracker_db;Integrated Security=True";
+				SqlConnection sqlConn(conn_str);
 
-			String^ conn_str = "Data Source=(localdb)\tracker-app;Initial Catalog=tracker_db;Integrated Security=True";
-			SqlConnection sqlConn(conn_str);
+				sqlConn.Open();
 
-			sqlConn.Open();
+				String^ sqlQuery = "INSERT INTO Credentials (Username , Passkey , Income , Balance) VALUES (@user  , @pwd , @income , @balance)";
 
-			String^ sqlQuery = "INSERT INTO Credentials (Username , Passkey , Income , Balance) VALUES (@user  , @pwd , @income , @balance)";
+				SqlCommand^ command = gcnew SqlCommand(sqlQuery, % sqlConn);
+				command->Parameters->AddWithValue("@user", username);
+				command->Parameters->AddWithValue("@pwd", password);
+				command->Parameters->AddWithValue("@income", incomeInt);
+				command->Parameters->AddWithValue("@balance", incomeInt);
 
-			SqlCommand^ command = gcnew SqlCommand(sqlQuery, % sqlConn);
-			command->Parameters->AddWithValue("@user", username);
-			command->Parameters->AddWithValue("@pwd", password);
-			command->Parameters->AddWithValue("@income", incomeInt);
-			command->Parameters->AddWithValue("@balance", incomeInt);
+				command->ExecuteNonQuery();
 
-			command->ExecuteNonQuery();
+				user = gcnew USER;
+				user->username = username;
+				user->income = incomeInt;
+				user->balance = incomeInt;
 
-			user = gcnew USER;
-			user->username = username;
-			user->income = incomeInt;
-			user->balance = incomeInt;
+				this->Close();
 
-			this->Close();
+			}
+			catch (Exception^ e) {
+				MessageBox::Show("Failed to Create Account", "Account Creation Failed", MessageBoxButtons::OK);
+			}
 
 		}
-		catch (Exception^ e) {
-			MessageBox::Show("Failed to Create Account", "Account Creation Failed", MessageBoxButtons::OK);
-		}
-
 	}
 	};
 }
