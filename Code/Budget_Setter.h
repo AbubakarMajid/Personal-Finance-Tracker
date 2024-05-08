@@ -554,6 +554,7 @@ namespace Project {
 		else {
 			health = 0;
 		}
+
 		int total_budget = utility + ent + health + food;
 
 		try {
@@ -601,7 +602,7 @@ namespace Project {
 
 						SqlCommand^ command = gcnew SqlCommand(sqlQuery, % sqlConn);
 						command->Parameters->AddWithValue("@user", this->name_label->Text);
-						command->Parameters->AddWithValue("@cat", "Health");
+						command->Parameters->AddWithValue("@cat", "Healthcare");
 						command->Parameters->AddWithValue("@budget", health);
 
 						command->ExecuteNonQuery();
@@ -666,7 +667,7 @@ namespace Project {
 
 						SqlCommand^ command = gcnew SqlCommand(sqlQuery, % sqlConn);
 						command->Parameters->AddWithValue("@user", this->name_label->Text);
-						command->Parameters->AddWithValue("@cat", "Health");
+						command->Parameters->AddWithValue("@cat", "Healthcare");
 						command->Parameters->AddWithValue("@budget", health);
 
 						command->ExecuteNonQuery();

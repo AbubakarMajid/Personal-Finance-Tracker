@@ -84,26 +84,26 @@ namespace Project {
 			// 
 			// username_box
 			// 
-			this->username_box->Location = System::Drawing::Point(1066, 289);
-			this->username_box->Margin = System::Windows::Forms::Padding(4);
+			this->username_box->Location = System::Drawing::Point(1104, 350);
+			this->username_box->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->username_box->Name = L"username_box";
-			this->username_box->Size = System::Drawing::Size(417, 22);
+			this->username_box->Size = System::Drawing::Size(544, 22);
 			this->username_box->TabIndex = 5;
 			// 
 			// pass_box
 			// 
-			this->pass_box->Location = System::Drawing::Point(1066, 401);
-			this->pass_box->Margin = System::Windows::Forms::Padding(4);
+			this->pass_box->Location = System::Drawing::Point(1104, 491);
+			this->pass_box->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->pass_box->Name = L"pass_box";
-			this->pass_box->Size = System::Drawing::Size(417, 22);
+			this->pass_box->Size = System::Drawing::Size(544, 22);
 			this->pass_box->TabIndex = 6;
-			// 
+
 			// Income_box
 			// 
-			this->Income_box->Location = System::Drawing::Point(1066, 528);
-			this->Income_box->Margin = System::Windows::Forms::Padding(4);
+			this->Income_box->Location = System::Drawing::Point(1104, 623);
+			this->Income_box->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->Income_box->Name = L"Income_box";
-			this->Income_box->Size = System::Drawing::Size(417, 22);
+			this->Income_box->Size = System::Drawing::Size(544, 22);
 			this->Income_box->TabIndex = 7;
 			// 
 			// account_button
@@ -112,8 +112,8 @@ namespace Project {
 			this->account_button->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 15.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->account_button->ForeColor = System::Drawing::Color::MidnightBlue;
-			this->account_button->Location = System::Drawing::Point(1186, 596);
-			this->account_button->Margin = System::Windows::Forms::Padding(4);
+			this->account_button->Location = System::Drawing::Point(1300, 687);
+			this->account_button->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->account_button->Name = L"account_button";
 			this->account_button->Size = System::Drawing::Size(200, 42);
 			this->account_button->TabIndex = 8;
@@ -128,7 +128,7 @@ namespace Project {
 			this->login_link->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->login_link->LinkColor = System::Drawing::Color::DarkBlue;
-			this->login_link->Location = System::Drawing::Point(1502, 657);
+			this->login_link->Location = System::Drawing::Point(1512, 754);
 			this->login_link->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
 			this->login_link->Name = L"login_link";
 			this->login_link->Size = System::Drawing::Size(87, 29);
@@ -144,15 +144,13 @@ namespace Project {
 			this->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(0)),
 				static_cast<System::Int32>(static_cast<System::Byte>(64)));
 			this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
-			this->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
 			this->ClientSize = System::Drawing::Size(1763, 817);
 			this->Controls->Add(this->login_link);
 			this->Controls->Add(this->account_button);
 			this->Controls->Add(this->Income_box);
 			this->Controls->Add(this->pass_box);
 			this->Controls->Add(this->username_box);
-			this->DoubleBuffered = true;
-			this->Margin = System::Windows::Forms::Padding(4);
+			this->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->Name = L"Account";
 			this->Text = L"Account";
 			this->WindowState = System::Windows::Forms::FormWindowState::Maximized;
@@ -169,51 +167,89 @@ namespace Project {
 		this->switch_to_login = true;
 		this->Close();
 	}
+
+		   bool IsFirstCharacterAlphabet(String^ str)
+		   {
+			   if (str == nullptr || str->Length == 0)
+			   {
+				   // Handle empty string or null reference
+				   return true;
+			   }
+			   else
+			   {
+				   wchar_t firstChar = str[0]; // Get the first character
+
+				   // Check if the first character is a letter (alphabet)
+				   return Char::IsLetter(firstChar);
+			   }
+		   }
+
+		   bool ContainsDigit(String^ str)
+		   {
+			   if (str == nullptr || str->Length == 0)
+			   {
+				   // Handle empty string or null reference
+				   return false;
+			   }
+			   else
+			   {
+				   for each (wchar_t ch in str)
+				   {
+					   // Check if the character is a digit
+					   if (Char::IsLetter(ch))
+					   {
+						   return true; // Return true if any character is a digit
+					   }
+				   }
+				   return false; // Return false if no character is a digit
+			   }
+		   }
+
 	public: USER^ user = nullptr;
 	private: System::Void account_button_Click(System::Object^ sender, System::EventArgs^ e) {
 		String^ username = username_box->Text;
 		String^ password = pass_box->Text;
 		String^ income = Income_box->Text;
 
-		/*msclr::interop::marshal_context context;
-		std::wstring incomeStr = context.marshal_as<std::wstring>(income);
-		int incomeInt = std::stoi(incomeStr);*/
-		int incomeInt = Convert::ToInt32(income);
+		bool username_validation = IsFirstCharacterAlphabet(username);
+		bool income_validation = ContainsDigit(income);
 
-		if (username->Length == 0 || password->Length == 0 || income->Length == 0) {
-			MessageBox::Show("PlEASE ENTER ALL THE FIELDS!!", "One or More Empty Fields", MessageBoxButtons::OK);
+		if (username->Length == 0 || password->Length == 0 || income->Length == 0 || (!username_validation) || (income_validation)) {
+			MessageBox::Show("PlEASE ENTER ALL THE FIELDS AND ENTER VALID DATA!!", "One or More Empty Fields", MessageBoxButtons::OK);
 			return;
 		}
+		else {
+			int incomeInt = Convert::ToInt32(income);
+			try {
 
-        try {
-            String^ conn_str = "Data Source=MIANZAIN\\SQLEXPRESS;Initial Catalog=APP;Integrated Security=True";
-            SqlConnection sqlConn(conn_str);
+				String^ conn_str = "Data Source=MIANZAIN\\SQLEXPRESS;Initial Catalog=APP;Integrated Security=True";
+				SqlConnection sqlConn(conn_str);
 
-            sqlConn.Open();
+				sqlConn.Open();
 
-            String^ sqlQuery = "INSERT INTO Credentials (Username , Passkey , Income , Balance) VALUES (@user  , @pwd , @income , @balance)";
+				String^ sqlQuery = "INSERT INTO Credentials (Username , Passkey , Income , Balance) VALUES (@user  , @pwd , @income , @balance)";
 
-            SqlCommand^ command = gcnew SqlCommand(sqlQuery, % sqlConn);
-            command->Parameters->AddWithValue("@user", username);
-            command->Parameters->AddWithValue("@pwd", password);
-            command->Parameters->AddWithValue("@income", incomeInt);
-            command->Parameters->AddWithValue("@balance", incomeInt);
+				SqlCommand^ command = gcnew SqlCommand(sqlQuery, % sqlConn);
+				command->Parameters->AddWithValue("@user", username);
+				command->Parameters->AddWithValue("@pwd", password);
+				command->Parameters->AddWithValue("@income", incomeInt);
+				command->Parameters->AddWithValue("@balance", incomeInt);
 
-            if (Char::IsDigit(username[0])) {
-                throw gcnew Exception("Username cannot start with a number");
-            }
+				command->ExecuteNonQuery();
 
-            command->ExecuteNonQuery();
+				user = gcnew USER;
+				user->username = username;
+				user->income = incomeInt;
+				user->balance = incomeInt;
 
-            user = gcnew USER;
-            user->username = username;
-            user->income = incomeInt;
-            user->balance = incomeInt;
+				this->Close();
 
-            this->Close();
-        }
-        catch (Exception^ e) {
-            MessageBox::Show("Failed to Create Account: " + e->Message, "Account Creation Failed", MessageBoxButtons::OK);
-        }
+			}
+			catch (Exception^ e) {
+				MessageBox::Show("Failed to Create Account", "Account Creation Failed", MessageBoxButtons::OK);
+			}
+
+		}
+	}
 	};
 }
