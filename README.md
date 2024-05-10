@@ -12,4 +12,4 @@ Technologies
 - Built with Microsoft Visual Studio, SQL Express, Windows Forms.
 
 Languages Used
-- C++ and C#.
+- C++ and C#(Windows Forms).
