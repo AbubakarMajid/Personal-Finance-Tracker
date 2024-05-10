@@ -9,7 +9,7 @@ Features
 - Reporting through Graphs: Generate graphs for monthly financial analysis.
 
 Technologies
-Built with Microsoft Visual Studio, SQL Express, Windows Forms.
+- Built with Microsoft Visual Studio, SQL Express, Windows Forms.
 
 Languages Used
-C++ and C#.
+- C++ and C#.
