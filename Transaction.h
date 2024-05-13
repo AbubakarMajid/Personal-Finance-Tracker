@@ -1,6 +1,6 @@
 #pragma once
 #include"User.h"
-namespace Project {
+namespace codebase {
 
 	using namespace System;
 	using namespace System::ComponentModel;
@@ -15,6 +15,9 @@ namespace Project {
 	/// </summary>
 	public ref class Transaction : public System::Windows::Forms::Form
 	{
+	public:
+		int utility_budget, healthcare_budget, ent_budget, food_budget, balance, utility_spent, health_spent, ent_spent, food_spent;
+	private: System::Windows::Forms::PictureBox^ pictureBox1;
 	public:
 		Transaction(USER^ user)
 		{
@@ -31,6 +34,200 @@ namespace Project {
 				if (this->name_label != nullptr)
 				{
 					this->name_label->Text = user->username;
+
+					try {
+						String^ conn_str = "Data Source=(localdb)\\tracker-app;Initial Catalog=tracker_db;Integrated Security=True";
+						SqlConnection sqlConn(conn_str);
+						sqlConn.Open();
+						String^ sqlQuery1 = "select Balance , Budget from Credentials JOIN Budget On Credentials.Username = Budget.Username Where Credentials.Username = @user AND Category = @cat";
+						SqlCommand^ command1 = gcnew SqlCommand(sqlQuery1, % sqlConn);
+						command1->Parameters->AddWithValue("@user", user->username);
+						command1->Parameters->AddWithValue("@cat", "Utility");
+						SqlDataReader^ reader1 = command1->ExecuteReader();
+
+						if (reader1->Read()) {
+							balance = reader1->GetInt64(0);
+							utility_budget = reader1->GetInt64(1);
+						}
+						reader1->Close();
+					}
+
+					catch (Exception^ ex) {
+
+					}
+
+					try {
+						String^ conn_str = "Data Source=(localdb)\\tracker-app;Initial Catalog=tracker_db;Integrated Security=True";
+						SqlConnection sqlConn(conn_str);
+						sqlConn.Open();
+						String^ sqlQuery1 = "select Budget from Credentials JOIN Budget On Credentials.Username = Budget.Username Where Credentials.Username = @user AND Category = @cat";
+						SqlCommand^ command1 = gcnew SqlCommand(sqlQuery1, % sqlConn);
+						command1->Parameters->AddWithValue("@user", user->username);
+						command1->Parameters->AddWithValue("@cat", "Entertainment");
+						SqlDataReader^ reader1 = command1->ExecuteReader();
+
+						if (reader1->Read()) {
+							ent_budget = reader1->GetInt64(0);
+						}
+						reader1->Close();
+					}
+
+					catch (Exception^ ex) {
+
+					}
+					try {
+						String^ conn_str = "Data Source=(localdb)\\tracker-app;Initial Catalog=tracker_db;Integrated Security=True";
+						SqlConnection sqlConn(conn_str);
+						sqlConn.Open();
+						String^ sqlQuery1 = "select  Budget from Credentials JOIN Budget On Credentials.Username = Budget.Username Where Credentials.Username = @user AND Category = @cat";
+						SqlCommand^ command1 = gcnew SqlCommand(sqlQuery1, % sqlConn);
+						command1->Parameters->AddWithValue("@user", user->username);
+						command1->Parameters->AddWithValue("@cat", "Healthcare");
+						SqlDataReader^ reader1 = command1->ExecuteReader();
+
+						if (reader1->Read()) {
+
+							healthcare_budget = reader1->GetInt64(0);
+						}
+						reader1->Close();
+					}
+
+					catch (Exception^ ex) {
+
+					}
+					try {
+						String^ conn_str = "Data Source=(localdb)\\tracker-app;Initial Catalog=tracker_db;Integrated Security=True";
+						SqlConnection sqlConn(conn_str);
+						sqlConn.Open();
+						String^ sqlQuery1 = "select Budget from Credentials JOIN Budget On Credentials.Username = Budget.Username Where Credentials.Username = @user AND Category = @cat";
+						SqlCommand^ command1 = gcnew SqlCommand(sqlQuery1, % sqlConn);
+						command1->Parameters->AddWithValue("@user", user->username);
+						command1->Parameters->AddWithValue("@cat", "Food");
+						SqlDataReader^ reader1 = command1->ExecuteReader();
+
+						if (reader1->Read()) {
+
+							food_budget = reader1->GetInt64(0);
+						}
+						reader1->Close();
+					}
+
+					catch (Exception^ ex) {
+
+					}
+
+					// transactions sum for the category
+
+					try {
+						String^ conn_str = "Data Source=(localdb)\\tracker-app;Initial Catalog=tracker_db;Integrated Security=True";
+						SqlConnection sqlConn(conn_str);
+
+						sqlConn.Open();
+
+						String^ tmpQuery = "select COALESCE(SUM(Amount), 0), COALESCE(MAX(Budget), 0) from Budget as b JOIN Transactions as t on  b.Category = t.Category AND b.Username = t.Username WHERE  b.Username = @user AND b.Category = @cat";
+
+						SqlCommand^ command = gcnew SqlCommand(tmpQuery, % sqlConn);
+						command->Parameters->AddWithValue("@user", user->username);
+						command->Parameters->AddWithValue("@cat", "Utility");
+						SqlDataReader^ reader = command->ExecuteReader();
+
+						if (reader->Read()) {
+							utility_spent = reader->GetInt64(0);
+						}
+						else {
+							utility_spent = 0;
+						}
+
+						reader->Close();
+					}
+
+					catch (Exception^ e) {
+						MessageBox::Show(e->Message);
+						//label2->Text = e->Message;
+					}
+
+					try {
+						String^ conn_str = "Data Source=(localdb)\\tracker-app;Initial Catalog=tracker_db;Integrated Security=True";
+						SqlConnection sqlConn(conn_str);
+
+						sqlConn.Open();
+
+						String^ tmpQuery = "select COALESCE(SUM(Amount), 0), COALESCE(MAX(Budget), 0) from Budget as b JOIN Transactions as t on  b.Category = t.Category AND b.Username = t.Username WHERE  b.Username = @user AND b.Category = @cat";
+
+						SqlCommand^ command = gcnew SqlCommand(tmpQuery, % sqlConn);
+						command->Parameters->AddWithValue("@user", user->username);
+						command->Parameters->AddWithValue("@cat", "Food");
+						SqlDataReader^ reader = command->ExecuteReader();
+
+						if (reader->Read()) {
+							food_spent = reader->GetInt64(0);
+						}
+						else {
+							food_spent = 0;
+						}
+						reader->Close();
+					}
+
+					catch (Exception^ e) {
+						MessageBox::Show(e->Message);
+						//label2->Text = e->Message;
+					}
+
+					try {
+						String^ conn_str = "Data Source=(localdb)\\tracker-app;Initial Catalog=tracker_db;Integrated Security=True";
+						SqlConnection sqlConn(conn_str);
+
+						sqlConn.Open();
+
+						String^ tmpQuery = "select COALESCE(SUM(Amount), 0), COALESCE(MAX(Budget), 0) from Budget as b JOIN Transactions as t on  b.Category = t.Category AND b.Username = t.Username WHERE  b.Username = @user AND b.Category = @cat";
+
+						SqlCommand^ command = gcnew SqlCommand(tmpQuery, % sqlConn);
+						command->Parameters->AddWithValue("@user", user->username);
+						command->Parameters->AddWithValue("@cat", "Healthcare");
+						SqlDataReader^ reader = command->ExecuteReader();
+
+						if (reader->Read()) {
+							health_spent = reader->GetInt64(0);
+						}
+						else {
+							health_spent = 0;
+						}
+						reader->Close();
+					}
+
+					catch (Exception^ e) {
+						MessageBox::Show(e->Message);
+						//label2->Text = e->Message;
+					}
+
+					try {
+						String^ conn_str = "Data Source=(localdb)\\tracker-app;Initial Catalog=tracker_db;Integrated Security=True";
+						SqlConnection sqlConn(conn_str);
+
+						sqlConn.Open();
+
+						String^ tmpQuery = "select COALESCE(SUM(Amount), 0), COALESCE(MAX(Budget), 0) from Budget as b JOIN Transactions as t on  b.Category = t.Category AND b.Username = t.Username WHERE  b.Username = @user AND b.Category = @cat";
+
+						SqlCommand^ command = gcnew SqlCommand(tmpQuery, % sqlConn);
+						command->Parameters->AddWithValue("@user", user->username);
+						command->Parameters->AddWithValue("@cat", "Entertainment");
+						SqlDataReader^ reader = command->ExecuteReader();
+
+						if (reader->Read()) {
+							ent_spent = reader->GetInt64(0);
+
+						}
+						else {
+							ent_spent = 0;
+						}
+						reader->Close();
+					}
+
+					catch (Exception^ e) {
+						MessageBox::Show(e->Message);
+						//label2->Text = e->Message;
+					}
+
 				}
 				else
 				{
@@ -74,12 +271,6 @@ namespace Project {
 	private: System::Windows::Forms::Panel^ panel5;
 	private: System::Windows::Forms::Label^ label6;
 	private: System::Windows::Forms::Label^ name_label;
-	private: System::Windows::Forms::PictureBox^ pictureBox1;
-	private: System::Windows::Forms::TextBox^ textBox1;
-	private: System::Windows::Forms::Label^ label8;
-	private: System::Windows::Forms::Button^ button5;
-
-
 
 	protected:
 	protected:
@@ -96,11 +287,11 @@ namespace Project {
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(Transaction::typeid));
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
 			this->panel2 = (gcnew System::Windows::Forms::Panel());
 			this->label7 = (gcnew System::Windows::Forms::Label());
 			this->panel3 = (gcnew System::Windows::Forms::Panel());
+			this->name_label = (gcnew System::Windows::Forms::Label());
 			this->button3 = (gcnew System::Windows::Forms::Button());
 			this->button2 = (gcnew System::Windows::Forms::Button());
 			this->button1 = (gcnew System::Windows::Forms::Button());
@@ -118,11 +309,7 @@ namespace Project {
 			this->label3 = (gcnew System::Windows::Forms::Label());
 			this->label2 = (gcnew System::Windows::Forms::Label());
 			this->label1 = (gcnew System::Windows::Forms::Label());
-			this->name_label = (gcnew System::Windows::Forms::Label());
 			this->pictureBox1 = (gcnew System::Windows::Forms::PictureBox());
-			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
-			this->label8 = (gcnew System::Windows::Forms::Label());
-			this->button5 = (gcnew System::Windows::Forms::Button());
 			this->panel1->SuspendLayout();
 			this->panel2->SuspendLayout();
 			this->panel3->SuspendLayout();
@@ -140,8 +327,9 @@ namespace Project {
 			this->panel1->Location = System::Drawing::Point(0, 0);
 			this->panel1->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
 			this->panel1->Name = L"panel1";
-			this->panel1->Size = System::Drawing::Size(1115, 90);
+			this->panel1->Size = System::Drawing::Size(949, 90);
 			this->panel1->TabIndex = 3;
+			this->panel1->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &Transaction::panel1_Paint_1);
 			// 
 			// panel2
 			// 
@@ -171,17 +359,25 @@ namespace Project {
 			// panel3
 			// 
 			this->panel3->BackColor = System::Drawing::Color::SteelBlue;
-			this->panel3->Controls->Add(this->button5);
-			this->panel3->Controls->Add(this->name_label);
 			this->panel3->Controls->Add(this->pictureBox1);
+			this->panel3->Controls->Add(this->name_label);
 			this->panel3->Controls->Add(this->button3);
 			this->panel3->Controls->Add(this->button2);
 			this->panel3->Controls->Add(this->button1);
 			this->panel3->Dock = System::Windows::Forms::DockStyle::Left;
 			this->panel3->Location = System::Drawing::Point(0, 90);
 			this->panel3->Name = L"panel3";
-			this->panel3->Size = System::Drawing::Size(250, 530);
+			this->panel3->Size = System::Drawing::Size(250, 430);
 			this->panel3->TabIndex = 4;
+			// 
+			// name_label
+			// 
+			this->name_label->Location = System::Drawing::Point(74, -11);
+			this->name_label->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
+			this->name_label->Name = L"name_label";
+			this->name_label->Size = System::Drawing::Size(75, 19);
+			this->name_label->TabIndex = 0;
+			this->name_label->Click += gcnew System::EventHandler(this, &Transaction::name_label_Click);
 			// 
 			// button3
 			// 
@@ -189,13 +385,14 @@ namespace Project {
 			this->button3->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 14.25F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->button3->ForeColor = System::Drawing::SystemColors::ControlLightLight;
-			this->button3->Location = System::Drawing::Point(0, 287);
+			this->button3->Location = System::Drawing::Point(0, 286);
 			this->button3->Name = L"button3";
 			this->button3->Size = System::Drawing::Size(250, 47);
 			this->button3->TabIndex = 5;
 			this->button3->Text = L"Budget/Goal Setup Form";
 			this->button3->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
 			this->button3->UseVisualStyleBackColor = false;
+			this->button3->Click += gcnew System::EventHandler(this, &Transaction::button3_Click_1);
 			// 
 			// button2
 			// 
@@ -203,7 +400,7 @@ namespace Project {
 			this->button2->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 14.25F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->button2->ForeColor = System::Drawing::SystemColors::ControlLightLight;
-			this->button2->Location = System::Drawing::Point(0, 242);
+			this->button2->Location = System::Drawing::Point(0, 239);
 			this->button2->Name = L"button2";
 			this->button2->Size = System::Drawing::Size(250, 47);
 			this->button2->TabIndex = 1;
@@ -230,8 +427,6 @@ namespace Project {
 			// 
 			this->panel4->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Left | System::Windows::Forms::AnchorStyles::Right));
 			this->panel4->BackColor = System::Drawing::SystemColors::ControlLightLight;
-			this->panel4->Controls->Add(this->textBox1);
-			this->panel4->Controls->Add(this->label8);
 			this->panel4->Controls->Add(this->panel5);
 			this->panel4->Controls->Add(this->button4);
 			this->panel4->Controls->Add(this->comboBox3);
@@ -244,9 +439,9 @@ namespace Project {
 			this->panel4->Controls->Add(this->label3);
 			this->panel4->Controls->Add(this->label2);
 			this->panel4->Controls->Add(this->label1);
-			this->panel4->Location = System::Drawing::Point(354, 200);
+			this->panel4->Location = System::Drawing::Point(354, 150);
 			this->panel4->Name = L"panel4";
-			this->panel4->Size = System::Drawing::Size(715, 338);
+			this->panel4->Size = System::Drawing::Size(549, 338);
 			this->panel4->TabIndex = 5;
 			// 
 			// panel5
@@ -256,7 +451,7 @@ namespace Project {
 			this->panel5->Dock = System::Windows::Forms::DockStyle::Top;
 			this->panel5->Location = System::Drawing::Point(0, 0);
 			this->panel5->Name = L"panel5";
-			this->panel5->Size = System::Drawing::Size(715, 60);
+			this->panel5->Size = System::Drawing::Size(549, 60);
 			this->panel5->TabIndex = 16;
 			// 
 			// label6
@@ -265,7 +460,7 @@ namespace Project {
 			this->label6->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 15.75F, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 			this->label6->ForeColor = System::Drawing::SystemColors::ControlLightLight;
-			this->label6->Location = System::Drawing::Point(18, 15);
+			this->label6->Location = System::Drawing::Point(19, 14);
 			this->label6->Name = L"label6";
 			this->label6->Size = System::Drawing::Size(164, 30);
 			this->label6->TabIndex = 6;
@@ -274,11 +469,11 @@ namespace Project {
 			// button4
 			// 
 			this->button4->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Right));
-			this->button4->BackColor = System::Drawing::SystemColors::InactiveCaption;
-			this->button4->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			this->button4->BackColor = System::Drawing::Color::AliceBlue;
+			this->button4->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 9.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->button4->ForeColor = System::Drawing::SystemColors::ControlText;
-			this->button4->Location = System::Drawing::Point(609, 298);
+			this->button4->ForeColor = System::Drawing::Color::Navy;
+			this->button4->Location = System::Drawing::Point(443, 298);
 			this->button4->Name = L"button4";
 			this->button4->Size = System::Drawing::Size(94, 31);
 			this->button4->TabIndex = 6;
@@ -294,9 +489,9 @@ namespace Project {
 			this->comboBox3->FormattingEnabled = true;
 			this->comboBox3->IntegralHeight = false;
 			this->comboBox3->Items->AddRange(gcnew cli::array< System::Object^  >(4) { L"Utility", L"Food", L"Healthcare", L"Entertainment" });
-			this->comboBox3->Location = System::Drawing::Point(182, 73);
+			this->comboBox3->Location = System::Drawing::Point(182, 91);
 			this->comboBox3->Name = L"comboBox3";
-			this->comboBox3->Size = System::Drawing::Size(466, 21);
+			this->comboBox3->Size = System::Drawing::Size(300, 21);
 			this->comboBox3->TabIndex = 15;
 			this->comboBox3->SelectedIndexChanged += gcnew System::EventHandler(this, &Transaction::comboBox3_SelectedIndexChanged);
 			// 
@@ -306,10 +501,10 @@ namespace Project {
 				| System::Windows::Forms::AnchorStyles::Left)
 				| System::Windows::Forms::AnchorStyles::Right));
 			this->comboBox2->FormattingEnabled = true;
-			this->comboBox2->Items->AddRange(gcnew cli::array< System::Object^  >(4) { L"PKR", L"EUR", L"USD", L"GBP" });
-			this->comboBox2->Location = System::Drawing::Point(182, 230);
+			this->comboBox2->Items->AddRange(gcnew cli::array< System::Object^  >(4) { L"USD", L"GBP", L"EUR", L"PKR" });
+			this->comboBox2->Location = System::Drawing::Point(182, 211);
 			this->comboBox2->Name = L"comboBox2";
-			this->comboBox2->Size = System::Drawing::Size(466, 21);
+			this->comboBox2->Size = System::Drawing::Size(300, 21);
 			this->comboBox2->TabIndex = 14;
 			// 
 			// comboBox1
@@ -319,9 +514,9 @@ namespace Project {
 				| System::Windows::Forms::AnchorStyles::Right));
 			this->comboBox1->FormattingEnabled = true;
 			this->comboBox1->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Income", L"Expense" });
-			this->comboBox1->Location = System::Drawing::Point(182, 185);
+			this->comboBox1->Location = System::Drawing::Point(182, 170);
 			this->comboBox1->Name = L"comboBox1";
-			this->comboBox1->Size = System::Drawing::Size(466, 21);
+			this->comboBox1->Size = System::Drawing::Size(300, 21);
 			this->comboBox1->TabIndex = 13;
 			// 
 			// textBox3
@@ -329,9 +524,9 @@ namespace Project {
 			this->textBox3->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Bottom)
 				| System::Windows::Forms::AnchorStyles::Left)
 				| System::Windows::Forms::AnchorStyles::Right));
-			this->textBox3->Location = System::Drawing::Point(182, 152);
+			this->textBox3->Location = System::Drawing::Point(182, 130);
 			this->textBox3->Name = L"textBox3";
-			this->textBox3->Size = System::Drawing::Size(466, 20);
+			this->textBox3->Size = System::Drawing::Size(300, 20);
 			this->textBox3->TabIndex = 12;
 			// 
 			// textBox2
@@ -339,9 +534,9 @@ namespace Project {
 			this->textBox2->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Bottom)
 				| System::Windows::Forms::AnchorStyles::Left)
 				| System::Windows::Forms::AnchorStyles::Right));
-			this->textBox2->Location = System::Drawing::Point(182, 272);
+			this->textBox2->Location = System::Drawing::Point(182, 255);
 			this->textBox2->Name = L"textBox2";
-			this->textBox2->Size = System::Drawing::Size(466, 20);
+			this->textBox2->Size = System::Drawing::Size(300, 20);
 			this->textBox2->TabIndex = 11;
 			// 
 			// label5
@@ -352,7 +547,7 @@ namespace Project {
 			this->label5->AutoSize = true;
 			this->label5->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 14.25F, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			this->label5->Location = System::Drawing::Point(54, 230);
+			this->label5->Location = System::Drawing::Point(54, 211);
 			this->label5->Name = L"label5";
 			this->label5->Size = System::Drawing::Size(89, 25);
 			this->label5->TabIndex = 10;
@@ -366,7 +561,7 @@ namespace Project {
 			this->label4->AutoSize = true;
 			this->label4->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 14.25F, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			this->label4->Location = System::Drawing::Point(54, 270);
+			this->label4->Location = System::Drawing::Point(54, 253);
 			this->label4->Name = L"label4";
 			this->label4->Size = System::Drawing::Size(54, 25);
 			this->label4->TabIndex = 9;
@@ -380,12 +575,11 @@ namespace Project {
 			this->label3->AutoSize = true;
 			this->label3->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 14.25F, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			this->label3->Location = System::Drawing::Point(54, 147);
+			this->label3->Location = System::Drawing::Point(54, 130);
 			this->label3->Name = L"label3";
 			this->label3->Size = System::Drawing::Size(82, 25);
 			this->label3->TabIndex = 8;
 			this->label3->Text = L"Amount";
-			this->label3->Click += gcnew System::EventHandler(this, &Transaction::label3_Click);
 			// 
 			// label2
 			// 
@@ -395,7 +589,7 @@ namespace Project {
 			this->label2->AutoSize = true;
 			this->label2->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 14.25F, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			this->label2->Location = System::Drawing::Point(54, 185);
+			this->label2->Location = System::Drawing::Point(54, 170);
 			this->label2->Name = L"label2";
 			this->label2->Size = System::Drawing::Size(54, 25);
 			this->label2->TabIndex = 7;
@@ -409,72 +603,20 @@ namespace Project {
 			this->label1->AutoSize = true;
 			this->label1->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 14.25F, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			this->label1->Location = System::Drawing::Point(54, 73);
+			this->label1->Location = System::Drawing::Point(54, 91);
 			this->label1->Name = L"label1";
 			this->label1->Size = System::Drawing::Size(91, 25);
 			this->label1->TabIndex = 6;
 			this->label1->Text = L"Category";
 			this->label1->Click += gcnew System::EventHandler(this, &Transaction::label1_Click);
 			// 
-			// name_label
-			// 
-			this->name_label->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 14.25F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->name_label->ForeColor = System::Drawing::SystemColors::ControlLight;
-			this->name_label->Location = System::Drawing::Point(80, 157);
-			this->name_label->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
-			this->name_label->Name = L"name_label";
-			this->name_label->Size = System::Drawing::Size(74, 32);
-			this->name_label->TabIndex = 0;
-			this->name_label->Text = L"label";
-			// 
 			// pictureBox1
 			// 
-			this->pictureBox1->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"pictureBox1.Image")));
-			this->pictureBox1->Location = System::Drawing::Point(50, 18);
+			this->pictureBox1->Location = System::Drawing::Point(55, 15);
 			this->pictureBox1->Name = L"pictureBox1";
 			this->pictureBox1->Size = System::Drawing::Size(137, 136);
-			this->pictureBox1->SizeMode = System::Windows::Forms::PictureBoxSizeMode::StretchImage;
-			this->pictureBox1->TabIndex = 10;
+			this->pictureBox1->TabIndex = 11;
 			this->pictureBox1->TabStop = false;
-			// 
-			// textBox1
-			// 
-			this->textBox1->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Bottom)
-				| System::Windows::Forms::AnchorStyles::Left)
-				| System::Windows::Forms::AnchorStyles::Right));
-			this->textBox1->Location = System::Drawing::Point(182, 112);
-			this->textBox1->Name = L"textBox1";
-			this->textBox1->Size = System::Drawing::Size(466, 20);
-			this->textBox1->TabIndex = 18;
-			// 
-			// label8
-			// 
-			this->label8->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Bottom)
-				| System::Windows::Forms::AnchorStyles::Left)
-				| System::Windows::Forms::AnchorStyles::Right));
-			this->label8->AutoSize = true;
-			this->label8->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 14.25F, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
-				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			this->label8->Location = System::Drawing::Point(54, 112);
-			this->label8->Name = L"label8";
-			this->label8->Size = System::Drawing::Size(110, 25);
-			this->label8->TabIndex = 17;
-			this->label8->Text = L"Description";
-			// 
-			// button5
-			// 
-			this->button5->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Left));
-			this->button5->BackColor = System::Drawing::Color::AliceBlue;
-			this->button5->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 9.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->button5->ForeColor = System::Drawing::SystemColors::Desktop;
-			this->button5->Location = System::Drawing::Point(6, 490);
-			this->button5->Name = L"button5";
-			this->button5->Size = System::Drawing::Size(239, 40);
-			this->button5->TabIndex = 11;
-			this->button5->Text = L"Log Out";
-			this->button5->UseVisualStyleBackColor = false;
 			// 
 			// Transaction
 			// 
@@ -482,7 +624,7 @@ namespace Project {
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::Color::AliceBlue;
 			this->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Zoom;
-			this->ClientSize = System::Drawing::Size(1115, 620);
+			this->ClientSize = System::Drawing::Size(949, 520);
 			this->Controls->Add(this->panel4);
 			this->Controls->Add(this->panel3);
 			this->Controls->Add(this->panel1);
@@ -544,33 +686,99 @@ namespace Project {
 	}
 	private: System::Void label1_Click(System::Object^ sender, System::EventArgs^ e) {
 	}
+
+		   bool ContainsDigit(String^ str)
+		   {
+			   if (str == nullptr || str->Length == 0)
+			   {
+				   // Handle empty string or null reference
+				   return false;
+			   }
+			   else
+			   {
+				   for each (wchar_t ch in str)
+				   {
+					   // Check if the character is a digit
+					   if (Char::IsLetter(ch))
+					   {
+						   return true; // Return true if any character is a digit
+					   }
+				   }
+				   return false; // Return false if no character is a digit
+			   }
+		   }
+
 	private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e) {
 		String^ category = this->comboBox3->Text;
 		String^ type = this->comboBox1->Text;
 		String^ amount = this->textBox3->Text;
 		String^ currency = this->comboBox2->Text;
 		String^ date = this->textBox2->Text;
+		bool amount_validation = ContainsDigit(amount);
 
-		try {
-			String^ conn_str = "Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=coincollector;Integrated Security=True";
-			SqlConnection sqlConn(conn_str);
-			sqlConn.Open();
-			String^ sqlQuery = "INSERT INTO Transactions (Username, Category, Type, Date, Amount, Currency) VALUES (@user, @cat, @type, @date, @amount, @currency)";
-			SqlCommand^ command = gcnew SqlCommand(sqlQuery, % sqlConn);
-			command->Parameters->AddWithValue("@user", this->name_label->Text);
-			command->Parameters->AddWithValue("@cat", category);
-			command->Parameters->AddWithValue("@type", type);
-			command->Parameters->AddWithValue("@date", date);
-			command->Parameters->AddWithValue("@amount", amount);
-			command->Parameters->AddWithValue("@currency", currency);
-			command->ExecuteNonQuery();
-			MessageBox::Show("Transaction Added Successfully", "Success", MessageBoxButtons::OK);
+
+		if (amount->Length == 0 || amount_validation || category->Length == 0 || type->Length == 0 || currency->Length == 0 || date->Length == 0) {
+			MessageBox::Show("Enter Valid Data");
 		}
-		catch (SqlException^ ex) {
-			MessageBox::Show("SQL Error: " + ex->Message, "Transaction Failed", MessageBoxButtons::OK);
-		}
-		catch (Exception^ ex) {
-			MessageBox::Show("Error: " + ex->Message, "Transaction Failed", MessageBoxButtons::OK);
+
+		else {
+			int amount_int = Convert::ToInt32(amount);
+			if (amount_int > balance) {
+				MessageBox::Show("Not Enough balance to Process this Transaction!!");
+			}
+			else if (category == "Utility" && amount_int > utility_budget - utility_spent) {
+				MessageBox::Show("You're reaching limit for this Category!!");
+			}
+			else if (category == "Entertainment" && amount_int > ent_budget - ent_spent) {
+				MessageBox::Show("You're reaching limit for this Category!!");
+			}
+			else if (category == "Healthcare" && amount_int > healthcare_budget - health_spent) {
+				MessageBox::Show("You're reaching limit for this Category!!");
+			}
+			else if (category == "Food" && amount_int > food_budget - food_spent) {
+				MessageBox::Show("You're reaching limit for this Category!!");
+			}
+			else {
+				try {
+
+					String^ conn_str = "Data Source=(localdb)\\tracker-app;Initial Catalog=tracker_db;Integrated Security=True";
+					SqlConnection sqlConn(conn_str);
+					sqlConn.Open();
+					String^ sqlQuery = "INSERT INTO Transactions (Username, Category, Type, Date, Amount, Currency) VALUES (@user, @cat, @type, @date, @amount, @currency)";
+					SqlCommand^ command = gcnew SqlCommand(sqlQuery, % sqlConn);
+					command->Parameters->AddWithValue("@user", this->name_label->Text);
+					command->Parameters->AddWithValue("@cat", category);
+					command->Parameters->AddWithValue("@type", type);
+					command->Parameters->AddWithValue("@date", date);
+					command->Parameters->AddWithValue("@amount", amount_int);
+					command->Parameters->AddWithValue("@currency", currency);
+					command->ExecuteNonQuery();
+					MessageBox::Show("Transaction Added Successfully", "Success", MessageBoxButtons::OK);
+
+					if (type == "Expense") {
+						String^ sqlQuery2 = "UPDATE CREDENTIALS SET Balance  = Balance - @amount where Username = @user";
+						SqlCommand^ command2 = gcnew SqlCommand(sqlQuery2, % sqlConn);
+						command2->Parameters->AddWithValue("@user", this->name_label->Text);
+						command2->Parameters->AddWithValue("@amount", amount_int);
+						command2->ExecuteNonQuery();
+					}
+					else {
+						String^ sqlQuery2 = "UPDATE CREDENTIALS SET Balance  = Balance + @amount where Username = @user";
+						SqlCommand^ command2 = gcnew SqlCommand(sqlQuery2, % sqlConn);
+						command2->Parameters->AddWithValue("@user", this->name_label->Text);
+						command2->Parameters->AddWithValue("@amount", amount_int);
+						command2->ExecuteNonQuery();
+					}
+
+				}
+
+				catch (SqlException^ ex) {
+					MessageBox::Show("SQL Error: " + ex->Message, "Transaction Failed", MessageBoxButtons::OK);
+				}
+			}
+			/*catch (Exception^ ex) {
+				MessageBox::Show("Error: " + ex->Message, "Transaction Failed", MessageBoxButtons::OK);
+			}*/
 		}
 	}
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -579,7 +787,14 @@ namespace Project {
 	}
 	private: System::Void comboBox3_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
 	}
-	private: System::Void label3_Click(System::Object^ sender, System::EventArgs^ e) {
+	private: System::Void panel1_Paint_1(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
 	}
-};
+	private: System::Void name_label_Click(System::Object^ sender, System::EventArgs^ e) {
+	}
+	public: bool switch_to_budget = false;
+	private: System::Void button3_Click_1(System::Object^ sender, System::EventArgs^ e) {
+		this->switch_to_budget = true;
+		this->Close();
+	}
+	};
 }

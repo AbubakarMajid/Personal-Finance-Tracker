@@ -1,7 +1,7 @@
 #pragma once
 #include "User.h"
 
-namespace Project {
+namespace codebase {
 
 	using namespace System;
 	using namespace System::ComponentModel;
@@ -75,7 +75,6 @@ namespace Project {
 	private: System::Windows::Forms::TabPage^ tabPage4;
 	private: System::Windows::Forms::TextBox^ textBox7;
 	private: System::Windows::Forms::Label^ name_label;
-	private: System::Windows::Forms::Button^ button5;
 	private: System::Windows::Forms::PictureBox^ pictureBox1;
 
 
@@ -118,7 +117,6 @@ namespace Project {
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(Budget_Setter::typeid));
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
 			this->panel2 = (gcnew System::Windows::Forms::Panel());
 			this->label7 = (gcnew System::Windows::Forms::Label());
@@ -144,7 +142,6 @@ namespace Project {
 			this->button2 = (gcnew System::Windows::Forms::Button());
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->pictureBox1 = (gcnew System::Windows::Forms::PictureBox());
-			this->button5 = (gcnew System::Windows::Forms::Button());
 			this->panel1->SuspendLayout();
 			this->panel2->SuspendLayout();
 			this->panel5->SuspendLayout();
@@ -167,7 +164,7 @@ namespace Project {
 			this->panel1->Location = System::Drawing::Point(0, 0);
 			this->panel1->Margin = System::Windows::Forms::Padding(2);
 			this->panel1->Name = L"panel1";
-			this->panel1->Size = System::Drawing::Size(1190, 90);
+			this->panel1->Size = System::Drawing::Size(1307, 90);
 			this->panel1->TabIndex = 6;
 			this->panel1->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &Budget_Setter::panel1_Paint);
 			// 
@@ -203,29 +200,29 @@ namespace Project {
 			this->panel5->Dock = System::Windows::Forms::DockStyle::Top;
 			this->panel5->Location = System::Drawing::Point(0, 0);
 			this->panel5->Name = L"panel5";
-			this->panel5->Size = System::Drawing::Size(760, 60);
+			this->panel5->Size = System::Drawing::Size(877, 60);
 			this->panel5->TabIndex = 16;
 			// 
 			// label6
 			// 
 			this->label6->AutoSize = true;
-			this->label6->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 14.25F, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
+			this->label6->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 15.75F, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 			this->label6->ForeColor = System::Drawing::SystemColors::ControlLightLight;
-			this->label6->Location = System::Drawing::Point(18, 17);
+			this->label6->Location = System::Drawing::Point(19, 14);
 			this->label6->Name = L"label6";
-			this->label6->Size = System::Drawing::Size(226, 25);
+			this->label6->Size = System::Drawing::Size(249, 30);
 			this->label6->TabIndex = 6;
 			this->label6->Text = L"Budget/Goal Setup Form";
 			// 
 			// button4
 			// 
 			this->button4->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Right));
-			this->button4->BackColor = System::Drawing::Color::AliceBlue;
-			this->button4->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 12, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
-				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			this->button4->ForeColor = System::Drawing::SystemColors::ControlText;
-			this->button4->Location = System::Drawing::Point(654, 298);
+			this->button4->BackColor = System::Drawing::SystemColors::InactiveCaption;
+			this->button4->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 9.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->button4->ForeColor = System::Drawing::Color::Navy;
+			this->button4->Location = System::Drawing::Point(771, 298);
 			this->button4->Name = L"button4";
 			this->button4->Size = System::Drawing::Size(94, 31);
 			this->button4->TabIndex = 6;
@@ -243,9 +240,9 @@ namespace Project {
 			this->panel4->Controls->Add(this->textBox2);
 			this->panel4->Controls->Add(this->label4);
 			this->panel4->Controls->Add(this->label1);
-			this->panel4->Location = System::Drawing::Point(354, 257);
+			this->panel4->Location = System::Drawing::Point(354, 258);
 			this->panel4->Name = L"panel4";
-			this->panel4->Size = System::Drawing::Size(760, 338);
+			this->panel4->Size = System::Drawing::Size(877, 338);
 			this->panel4->TabIndex = 8;
 			// 
 			// abc
@@ -261,7 +258,7 @@ namespace Project {
 			this->abc->Margin = System::Windows::Forms::Padding(2);
 			this->abc->Name = L"abc";
 			this->abc->SelectedIndex = 0;
-			this->abc->Size = System::Drawing::Size(511, 79);
+			this->abc->Size = System::Drawing::Size(628, 79);
 			this->abc->TabIndex = 7;
 			// 
 			// tabPage1
@@ -273,9 +270,9 @@ namespace Project {
 			this->tabPage1->Margin = System::Windows::Forms::Padding(2);
 			this->tabPage1->Name = L"tabPage1";
 			this->tabPage1->Padding = System::Windows::Forms::Padding(2);
-			this->tabPage1->Size = System::Drawing::Size(503, 53);
+			this->tabPage1->Size = System::Drawing::Size(620, 53);
 			this->tabPage1->TabIndex = 0;
-			this->tabPage1->Text = L"Utility";
+			this->tabPage1->Text = L"Utilities";
 			this->tabPage1->UseVisualStyleBackColor = true;
 			this->tabPage1->Click += gcnew System::EventHandler(this, &Budget_Setter::tabPage1_Click);
 			// 
@@ -287,7 +284,7 @@ namespace Project {
 			this->textBox6->Location = System::Drawing::Point(37, 15);
 			this->textBox6->Margin = System::Windows::Forms::Padding(2);
 			this->textBox6->Name = L"textBox6";
-			this->textBox6->Size = System::Drawing::Size(427, 20);
+			this->textBox6->Size = System::Drawing::Size(544, 20);
 			this->textBox6->TabIndex = 13;
 			// 
 			// tabPage2
@@ -299,7 +296,7 @@ namespace Project {
 			this->tabPage2->Margin = System::Windows::Forms::Padding(2);
 			this->tabPage2->Name = L"tabPage2";
 			this->tabPage2->Padding = System::Windows::Forms::Padding(2);
-			this->tabPage2->Size = System::Drawing::Size(503, 53);
+			this->tabPage2->Size = System::Drawing::Size(391, 53);
 			this->tabPage2->TabIndex = 4;
 			this->tabPage2->Text = L"Entertainment";
 			this->tabPage2->UseVisualStyleBackColor = true;
@@ -312,7 +309,7 @@ namespace Project {
 			this->textBox5->Location = System::Drawing::Point(37, 15);
 			this->textBox5->Margin = System::Windows::Forms::Padding(2);
 			this->textBox5->Name = L"textBox5";
-			this->textBox5->Size = System::Drawing::Size(362, 20);
+			this->textBox5->Size = System::Drawing::Size(250, 20);
 			this->textBox5->TabIndex = 13;
 			// 
 			// tabPage3
@@ -324,7 +321,7 @@ namespace Project {
 			this->tabPage3->Margin = System::Windows::Forms::Padding(2);
 			this->tabPage3->Name = L"tabPage3";
 			this->tabPage3->Padding = System::Windows::Forms::Padding(2);
-			this->tabPage3->Size = System::Drawing::Size(503, 53);
+			this->tabPage3->Size = System::Drawing::Size(391, 53);
 			this->tabPage3->TabIndex = 5;
 			this->tabPage3->Text = L"Healthcare";
 			this->tabPage3->UseVisualStyleBackColor = true;
@@ -337,7 +334,7 @@ namespace Project {
 			this->textBox4->Location = System::Drawing::Point(37, 15);
 			this->textBox4->Margin = System::Windows::Forms::Padding(2);
 			this->textBox4->Name = L"textBox4";
-			this->textBox4->Size = System::Drawing::Size(362, 20);
+			this->textBox4->Size = System::Drawing::Size(250, 20);
 			this->textBox4->TabIndex = 13;
 			// 
 			// tabPage4
@@ -349,7 +346,7 @@ namespace Project {
 			this->tabPage4->Margin = System::Windows::Forms::Padding(2);
 			this->tabPage4->Name = L"tabPage4";
 			this->tabPage4->Padding = System::Windows::Forms::Padding(2);
-			this->tabPage4->Size = System::Drawing::Size(503, 53);
+			this->tabPage4->Size = System::Drawing::Size(391, 53);
 			this->tabPage4->TabIndex = 6;
 			this->tabPage4->Text = L"Food";
 			this->tabPage4->UseVisualStyleBackColor = true;
@@ -362,7 +359,7 @@ namespace Project {
 			this->textBox7->Location = System::Drawing::Point(38, 16);
 			this->textBox7->Margin = System::Windows::Forms::Padding(2);
 			this->textBox7->Name = L"textBox7";
-			this->textBox7->Size = System::Drawing::Size(362, 20);
+			this->textBox7->Size = System::Drawing::Size(250, 20);
 			this->textBox7->TabIndex = 12;
 			// 
 			// textBox2
@@ -372,7 +369,7 @@ namespace Project {
 				| System::Windows::Forms::AnchorStyles::Right));
 			this->textBox2->Location = System::Drawing::Point(182, 199);
 			this->textBox2->Name = L"textBox2";
-			this->textBox2->Size = System::Drawing::Size(511, 20);
+			this->textBox2->Size = System::Drawing::Size(628, 20);
 			this->textBox2->TabIndex = 11;
 			// 
 			// label4
@@ -406,7 +403,6 @@ namespace Project {
 			// panel3
 			// 
 			this->panel3->BackColor = System::Drawing::Color::SteelBlue;
-			this->panel3->Controls->Add(this->button5);
 			this->panel3->Controls->Add(this->pictureBox1);
 			this->panel3->Controls->Add(this->name_label);
 			this->panel3->Controls->Add(this->button3);
@@ -415,21 +411,21 @@ namespace Project {
 			this->panel3->Dock = System::Windows::Forms::DockStyle::Left;
 			this->panel3->Location = System::Drawing::Point(0, 90);
 			this->panel3->Name = L"panel3";
-			this->panel3->Size = System::Drawing::Size(250, 644);
+			this->panel3->Size = System::Drawing::Size(250, 646);
 			this->panel3->TabIndex = 4;
 			// 
 			// name_label
 			// 
 			this->name_label->AutoSize = true;
-			this->name_label->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 14.25F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			this->name_label->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium", 24, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->name_label->ForeColor = System::Drawing::SystemColors::ControlLightLight;
-			this->name_label->Location = System::Drawing::Point(95, 151);
+			this->name_label->ForeColor = System::Drawing::Color::SteelBlue;
+			this->name_label->Location = System::Drawing::Point(45, 335);
 			this->name_label->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
 			this->name_label->Name = L"name_label";
-			this->name_label->Size = System::Drawing::Size(53, 25);
+			this->name_label->Size = System::Drawing::Size(109, 37);
 			this->name_label->TabIndex = 9;
-			this->name_label->Text = L"label";
+			this->name_label->Text = L"label2";
 			this->name_label->Click += gcnew System::EventHandler(this, &Budget_Setter::label2_Click);
 			// 
 			// button3
@@ -438,7 +434,7 @@ namespace Project {
 			this->button3->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 14.25F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->button3->ForeColor = System::Drawing::SystemColors::ButtonHighlight;
-			this->button3->Location = System::Drawing::Point(0, 298);
+			this->button3->Location = System::Drawing::Point(0, 286);
 			this->button3->Name = L"button3";
 			this->button3->Size = System::Drawing::Size(250, 47);
 			this->button3->TabIndex = 8;
@@ -451,7 +447,7 @@ namespace Project {
 			this->button2->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 14.25F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->button2->ForeColor = System::Drawing::SystemColors::ButtonHighlight;
-			this->button2->Location = System::Drawing::Point(0, 245);
+			this->button2->Location = System::Drawing::Point(0, 239);
 			this->button2->Name = L"button2";
 			this->button2->Size = System::Drawing::Size(250, 47);
 			this->button2->TabIndex = 7;
@@ -466,7 +462,7 @@ namespace Project {
 			this->button1->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 14.25F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->button1->ForeColor = System::Drawing::SystemColors::ButtonHighlight;
-			this->button1->Location = System::Drawing::Point(0, 195);
+			this->button1->Location = System::Drawing::Point(0, 192);
 			this->button1->Name = L"button1";
 			this->button1->Size = System::Drawing::Size(250, 47);
 			this->button1->TabIndex = 6;
@@ -477,33 +473,18 @@ namespace Project {
 			// 
 			// pictureBox1
 			// 
-			this->pictureBox1->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"pictureBox1.Image")));
-			this->pictureBox1->Location = System::Drawing::Point(59, 12);
+			this->pictureBox1->Location = System::Drawing::Point(55, 15);
 			this->pictureBox1->Name = L"pictureBox1";
 			this->pictureBox1->Size = System::Drawing::Size(137, 136);
-			this->pictureBox1->SizeMode = System::Windows::Forms::PictureBoxSizeMode::StretchImage;
 			this->pictureBox1->TabIndex = 10;
 			this->pictureBox1->TabStop = false;
-			// 
-			// button5
-			// 
-			this->button5->BackColor = System::Drawing::Color::AliceBlue;
-			this->button5->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 9.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->button5->ForeColor = System::Drawing::SystemColors::Desktop;
-			this->button5->Location = System::Drawing::Point(3, 592);
-			this->button5->Name = L"button5";
-			this->button5->Size = System::Drawing::Size(239, 40);
-			this->button5->TabIndex = 11;
-			this->button5->Text = L"Log Out";
-			this->button5->UseVisualStyleBackColor = false;
 			// 
 			// Budget_Setter
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::Color::AliceBlue;
-			this->ClientSize = System::Drawing::Size(1190, 734);
+			this->ClientSize = System::Drawing::Size(1307, 736);
 			this->Controls->Add(this->panel3);
 			this->Controls->Add(this->panel1);
 			this->Controls->Add(this->panel4);
@@ -559,7 +540,7 @@ namespace Project {
 		String^ food_budget = this->textBox7->Text;
 		String^ income_goal = this->textBox2->Text;
 
-		int utility, food, ent, health;
+		int utility, food, ent, health, income_goal_int;
 
 		if (utility_budget != "") {
 			utility = Convert::ToInt32(utility_budget);
@@ -587,11 +568,26 @@ namespace Project {
 		else {
 			health = 0;
 		}
+
+		if (income_goal != "") {
+			income_goal_int = Convert::ToInt32(income_goal);
+		}
+		else {
+			income_goal_int = 0;
+		}
+
+
+		/*int utility = Convert::ToInt32(utility_budget);
+		int ent = Convert::ToInt32(ent_budget);
+		int health = Convert::ToInt32(health_budget);
+		int food = Convert::ToInt32(food_budget);
+		int income = Convert::ToInt32(income_goal);*/
+
 		int total_budget = utility + ent + health + food;
 
 		try {
 
-			String^ conn_str = "Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=coincollector;Integrated Security=True";
+			String^ conn_str = "Data Source=(localdb)\\tracker-app;Initial Catalog=tracker_db;Integrated Security=True";
 			SqlConnection sqlConn(conn_str);
 
 			sqlConn.Open();
@@ -634,7 +630,7 @@ namespace Project {
 
 						SqlCommand^ command = gcnew SqlCommand(sqlQuery, % sqlConn);
 						command->Parameters->AddWithValue("@user", this->name_label->Text);
-						command->Parameters->AddWithValue("@cat", "Health");
+						command->Parameters->AddWithValue("@cat", "Healthcare");
 						command->Parameters->AddWithValue("@budget", health);
 
 						command->ExecuteNonQuery();
@@ -656,7 +652,7 @@ namespace Project {
 
 						SqlCommand^ command = gcnew SqlCommand(sqlQuery, % sqlConn);
 						command->Parameters->AddWithValue("@user", this->name_label->Text);
-						command->Parameters->AddWithValue("@goal", income);
+						command->Parameters->AddWithValue("@goal", income_goal_int);
 
 						command->ExecuteNonQuery();
 					}
@@ -699,7 +695,7 @@ namespace Project {
 
 						SqlCommand^ command = gcnew SqlCommand(sqlQuery, % sqlConn);
 						command->Parameters->AddWithValue("@user", this->name_label->Text);
-						command->Parameters->AddWithValue("@cat", "Health");
+						command->Parameters->AddWithValue("@cat", "Healthcare");
 						command->Parameters->AddWithValue("@budget", health);
 
 						command->ExecuteNonQuery();
