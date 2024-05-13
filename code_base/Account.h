@@ -84,7 +84,7 @@ namespace codebase {
 			// 
 			// username_box
 			// 
-			this->username_box->Location = System::Drawing::Point(1104, 350);
+			this->username_box->Location = System::Drawing::Point(1257, 390);
 			this->username_box->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->username_box->Name = L"username_box";
 			this->username_box->Size = System::Drawing::Size(544, 22);
@@ -92,7 +92,7 @@ namespace codebase {
 			// 
 			// pass_box
 			// 
-			this->pass_box->Location = System::Drawing::Point(1104, 491);
+			this->pass_box->Location = System::Drawing::Point(1257, 527);
 			this->pass_box->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->pass_box->Name = L"pass_box";
 			this->pass_box->Size = System::Drawing::Size(544, 22);
@@ -100,7 +100,7 @@ namespace codebase {
 			// 
 			// Income_box
 			// 
-			this->Income_box->Location = System::Drawing::Point(1104, 623);
+			this->Income_box->Location = System::Drawing::Point(1257, 675);
 			this->Income_box->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->Income_box->Name = L"Income_box";
 			this->Income_box->Size = System::Drawing::Size(544, 22);
@@ -112,7 +112,7 @@ namespace codebase {
 			this->account_button->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 15.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->account_button->ForeColor = System::Drawing::Color::MidnightBlue;
-			this->account_button->Location = System::Drawing::Point(1300, 687);
+			this->account_button->Location = System::Drawing::Point(1408, 746);
 			this->account_button->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->account_button->Name = L"account_button";
 			this->account_button->Size = System::Drawing::Size(200, 42);
@@ -128,7 +128,7 @@ namespace codebase {
 			this->login_link->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->login_link->LinkColor = System::Drawing::Color::DarkBlue;
-			this->login_link->Location = System::Drawing::Point(1512, 754);
+			this->login_link->Location = System::Drawing::Point(1685, 837);
 			this->login_link->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
 			this->login_link->Name = L"login_link";
 			this->login_link->Size = System::Drawing::Size(87, 29);
@@ -144,12 +144,14 @@ namespace codebase {
 			this->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(0)),
 				static_cast<System::Int32>(static_cast<System::Byte>(64)));
 			this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
-			this->ClientSize = System::Drawing::Size(1763, 817);
+			this->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
+			this->ClientSize = System::Drawing::Size(1838, 911);
 			this->Controls->Add(this->login_link);
 			this->Controls->Add(this->account_button);
 			this->Controls->Add(this->Income_box);
 			this->Controls->Add(this->pass_box);
 			this->Controls->Add(this->username_box);
+			this->DoubleBuffered = true;
 			this->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->Name = L"Account";
 			this->Text = L"Account";

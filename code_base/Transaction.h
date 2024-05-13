@@ -718,7 +718,7 @@ namespace codebase {
 		bool amount_validation = ContainsDigit(amount);
 
 
-		if (amount->Length == 0 || amount_validation) {
+		if (amount->Length == 0 || amount_validation || category->Length == 0 || type->Length == 0 || currency->Length == 0 || date->Length == 0) {
 			MessageBox::Show("Enter Valid Data");
 		}
 

@@ -526,7 +526,7 @@ private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e
 	String^ food_budget = this->textBox7->Text;
 	String^ income_goal = this->textBox2->Text;
 
-	int utility, food, ent, health;
+	int utility, food, ent, health , income_goal_int;
 
 	if (utility_budget != "") {
 		 utility = Convert::ToInt32(utility_budget);
@@ -553,6 +553,13 @@ private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e
 	}
 	else {
 		 health = 0;
+	}
+
+	if (income_goal != "") {
+		income_goal_int = Convert::ToInt32(income_goal);
+	}
+	else {
+		income_goal_int = 0;
 	}
 
 
@@ -631,7 +638,7 @@ private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e
 
 					SqlCommand^ command = gcnew SqlCommand(sqlQuery, % sqlConn);
 					command->Parameters->AddWithValue("@user", this->name_label->Text);
-					command->Parameters->AddWithValue("@goal", income);
+					command->Parameters->AddWithValue("@goal", income_goal_int);
 
 					command->ExecuteNonQuery();
 				}
